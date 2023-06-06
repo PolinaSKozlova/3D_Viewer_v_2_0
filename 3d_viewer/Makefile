@@ -71,6 +71,6 @@ cppcheck:
 	cppcheck --enable=all --language=c++ --suppress=missingIncludeSystem **/*s21*.cc **/*s21*.h *s21*.cc
 
 push:
-	git push origin develop
+	git push origin main
 
 
