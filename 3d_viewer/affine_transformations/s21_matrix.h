@@ -6,20 +6,34 @@
 #include <stdexcept>
 
 namespace s21 {
-class Matrix {
+struct TransformData {
+  // Углы поворота
+  double x_rotation_deg;
+  double y_rotation_deg;
+  double z_rotation_deg;
+  // Смещения вдоль осей
+  double x_shift;
+  double y_shift;
+  double z_shift;
+  // Коэффициент масштабирования
+  double user_scaler;
+  double model_scaler;
+  bool perspective_ortho;
+};
+
+class Matrix4X4 {
  public:
-  Matrix();
-  explicit Matrix(int size);
-  ~Matrix();
+  Matrix4X4();
+  explicit Matrix4X4(int size);
+  ~Matrix4X4();
   int GetRows() const noexcept;
   int GetCols() const noexcept;
-  Matrix operator*(const double& num) noexcept;
+  Matrix4X4 operator*(const double& num) noexcept;
   void MulNumber(const double& num) noexcept;
   double& operator()(const int& i, const int& j);
-  std::array<Matrix, 6> CreateMatrixArray();
 
-  //  private:
- protected:
+ private:
+  //  protected:
   void MemoryAllocate();
   void MemoryFree();
   void InitializeIdentityMatrix();
