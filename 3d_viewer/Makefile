@@ -3,7 +3,7 @@ CC = g++
 CC_FLAGS = -Wall -Wextra -Werror -std=c++17 #-pedantic-errors
 TEST_FLAGS = -lgtest -pthread
 COVERAGE_FLAGS = -fprofile-arcs -ftest-coverage
-SANITIZER_FLAGS = -fsanitize=address
+SANITIZER_FLAGS = #-fsanitize=address
 PROJECT_NAME = s21_3DViewer_v_2_0
 SRCS=$(wildcard s21*.cc,*/s21*.cc)
 OBJ_FILES=$(patsubst %.cc,%.o,$(SRCS))
@@ -11,7 +11,7 @@ REPORT_DIR = report
 
 run: clean
 	clear
-	$(CC) $(CC_FLAGS) affine_transformations/s21_*.cc run.cc -o run -g
+	$(CC) $(CC_FLAGS) $(SANITIZER_FLAGS) affine_transformations/s21_matrix4X4.cc affine_transformations/s21_matrix_transform.cc run.cc -o run -g
 #	./run
 
 all: install
