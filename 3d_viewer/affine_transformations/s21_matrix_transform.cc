@@ -20,7 +20,7 @@ void Matrix4X4::InitializeXRotationMatrix() {
   x_rotation_matrix.matrix_[1][2] = -sin(data_.x_rotation_deg);
   x_rotation_matrix.matrix_[2][1] = sin(data_.x_rotation_deg);
   x_rotation_matrix.matrix_[2][2] = cos(data_.x_rotation_deg);
-  *this *= x_rotation_matrix;
+  MulMatrix(x_rotation_matrix);
 }
 
 void Matrix4X4::InitializeYRotationMatrix() {
