@@ -8,7 +8,6 @@
 
 namespace s21 {
 struct TransformData {
-  TransformData() = default;
   TransformData(double x_rotation = 0, double y_rotation = 0,
                 double z_rotation = 0, double shift_x = 0, double shift_y = 0,
                 double shift_z = 0, double scaler_user = 0,
