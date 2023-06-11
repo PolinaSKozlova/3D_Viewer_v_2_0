@@ -68,7 +68,7 @@ clang:
 	clang-format -n --style=Google **/s21*.cc **/s21*.h
 
 cppcheck:
-	cppcheck --enable=all --language=c++ --suppress=missingIncludeSystem **/*s21*.cc **/*s21*.h *s21*.cc
+	cppcheck --enable=all --language=c++ --suppress=missingIncludeSystem **/*s21*.cc **/*s21*.h
 
 push:
 	git push origin main
