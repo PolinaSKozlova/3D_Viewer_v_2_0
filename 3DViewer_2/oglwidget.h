@@ -14,17 +14,12 @@
 #include <QDebug>
 #include <QFile>
 #include <QMessageBox>
-
-#include "mainwindow.h"
-// Our C includes
-// extern "C" {
-//#include "../s21_affine_transformations.h"
-//#include "../s21_parser.h"
-//}
-// Cpp std includes
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+
+#include "3d_viewer/affine_transformations/s21_matrix4X4.h"
+#include "mainwindow.h"
 
 namespace s21 {
 //==================from parser===================
@@ -35,25 +30,6 @@ typedef struct model_data {
   void* p_to_indices;
   double model_to_world_scaler;
 } model_data_t;
-
-//==============from affine transformations ============
-typedef enum { PERSPECTIVE, ORTHO } projection_t;
-
-typedef struct transform_data {
-  // Углы поворота
-  double x_rotation_deg;
-  double y_rotation_deg;
-  double z_rotation_deg;
-  // Смещения вдоль осей
-  double x_shift;
-  double y_shift;
-  double z_shift;
-  // Коэффициент масштабирования
-  double user_scaler;
-  double model_scaler;
-  char perspective;
-} transform_data_t;
-//======================================================
 
 // Colors, linetypes etc.
 typedef struct style_data {
@@ -67,6 +43,8 @@ typedef struct style_data {
   QColor e_color;
   QColor bg_color;
 } style_data_t;
+
+typedef enum { PERSPECTIVE, ORTHO } projection_t;
 
 #define DEFAULT_ASPECT_RATIO 1.865889
 
@@ -107,7 +85,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
   model_data_t modelData;  // Модель
   // default member initialisation, google it!
-  transform_data_t transformations;
+  TransformData transformations;
   style_data_t style;
 
   QOpenGLShaderProgram
@@ -119,6 +97,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   QMatrix4x4 projection;  // Матрица проекций, используется при отображении,
                           // разобраться как это работает
 
+  Matrix4X4 affine_transformation_matrix_{};
   QOpenGLBuffer arrayBuf;  // Вершинный буффер
   QOpenGLBuffer indexBuf;  // Индексный буффер
 

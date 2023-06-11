@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QMainWindow>
 
+#include "3d_viewer/affine_transformations/s21_matrix4X4.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -27,7 +29,7 @@ typedef struct ui_state {
   int z_shift;
 
   int user_scaler;
-  int perspective;
+  bool perspective;
 
   int v_style;
   int v_size;
@@ -104,7 +106,6 @@ class MainWindow : public QMainWindow {
   //  void record_gif();
   //  void start_timer_gif();
 
- private:
  private:
   Ui::MainWindow* ui;
   s21::ui_state_t uiState;

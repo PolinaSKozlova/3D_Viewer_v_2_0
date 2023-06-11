@@ -120,7 +120,7 @@ void s21::MainWindow::setDefaultTransforms() {
 
   uiState.user_scaler = 1;
 
-  uiState.perspective = PERSPECTIVE;
+  uiState.perspective = false;
 }
 
 void s21::MainWindow::setDefaultStyle() {
