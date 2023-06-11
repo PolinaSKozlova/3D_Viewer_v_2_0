@@ -68,6 +68,7 @@ class Matrix4X4 {
   void InitializeUserScalerMatrix();
   void InitializeModelScalerMatrix();
   void InitializeShiftMatrix();
+  void SetNullMatrix();
   int rows_, cols_;
   double** matrix_;
   TransformData data_;
