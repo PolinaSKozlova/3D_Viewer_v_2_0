@@ -71,6 +71,6 @@ cppcheck:
 	cppcheck --enable=all --language=c++ --suppress=missingIncludeSystem **/*s21*.cc **/*s21*.h
 
 push:
-	git push origin main
+	git push origin matrix4x4
 
 
