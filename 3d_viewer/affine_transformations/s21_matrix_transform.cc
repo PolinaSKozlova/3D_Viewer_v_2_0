@@ -3,7 +3,8 @@
 namespace s21 {
 static double DegreesToRadian(double degrees) { return degrees * (M_PI / 180); }
 
-void Matrix4X4::MakeMovement() {
+void Matrix4X4::MakeMovement(const TransformData& other) {
+  SetData(other);
   InitializeXRotationMatrix();
   InitializeYRotationMatrix();
   InitializeZRotationMatrix();

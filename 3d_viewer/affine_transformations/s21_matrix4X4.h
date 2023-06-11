@@ -41,7 +41,7 @@ class Matrix4X4 {
   explicit Matrix4X4(int size);
   Matrix4X4(const Matrix4X4& other);
   ~Matrix4X4();
-  void MakeMovement();
+  void MakeMovement(const TransformData& other);
   void MulMatrix(const Matrix4X4& other);
   Matrix4X4& operator=(const Matrix4X4& other) noexcept;
   Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
