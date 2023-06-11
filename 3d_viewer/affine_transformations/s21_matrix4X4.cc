@@ -1,7 +1,6 @@
 #include "s21_matrix4X4.h"
 
 namespace s21 {
-
 Matrix4X4::Matrix4X4() : rows_(4), cols_(4) {
   MemoryAllocate();
   // InitializeIdentityMatrix();
@@ -20,10 +19,6 @@ Matrix4X4::~Matrix4X4() {
   matrix_ = nullptr;
   rows_ = cols_ = 0;
 }
-
-int Matrix4X4::GetRows() const noexcept { return rows_; }
-
-int Matrix4X4::GetCols() const noexcept { return cols_; }
 
 void Matrix4X4::MulMatrix(const Matrix4X4& other) { *this *= other; }
 
@@ -67,6 +62,8 @@ void Matrix4X4::MulNumber(const double& num) noexcept {
     }
   }
 }
+
+double** Matrix4X4::GetMatrix() const noexcept { return matrix_; }
 
 void Matrix4X4::SetData(const TransformData& other) {
   data_.x_rotation_deg = other.x_rotation_deg;

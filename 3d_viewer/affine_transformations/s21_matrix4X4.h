@@ -8,6 +8,7 @@
 
 namespace s21 {
 struct TransformData {
+  TransformData() = default;
   TransformData(double x_rotation = 0, double y_rotation = 0,
                 double z_rotation = 0, double shift_x = 0, double shift_y = 0,
                 double shift_z = 0, double scaler_user = 0,
@@ -41,14 +42,13 @@ class Matrix4X4 {
   explicit Matrix4X4(int size);
   Matrix4X4(const Matrix4X4& other);
   ~Matrix4X4();
-  int GetRows() const noexcept;
-  int GetCols() const noexcept;
   void MakeMovement();
   void MulMatrix(const Matrix4X4& other);
   Matrix4X4& operator=(const Matrix4X4& other) noexcept;
   Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
   Matrix4X4& operator*=(const double& num) noexcept;
   void MulNumber(const double& num) noexcept;
+  double** GetMatrix() const noexcept;
   void SetData(const TransformData& other);
   void print() {
     for (int i = 0; i < 4; ++i) {
@@ -71,7 +71,7 @@ class Matrix4X4 {
   void InitializeShiftMatrix();
   int rows_, cols_;
   double** matrix_;
-  TransformData data_{};
+  TransformData data_;
 };
 };  // namespace s21
 
