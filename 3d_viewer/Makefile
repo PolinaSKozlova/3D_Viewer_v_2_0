@@ -38,7 +38,7 @@ dist:
 
 tests: 
 	clear
-	$(CC) $(CC_FLAGS) viewer_test/*tests.cc viewer_test/main.cc -o c_tests $(TEST_FLAGS)
+	$(CC) $(CC_FLAGS) viewer_test/*.cc affine_transformations/s21_*.cc -o v_tests $(TEST_FLAGS)
 	./v_tests
 
 gcov_report:
