@@ -26,7 +26,7 @@ uninstall:
 	rm -rf build
 
 clean:
-	rm -rf *.o *.gcno *.gcda *.info *.a $(REPORT_DIR) c_tests run *.dSYM 3DViewer_v_2_0.tar.gz CMakeLists.txt.user
+	rm -rf *.o *.gcno *.gcda *.info *.a $(REPORT_DIR) v_tests run *.dSYM 3DViewer_v_2_0.tar.gz CMakeLists.txt.user
 
 dvi:
 	makeinfo -o report --html --no-warn --no-validate --force doc.texi
@@ -43,8 +43,8 @@ tests:
 
 gcov_report:
 	clear
-	$(CC) $(CC_FLAGS) $(COVERAGE_FLAGS) $(SANITIZER_FLAGS) viewer_tests/*_tests.cc -o v_tests $(TEST_FLAGS)
-	./c_tests
+	$(CC) $(CC_FLAGS) $(COVERAGE_FLAGS) viewer_test/*.cc affine_transformations/s21_*.cc -o v_tests $(TEST_FLAGS)
+	./v_tests
 	lcov -t "$@" -o $@.info -c -d . --no-external
 	lcov -r $@.info "*include*" -o $@.info
 	genhtml -o ./$(REPORT_DIR) $@.info
