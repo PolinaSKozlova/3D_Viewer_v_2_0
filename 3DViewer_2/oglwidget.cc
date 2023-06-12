@@ -60,13 +60,15 @@ void s21::OGLWidget::paintGL() {
   float*)
   - эта переменная передается в конструктор QMatrix4x4
   */
-  float transform[16] = {0};  // В этом массиве будет содержаться композиция
-                              // афинных преобразований модели.
-  float* p_to_data = (float*)transform;
+  //  float transform[16] = {0};  // В этом массиве будет содержаться композиция
+  //                              // афинных преобразований модели.
+  //  float* p_to_data = (float*)transform;
   //  transform_matrix(p_to_data, &transformations);
 
-  const float* p_to_transform = (const float*)p_to_data;
-
+  //  const float* p_to_transform = (const float*)p_to_data;
+  affine_transformation_matrix_.MakeMovement(transformations);
+  const float* p_to_transform =
+      (const float*)affine_transformation_matrix_.GetMatrix();
   QMatrix4x4 matrix(
       p_to_transform);  // Инициируем модельно - видовую матрицу матрицей
                         // трансформаций, вычисленной из афинных преобразований
@@ -144,7 +146,7 @@ void s21::OGLWidget::resizeGL(int w, int h) {
 void s21::OGLWidget::calculateProjection() {
   projection
       .setToIdentity();  // Инициализируем матрицу проекции единичной матрицей
-  if (transformations.perspective == 0) {
+  if (transformations.perspective_ortho == false) {
     projection.perspective(
         22.5, aspect, 0.1,
         10.0);  // C помощью метода perspective формируем матрицу, необходимую
@@ -248,7 +250,7 @@ void s21::OGLWidget::setNewGeometry() {
 }
 
 void s21::OGLWidget::setWidgetState(s21::ui_state_t& uiState) {
-  transform_data_t& T = transformations;
+  TransformData& T = transformations;
   s21::ui_state_t& S = uiState;
 
   filePath = S.filePath;
@@ -262,7 +264,7 @@ void s21::OGLWidget::setWidgetState(s21::ui_state_t& uiState) {
   T.z_shift = S.z_shift / (double)100;
 
   T.user_scaler = 1 + S.user_scaler / (double)100.;
-  T.perspective = (char)S.perspective;
+  T.perspective_ortho = (char)S.perspective;
 
   style.bg_color = S.bg_color;
   style.e_color = S.e_color;
