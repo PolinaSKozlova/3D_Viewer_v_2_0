@@ -61,7 +61,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="OGLWidget" name="widget" native="true">
+     <widget class="s21::OGLWidget" name="widget" native="true">
       <property name="maximumSize">
        <size>
         <width>3840</width>
@@ -316,9 +316,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-70</y>
-                <width>240</width>
-                <height>352</height>
+                <y>0</y>
+                <width>246</width>
+                <height>405</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
@@ -1593,7 +1593,7 @@
      <x>0</x>
      <y>0</y>
      <width>1920</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="defaultUp">
@@ -1649,7 +1649,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OGLWidget</class>
+   <class>s21::OGLWidget</class>
    <extends>QWidget</extends>
    <header location="global">oglwidget.h</header>
    <container>1</container>
