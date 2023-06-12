@@ -15,25 +15,22 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets OpenGL)
 
-
 qt6_add_resources(SHADER_RSC_ADDED
-        3DViewer_2/shaders.qrc
+    3DViewer_2/shaders.qrc
 )
 
-
 set(PROJECT_SOURCES
-        3DViewer_2/main.cpp
-        3DViewer_2/mainwindow.cc
-        3DViewer_2/oglwidget.cc
-        3DViewer_2/oglwidget.h
-        3DViewer_2/mainwindow.h
-        3DViewer_2/mainwindow.ui
-        3DViewer_2/parser.cc
-        3DViewer_2/parser.h
-        3d_viewer/affine_transformations/s21_matrix4X4.h
-        3d_viewer/affine_transformations/s21_matrix4X4.cc
-        3d_viewer/affine_transformations/s21_matrix_transform.cc
-
+    3DViewer_2/main.cpp
+    3DViewer_2/mainwindow.cc
+    3DViewer_2/oglwidget.cc
+    3DViewer_2/oglwidget.h
+    3DViewer_2/mainwindow.h
+    3DViewer_2/mainwindow.ui
+    3DViewer_2/parser.cc
+    3DViewer_2/parser.h
+    affine_transformations/s21_matrix4X4.h
+    affine_transformations/s21_matrix4X4.cc
+    affine_transformations/s21_matrix_transform.cc
 )
 
 include_directories(3DViewer_2)
@@ -44,9 +41,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         ${SHADER_RSC_ADDED}
     )
+
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET 3DViewer_2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# set_property(TARGET 3DViewer_2 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+# ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
@@ -54,8 +52,9 @@ else()
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+
+    # Define properties for Android with Qt 5 after find_package() calls as:
+    # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(3DViewer_2
             ${PROJECT_SOURCES}
@@ -64,7 +63,7 @@ else()
     endif()
 endif()
 
-#target_link_libraries(3DViewer_2 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# target_link_libraries(3DViewer_2 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(3DViewer_2 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGLWidgets Qt${QT_VERSION_MAJOR}::OpenGL ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 set_target_properties(3DViewer_2 PROPERTIES
