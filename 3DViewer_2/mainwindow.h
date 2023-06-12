@@ -6,7 +6,7 @@
 #include <QFileDialog>
 #include <QMainWindow>
 
-#include "3d_viewer/affine_transformations/s21_matrix4X4.h"
+#include "affine_transformations/s21_matrix4X4.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

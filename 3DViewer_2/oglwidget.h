@@ -18,9 +18,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "3d_viewer/affine_transformations/s21_matrix4X4.h"
+#include "affine_transformations/s21_matrix4X4.h"
 #include "mainwindow.h"
-#include "parser.h"
+#include "parser/s21_parser.h"
 
 namespace s21 {
 //==================from parser===================
