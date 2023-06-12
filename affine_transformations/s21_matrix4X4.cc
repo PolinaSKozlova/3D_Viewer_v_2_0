@@ -64,7 +64,7 @@ void Matrix4X4::MulNumber(const double& num) noexcept {
   }
 }
 
-double** Matrix4X4::GetMatrix() const noexcept { return matrix_; }
+float** Matrix4X4::GetMatrix() const noexcept { return matrix_; }
 
 void Matrix4X4::SetData(const TransformData& other) {
   data_.x_rotation_deg = other.x_rotation_deg;
@@ -79,9 +79,9 @@ void Matrix4X4::SetData(const TransformData& other) {
 }
 
 void Matrix4X4::MemoryAllocate() {
-  matrix_ = new double*[rows_];
+  matrix_ = new float*[rows_];
   for (int i = 0; i < rows_; ++i) {
-    matrix_[i] = new double[cols_]{};
+    matrix_[i] = new float[cols_]{};
   }
 }
 

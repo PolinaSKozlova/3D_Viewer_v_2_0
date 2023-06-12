@@ -47,7 +47,7 @@ class Matrix4X4 {
   Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
   Matrix4X4& operator*=(const double& num) noexcept;
   void MulNumber(const double& num) noexcept;
-  double** GetMatrix() const noexcept;
+  float** GetMatrix() const noexcept;
   void SetData(const TransformData& other);
   void print() {
     for (int i = 0; i < 4; ++i) {
@@ -70,7 +70,7 @@ class Matrix4X4 {
   void InitializeShiftMatrix();
   void SetNullMatrix();
   int rows_, cols_;
-  double** matrix_;
+  float** matrix_;
   TransformData data_;
 };
 };  // namespace s21
