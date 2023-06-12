@@ -78,6 +78,16 @@ void Matrix4X4::SetData(const TransformData& other) {
   data_.perspective_ortho = other.perspective_ortho;
 }
 
+float* Matrix4X4::CreateOneRowMatrix() const noexcept {
+  float* new_matrix = new float[rows_ * cols_];
+  for (int i = 0; i < rows_; ++i) {
+    for (int j = 0; j < cols_; ++j) {
+      new_matrix[i * cols_ + j] = matrix_[i][j];
+    }
+  }
+  return new_matrix;
+}
+
 void Matrix4X4::MemoryAllocate() {
   matrix_ = new float*[rows_];
   for (int i = 0; i < rows_; ++i) {

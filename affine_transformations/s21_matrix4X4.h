@@ -49,6 +49,7 @@ class Matrix4X4 {
   void MulNumber(const double& num) noexcept;
   float** GetMatrix() const noexcept;
   void SetData(const TransformData& other);
+  float* CreateOneRowMatrix() const noexcept;
   void print() {
     for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 4; ++j) {

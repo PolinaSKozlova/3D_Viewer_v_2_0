@@ -35,6 +35,8 @@ set(PROJECT_SOURCES
 
 include_directories(3DViewer_2)
 
+option(USE_OGLWidget_NAMESPACE "s21" ON)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(3DViewer_2
         MANUAL_FINALIZATION
