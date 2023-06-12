@@ -33,6 +33,7 @@ typedef struct model_data {
   int n_indices;
   void* p_to_vertices;
   void* p_to_indices;
+
   double model_to_world_scaler;
 } model_data_t;
 
@@ -106,6 +107,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   float aspect = DEFAULT_ASPECT_RATIO;
 
   model_data_t modelData;  // Модель
+
   // default member initialisation, google it!
   transform_data_t transformations;
   style_data_t style;

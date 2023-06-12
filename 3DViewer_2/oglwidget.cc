@@ -30,6 +30,7 @@ void s21::OGLWidget::initializeGL() {
   glEnable(GL_PROGRAM_POINT_SIZE);
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
   initShaders();
+
   //  loadGeometry(filePath);
 }
 
@@ -196,6 +197,7 @@ void s21::OGLWidget::initShaders() {
 // Загрузка модели
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
   //  int return_code = load_model(file_path.c_str(), &modelData);
+
   int return_code = 0;
   transformations.model_scaler = modelData.model_to_world_scaler;
 
