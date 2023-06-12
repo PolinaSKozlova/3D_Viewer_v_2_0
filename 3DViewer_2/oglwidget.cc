@@ -290,21 +290,32 @@ void s21::OGLWidget::setNewGeometry() {
 }
 
 void s21::OGLWidget::setWidgetState(s21::ui_state_t& uiState) {
-  TransformData& T = transformations;
+  //  TransformData& T = transformations;
   s21::ui_state_t& S = uiState;
 
   filePath = S.filePath;
 
-  T.x_rotation_deg = S.x_rotation_deg;
-  T.y_rotation_deg = S.y_rotation_deg;
-  T.z_rotation_deg = S.z_rotation_deg;
+  //  T.x_rotation_deg = S.x_rotation_deg;
+  //  T.y_rotation_deg = S.y_rotation_deg;
+  //  T.z_rotation_deg = S.z_rotation_deg;
 
-  T.x_shift = (S.x_shift / (double)100) * aspect;
-  T.y_shift = S.y_shift / (double)100;
-  T.z_shift = S.z_shift / (double)100;
+  //  T.x_shift = (S.x_shift / (double)100) * aspect;
+  //  T.y_shift = S.y_shift / (double)100;
+  //  T.z_shift = S.z_shift / (double)100;
 
-  T.user_scaler = 1 + S.user_scaler / (double)100.;
-  T.perspective_ortho = (char)S.perspective;
+  //  T.user_scaler = 1 + S.user_scaler / (double)100.;
+  //  T.perspective_ortho = (char)S.perspective;
+
+  transformations.x_rotation_deg = S.x_rotation_deg;
+  transformations.y_rotation_deg = S.y_rotation_deg;
+  transformations.z_rotation_deg = S.z_rotation_deg;
+
+  transformations.x_shift = (S.x_shift / (double)100) * aspect;
+  transformations.y_shift = S.y_shift / (double)100;
+  transformations.z_shift = S.z_shift / (double)100;
+
+  transformations.user_scaler = 1 + S.user_scaler / (double)100.;
+  transformations.perspective_ortho = S.perspective;
 
   style.bg_color = S.bg_color;
   style.e_color = S.e_color;
