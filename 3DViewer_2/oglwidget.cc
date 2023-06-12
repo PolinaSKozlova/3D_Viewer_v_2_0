@@ -66,7 +66,9 @@ void s21::OGLWidget::paintGL() {
   //  transform_matrix(p_to_data, &transformations);
 
   //  const float* p_to_transform = (const float*)p_to_data;
+
   affine_transformation_matrix_.MakeMovement(transformations);
+  QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
   //  const float* p_to_transform =
   //      (const float*)affine_transformation_matrix_.GetMatrix();
 
@@ -78,12 +80,12 @@ void s21::OGLWidget::paintGL() {
   //  std::cout << *matrix.data() << '\n';
 
   // Temp code
-  QMatrix4x4 matrix{};
-  matrix.setToIdentity();
+  //  QMatrix4x4 matrix{};
+  //  matrix.setToIdentity();
 
-  matrix.scale(model.scaler);
-  matrix.translate(0, 0, -1);
-  matrix.rotate(-45, 1, 1, 1);
+  //  matrix.scale(model.scaler);
+  //  matrix.translate(0, 0, -1);
+  //  matrix.rotate(-45, 1, 1, 1);
   program.bind();  // Снова биндим шейдерную программу
 
   program_P.bind();
@@ -102,24 +104,24 @@ void s21::OGLWidget::paintGL() {
   arrayBuf.bind();
   indexBuf.bind();
 
-  if (arrayBuf.isCreated()) {
-    float* bufferData =
-        static_cast<float*>(arrayBuf.map(QOpenGLBuffer::ReadOnly));
-    for (int i = 0; i < model.vertices.size() / 3; i++) {
-      qDebug() << "Vertex " << i << ": " << bufferData[i * 3] << ", "
-               << bufferData[i * 3 + 1] << ", " << bufferData[i * 3 + 2];
-    }
-    arrayBuf.unmap();
-  }
+  //  if (arrayBuf.isCreated()) {
+  //    float* bufferData =
+  //        static_cast<float*>(arrayBuf.map(QOpenGLBuffer::ReadOnly));
+  //    for (int i = 0; i < model.vertices.size() / 3; i++) {
+  //      qDebug() << "Vertex " << i << ": " << bufferData[i * 3] << ", "
+  //               << bufferData[i * 3 + 1] << ", " << bufferData[i * 3 + 2];
+  //    }
+  //    arrayBuf.unmap();
+  //  }
 
-  if (indexBuf.isCreated()) {
-    GLuint* bufferData =
-        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
-    for (int i = 0; i < model.faces.size(); i++) {
-      qDebug() << "Index " << i << ": " << bufferData[i];
-    }
-    indexBuf.unmap();
-  }
+  //  if (indexBuf.isCreated()) {
+  //    GLuint* bufferData =
+  //        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
+  //    for (int i = 0; i < model.faces.size(); i++) {
+  //      qDebug() << "Index " << i << ": " << bufferData[i];
+  //    }
+  //    indexBuf.unmap();
+  //  }
 
   // Offset for position
   quintptr offset = 0;
