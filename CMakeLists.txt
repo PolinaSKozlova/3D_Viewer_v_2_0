@@ -28,6 +28,8 @@ set(PROJECT_SOURCES
         3DViewer_2/oglwidget.h
         3DViewer_2/mainwindow.h
         3DViewer_2/mainwindow.ui
+        3DViewer_2/parser.cc
+        3DViewer_2/parser.h
         3d_viewer/affine_transformations/s21_matrix4X4.h
         3d_viewer/affine_transformations/s21_matrix4X4.cc
         3d_viewer/affine_transformations/s21_matrix_transform.cc

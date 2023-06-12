@@ -20,17 +20,18 @@
 
 #include "3d_viewer/affine_transformations/s21_matrix4X4.h"
 #include "mainwindow.h"
+#include "parser.h"
 
 namespace s21 {
 //==================from parser===================
-typedef struct model_data {
-  int n_vertices;
-  int n_indices;
-  void* p_to_vertices;
-  void* p_to_indices;
+// typedef struct model_data {
+//  int n_vertices;
+//  int n_indices;
+//  void* p_to_vertices;
+//  void* p_to_indices;
 
-  double model_to_world_scaler;
-} model_data_t;
+//  double model_to_world_scaler;
+//} model_data_t;
 
 // Colors, linetypes etc.
 typedef struct style_data {
@@ -84,7 +85,8 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
   float aspect = DEFAULT_ASPECT_RATIO;
 
-  model_data_t modelData;  // Модель
+  //  model_data_t modelData;  // Модель
+  Model model;
 
   // default member initialisation, google it!
   TransformData transformations;

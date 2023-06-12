@@ -31,7 +31,7 @@ void s21::OGLWidget::initializeGL() {
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
   initShaders();
 
-  //  loadGeometry(filePath);
+  loadGeometry(filePath);
 }
 
 // Вызывается каждый раз при перерисовке
@@ -67,13 +67,25 @@ void s21::OGLWidget::paintGL() {
 
   //  const float* p_to_transform = (const float*)p_to_data;
   affine_transformation_matrix_.MakeMovement(transformations);
-  const float* p_to_transform =
-      (const float*)affine_transformation_matrix_.GetMatrix();
-  QMatrix4x4 matrix(
-      p_to_transform);  // Инициируем модельно - видовую матрицу матрицей
-                        // трансформаций, вычисленной из афинных преобразований
+  //  const float* p_to_transform =
+  //      (const float*)affine_transformation_matrix_.GetMatrix();
 
+  /*QMatrix4x4 matrix(
+      p_to_transform);*/  // Инициируем модельно - видовую матрицу матрицей
+  //                        // трансформаций, вычисленной из афинных
+  //                        преобразований
+  //                        //  matrix *= 1e6;
+  //  std::cout << *matrix.data() << '\n';
+
+  // Temp code
+  QMatrix4x4 matrix{};
+  matrix.setToIdentity();
+
+  matrix.scale(model.scaler);
+  matrix.translate(0, 0, -1);
+  matrix.rotate(-45, 1, 1, 1);
   program.bind();  // Снова биндим шейдерную программу
+
   program_P.bind();
 
   // Set modelview-projection matrix
@@ -89,6 +101,26 @@ void s21::OGLWidget::paintGL() {
   // Тут мы снова привязываем вершинный и индексный буферы
   arrayBuf.bind();
   indexBuf.bind();
+
+  if (arrayBuf.isCreated()) {
+    float* bufferData =
+        static_cast<float*>(arrayBuf.map(QOpenGLBuffer::ReadOnly));
+    for (int i = 0; i < model.vertices.size() / 3; i++) {
+      qDebug() << "Vertex " << i << ": " << bufferData[i * 3] << ", "
+               << bufferData[i * 3 + 1] << ", " << bufferData[i * 3 + 2];
+    }
+    arrayBuf.unmap();
+  }
+
+  if (indexBuf.isCreated()) {
+    GLuint* bufferData =
+        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
+    for (int i = 0; i < model.faces.size(); i++) {
+      qDebug() << "Index " << i << ": " << bufferData[i];
+    }
+    indexBuf.unmap();
+  }
+
   // Offset for position
   quintptr offset = 0;
 
@@ -111,7 +143,8 @@ void s21::OGLWidget::paintGL() {
   }
 
   if (style.e_style != 0) {
-    glDrawElements(GL_TRIANGLES, modelData.n_indices, GL_UNSIGNED_INT, nullptr);
+    std::cout << "Tryna drawning" << '\n';
+    glDrawElements(GL_TRIANGLES, model.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
 
   // That part not so good, need to refactor it
@@ -128,7 +161,7 @@ void s21::OGLWidget::paintGL() {
     program_P.setUniformValue("dot_color", style.v_color.red() / 255.,
                               style.v_color.green() / 255.,
                               style.v_color.blue() / 255., 1.0);
-    glDrawElements(GL_POINTS, modelData.n_indices, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_POINTS, model.faces.size(), GL_INT, nullptr);
   }
   // Here the broken part is ended))
 
@@ -198,50 +231,55 @@ void s21::OGLWidget::initShaders() {
 
 // Загрузка модели
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
-  //  int return_code = load_model(file_path.c_str(), &modelData);
+  //    int return_code = load_model(file_path.c_str(), &modelData);
+  ObjParser parser{};
+  model = parser.Parse(file_path);
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!" << '\n';
+  std::cout << model.faces.size() << '\n';
+  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!" << '\n';
+  transformations.model_scaler = model.scaler;
 
-  int return_code = 0;
-  transformations.model_scaler = modelData.model_to_world_scaler;
+  //  if (return_code == 0) {
+  arrayBuf.create();  // Создаем буффер
+  arrayBuf.bind();    // Tell OpenGL which VBOs to use
 
-  if (return_code == 0) {
-    arrayBuf.create();  // Создаем буффер
-    arrayBuf.bind();    // Tell OpenGL which VBOs to use
+  float* p_to_data = model.vertices.data();
+  //      *(float**)(model.vertices.begin());  // Вот тут получаем адрес
+  //                                            //          первой
+  //                                            // вершиной
 
-    float* p_to_data =
-        *(float**)(modelData.p_to_vertices);  // Вот тут получаем адрес с первой
-                                              // вершиной
+  arrayBuf.allocate(
+      p_to_data,
+      model.vertices.size() * sizeof(float));  // Тут allocate - это
+  //  //                            одновременно и
+  // выделение памяти и загрузка
+  arrayBuf.release();  // Отвязываем буффер до момента отрисовки
 
-    arrayBuf.allocate(p_to_data,
-                      modelData.n_vertices * 3 *
-                          sizeof(float));  // Тут allocate - это одновременно и
-                                           // выделение памяти и загрузка
-    arrayBuf.release();  // Отвязываем буффер до момента отрисовки
+  // очистка памяти на указателе vertices_matrix
+  // после инициализации вершинного буфера, память, захваченную парсером,
+  // можно освобождать
+  //    s21_free_vertices_matrix((float**)modelData.p_to_vertices);
 
-    // очистка памяти на указателе vertices_matrix
-    // после инициализации вершинного буфера, память, захваченную парсером,
-    // можно освобождать
-    //    s21_free_vertices_matrix((float**)modelData.p_to_vertices);
+  indexBuf.create();  // Создаем буффер
+  indexBuf.bind();    // Tell OpenGL which VBOs to use
 
-    indexBuf.create();  // Создаем буффер
-    indexBuf.bind();    // Tell OpenGL which VBOs to use
+  indexBuf.allocate(
+      model.faces.data(),
+      model.faces.size() *
+          sizeof(unsigned int));  // Тут allocate - это одновременно и
+  //                                  // выделение памяти и загрузка
 
-    indexBuf.allocate(
-        modelData.p_to_indices,
-        modelData.n_indices *
-            sizeof(unsigned int));  // Тут allocate - это одновременно и
-                                    // выделение памяти и загрузка
+  //  // очистка памяти на указателе indices_array
+  //  // после инициализации индексного буфера, память, захваченную парсером,
+  //  // можно освобождать
+  //    s21_free_indices_array((unsigned int*)modelData.p_to_indices);
 
-    // очистка памяти на указателе indices_array
-    // после инициализации индексного буфера, память, захваченную парсером,
-    // можно освобождать
-    //    s21_free_indices_array((unsigned int*)modelData.p_to_indices);
-
-    arrayBuf.release();  // Отвязываем буффер до момента отрисовки
-  } else {
-    QMessageBox::critical(
-        this, "Warning",
-        "Ошибка чтения файла: " + QString::fromStdString(filePath));
-  }
+  indexBuf.release();  // Отвязываем буффер до момента отрисовки
+  //  //    } else {
+  //  //      QMessageBox::critical(
+  //  //          this, "Warning",
+  //  //          "Ошибка чтения файла: " + QString::fromStdString(filePath));
+  //  //    }
 }
 
 void s21::OGLWidget::setNewGeometry() {
@@ -279,9 +317,9 @@ void s21::OGLWidget::setWidgetState(s21::ui_state_t& uiState) {
   update();
 }
 
-int s21::OGLWidget::getNVerticies() { return modelData.n_indices; }
+int s21::OGLWidget::getNVerticies() { return model.vertices.size(); }
 
-int s21::OGLWidget::getNIndicies() { return modelData.n_vertices; }
+int s21::OGLWidget::getNIndicies() { return model.faces.size(); }
 
 std::string s21::OGLWidget::getFilePath() {
   using namespace std;

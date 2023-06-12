@@ -23,6 +23,7 @@ void s21::MainWindow::findOutBasePath(std::string& basePath) {
 
   QString QbasePath = QCoreApplication::applicationDirPath();
   basePath = QbasePath.toStdString();
+  std::cout << "base path " << basePath << std::endl;
 }
 
 void s21::MainWindow::setState(std::string& basePath, ui_state_t& uiState) {
@@ -33,11 +34,14 @@ void s21::MainWindow::setState(std::string& basePath, ui_state_t& uiState) {
   ifstream fileStream;
   fileStream.open(confPath);
   if (fileStream.good()) {
+    std::cout << "i found suitable config" << '\n';
     fileStream.close();
     loadConf(confPath, uiState);
   } else {
+    std::cout << "no config founded" << '\n';
     setDefaults(basePath);
     loadConf(confPath, uiState);
+    std::cout << basePath;
     uiState.filePath = basePath + "/logo.obj";
   }
   syncUi();
@@ -59,7 +63,10 @@ void s21::MainWindow::loadConf(std::string& confPath, ui_state_t& uiState) {
     key = line.substr(0, separatorIdx);
     value = line.substr(separatorIdx + 1, line.length());
 
-    if (key == "filePath") S.filePath = value;
+    if (key == "filePath") {
+      S.filePath = value;
+      std::cout << "filepath from load conf:\n" << value << '\n';
+    }
 
     if (key == "x_rotation_deg") S.x_rotation_deg = stoi(value);
     if (key == "y_rotation_deg") S.y_rotation_deg = stoi(value);
