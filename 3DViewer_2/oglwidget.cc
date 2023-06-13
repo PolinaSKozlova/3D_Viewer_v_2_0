@@ -68,6 +68,7 @@ void s21::OGLWidget::paintGL() {
   //  const float* p_to_transform = (const float*)p_to_data;
 
   affine_transformation_matrix_.MakeMovement(transformations);
+  affine_transformation_matrix_.print();
   QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
   //  const float* p_to_transform =
   //      (const float*)affine_transformation_matrix_.GetMatrix();
