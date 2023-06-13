@@ -11,7 +11,7 @@ REPORT_DIR = report
 
 run: clean
 	clear
-	$(CC) $(CC_FLAGS) $(SANITIZER_FLAGS) affine_transformations/s21_matrix4X4.cc affine_transformations/s21_matrix_transform.cc run.cc -o run -g
+	$(CC) $(CC_FLAGS) $(SANITIZER_FLAGS) affine_transformations/s21_matrix4X4.cc affine_transformations/s21_matrix_transform.cc parser/s21_parser.cc $(OBJ_FILES) run.cc -o run -g
 #	./run
 
 all: install
