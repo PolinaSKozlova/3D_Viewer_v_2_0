@@ -3,14 +3,14 @@
 namespace s21 {
 Matrix4X4::Matrix4X4() : rows_(4), cols_(4) {
   MemoryAllocate();
-  InitializeIdentityMatrix();
+  // InitializeIdentityMatrix();
 }
 
-Matrix4X4::Matrix4X4(int size) : rows_(size), cols_(size) {
-  if (size <= 0) throw std::invalid_argument("Size can't be less than zero");
-  MemoryAllocate();
-  InitializeIdentityMatrix();
-}
+// Matrix4X4::Matrix4X4(int size) : rows_(size), cols_(size) {
+//   if (size <= 0) throw std::invalid_argument("Size can't be less than zero");
+//   MemoryAllocate();
+//   InitializeIdentityMatrix();
+// }
 
 Matrix4X4::Matrix4X4(const Matrix4X4& other) { *this = other; }
 

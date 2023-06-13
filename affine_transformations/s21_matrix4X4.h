@@ -38,7 +38,7 @@ struct TransformData {
 class Matrix4X4 {
  public:
   Matrix4X4();
-  explicit Matrix4X4(int size);
+  // explicit Matrix4X4(int size);
   Matrix4X4(const Matrix4X4& other);
   ~Matrix4X4();
   void MakeMovement(const TransformData& other);
