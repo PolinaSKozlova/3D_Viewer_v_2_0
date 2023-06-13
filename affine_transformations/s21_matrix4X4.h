@@ -67,8 +67,9 @@ class Matrix4X4 {
   void InitializeXRotationMatrix();
   void InitializeYRotationMatrix();
   void InitializeZRotationMatrix();
-  void InitializeUserScalerMatrix();
-  void InitializeModelScalerMatrix();
+  // void InitializeUserScalerMatrix();
+  // void InitializeModelScalerMatrix();
+  void InitializeScalerMatrix() noexcept;
   void InitializeShiftMatrix();
   // void SetNullMatrix();
   int rows_, cols_;
