@@ -105,7 +105,11 @@ void Matrix4X4::MemoryFree() {
 void Matrix4X4::InitializeIdentityMatrix() {
   for (int i = 0; i < rows_; ++i) {
     for (int j = 0; j < cols_; ++j) {
-      if (i == j) matrix_[i][j] = 1;
+      if (i == j) {
+        matrix_[i][j] = 1;
+      } else {
+        matrix_[i][j] = 0;
+      }
     }
   }
 }
