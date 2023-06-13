@@ -8,10 +8,10 @@
 
 namespace s21 {
 struct TransformData {
-  TransformData(double x_rotation = 0, double y_rotation = 0,
-                double z_rotation = 0, double shift_x = 0, double shift_y = 0,
-                double shift_z = 0, double scaler_user = 0,
-                double scaler_model = 0, bool perspective = false)
+  TransformData(float x_rotation = 0, float y_rotation = 0,
+                float z_rotation = 0, float shift_x = 0, float shift_y = 0,
+                float shift_z = 0, float scaler_user = 0,
+                float scaler_model = 0, bool perspective = false)
       : x_rotation_deg(x_rotation),
         y_rotation_deg(y_rotation),
         z_rotation_deg(z_rotation),
@@ -22,16 +22,16 @@ struct TransformData {
         model_scaler(scaler_model),
         perspective_ortho(perspective) {}
   // Углы поворота
-  double x_rotation_deg;
-  double y_rotation_deg;
-  double z_rotation_deg;
+  float x_rotation_deg;
+  float y_rotation_deg;
+  float z_rotation_deg;
   // Смещения вдоль осей
-  double x_shift;
-  double y_shift;
-  double z_shift;
+  float x_shift;
+  float y_shift;
+  float z_shift;
   // Коэффициент масштабирования
-  double user_scaler;
-  double model_scaler;
+  float user_scaler;
+  float model_scaler;
   bool perspective_ortho;
 };
 
