@@ -8,6 +8,7 @@
 namespace s21 {
 
 Model ObjParser::Parse(const std::string& filename) {
+  std::cout << "file in parser:" << filename << std::endl;
   Model model = ParseData(filename);
   return CalculateScaler(model);
 }
@@ -60,6 +61,9 @@ Model ObjParser::ParseData(const std::string& filename) {
           model.faces.push_back(face[i]);
           model.faces.push_back(face[i + 1]);
         }
+        //        model.faces.push_back(face[0]);
+        //        model.faces.push_back(face[1]);
+        //        model.faces.push_back(face[2]);
       } else {
         model.faces.insert(model.faces.end(), face.begin(), face.end());
       }
@@ -90,6 +94,7 @@ Model ObjParser::CalculateScaler(Model& model) {
 
   double max_val = std::max(std::max(x_max, y_max), z_max);
   model.scaler = 1.0 / max_val;
+  std::cout << "scaler in parser:" << model.scaler << std::endl;
   return std::move(model);
 }
 

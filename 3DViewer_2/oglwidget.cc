@@ -68,7 +68,7 @@ void s21::OGLWidget::paintGL() {
   //  const float* p_to_transform = (const float*)p_to_data;
 
   affine_transformation_matrix_.MakeMovement(transformations);
-  affine_transformation_matrix_.print();
+  //  affine_transformation_matrix_.print();
   QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
   //  const float* p_to_transform =
   //      (const float*)affine_transformation_matrix_.GetMatrix();
@@ -146,7 +146,7 @@ void s21::OGLWidget::paintGL() {
   }
 
   if (style.e_style != 0) {
-    std::cout << "Tryna drawning" << '\n';
+    //    std::cout << "Tryna drawning" << '\n';
     glDrawElements(GL_TRIANGLES, model.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
 
@@ -247,9 +247,6 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
   arrayBuf.bind();    // Tell OpenGL which VBOs to use
 
   float* p_to_data = model.vertices.data();
-  //      *(float**)(model.vertices.begin());  // Вот тут получаем адрес
-  //                                            //          первой
-  //                                            // вершиной
 
   arrayBuf.allocate(
       p_to_data,
@@ -266,12 +263,22 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
   indexBuf.create();  // Создаем буффер
   indexBuf.bind();    // Tell OpenGL which VBOs to use
 
+  //  std::cout <<  *model.faces.data() << std::endl;
+
   indexBuf.allocate(
       model.faces.data(),
       model.faces.size() *
           sizeof(unsigned int));  // Тут allocate - это одновременно и
   //                                  // выделение памяти и загрузка
 
+  if (indexBuf.isCreated()) {
+    GLuint* bufferData =
+        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
+    for (int i = 0; i < model.faces.size(); i++) {
+      qDebug() << "Index in load " << i << ": " << bufferData[i];
+    }
+    indexBuf.unmap();
+  }
   //  // очистка памяти на указателе indices_array
   //  // после инициализации индексного буфера, память, захваченную парсером,
   //  // можно освобождать
