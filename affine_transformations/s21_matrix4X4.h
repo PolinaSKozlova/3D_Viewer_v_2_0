@@ -41,15 +41,16 @@ class Matrix4X4 {
   // explicit Matrix4X4(int size);
   Matrix4X4(const Matrix4X4& other);
   ~Matrix4X4();
-  void MakeMovement(const TransformData& other);
-  void MulMatrix(const Matrix4X4& other);
   Matrix4X4& operator=(const Matrix4X4& other) noexcept;
   Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
   Matrix4X4& operator*=(const double& num) noexcept;
+  void MakeMovement(const TransformData& other);
+  void MulMatrix(const Matrix4X4& other);
   void MulNumber(const double& num) noexcept;
   float** GetMatrix() const noexcept;
   void SetData(const TransformData& other);
   float* CreateOneRowMatrix() const noexcept;
+  /*вывод матрицы*/
   void print() {
     for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 4; ++j) {
@@ -69,7 +70,7 @@ class Matrix4X4 {
   void InitializeUserScalerMatrix();
   void InitializeModelScalerMatrix();
   void InitializeShiftMatrix();
-  void SetNullMatrix();
+  // void SetNullMatrix();
   int rows_, cols_;
   float** matrix_;
   TransformData data_;

@@ -39,7 +39,7 @@ Matrix4X4& Matrix4X4::operator=(const Matrix4X4& other) noexcept {
 
 Matrix4X4& Matrix4X4::operator*=(const Matrix4X4& other) noexcept {
   Matrix4X4 result_matrix;
-  result_matrix.SetNullMatrix();
+  // result_matrix.SetNullMatrix();
   for (int i = 0; i < rows_; ++i) {
     for (int j = 0; j < cols_; ++j) {
       for (int k = 0; k < cols_; ++k) {

@@ -59,11 +59,11 @@ void Matrix4X4::InitializeShiftMatrix() {
   matrix_[1][3] += data_.y_shift;
   matrix_[2][3] += data_.z_shift;
 }
-void Matrix4X4::SetNullMatrix() {
-  for (int i = 0; i < rows_; ++i) {
-    for (int j = 0; j < cols_; ++j) {
-      matrix_[i][j] = 0;
-    }
-  }
-}
+// void Matrix4X4::SetNullMatrix() {
+//   for (int i = 0; i < rows_; ++i) {
+//     for (int j = 0; j < cols_; ++j) {
+//       matrix_[i][j] = 0;
+//     }
+//   }
+// }
 };  //  namespace s21
