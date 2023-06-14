@@ -14,72 +14,63 @@ void ViewerSettings::LoadConf(std::string& confPath) {
   fileStream.open(confPath);
   string line, key, value;
   int separatorIdx;
-  // map<string, function<void(const string&)>> key_value_pairs = {
-  //     {"filePath", [&](const string& val) { conf_settings_.filePath = val;
-  //     }},
-  //     {"x_rotation_deg",
-  //      [&](const string& val) { conf_settings_.x_rotation_deg = stoi(val);
-  //      }},
-  //     {"y_rotation_deg",
-  //      [&](const std::string& val) {
-  //        conf_settings_.y_rotation_deg = stoi(val);
-  //      }},
-  //     {"z_rotation_deg",
-  //      [&](const string& val) { conf_settings_.z_rotation_deg = stoi(val);
-  //      }},
-  //     {"x_shift",
-  //      [&](const string& val) { conf_settings_.x_shift = stoi(val); }},
-  //     {"y_shift",
-  //      [&](const string& val) { conf_settings_.y_shift = stoi(val); }},
-  //     {"z_shift",
-  //      [&](const string& val) { conf_settings_.z_shift = stoi(val); }},
-  //     {"user_scaler",
-  //      [&](const string& val) { conf_settings_.user_scaler = stoi(val); }},
-  //     {"perspective",
-  //      [&](const string& val) { conf_settings_.perspective = stoi(val); }},
-  //     {"e_style",
-  //      [&](const string& val) { conf_settings_.e_style = stoi(val); }},
-  //     {"e_size", [&](const string& val) { conf_settings_.e_size = stoi(val);
-  //     }},
-  //     {"v_style",
-  //      [&](const string& val) { conf_settings_.v_style = stoi(val); }},
-  //     {"v_size", [&](const string& val) { conf_settings_.v_size = stoi(val);
-  //     }},
-  //     {"n_verticies",
-  //      [&](const string& val) { conf_settings_.n_verticies = stoi(val); }},
-  //     {"n_indices",
-  //      [&](const string& val) { conf_settings_.n_indices = stoi(val); }},
-  //     {"bg_color_red",
-  //      [&](const string& val) { conf_settings_.bg_color.setRed(stoi(value));
-  //      }},
-  //     {"bg_color_green",
-  //      [&](const string& val) {
-  //        conf_settings_.bg_color.setGreen(stoi(value));
-  //      }},
-  //     {"bg_color_blue",
-  //      [&](const string& val) {
-  //        conf_settings_.bg_color.setBlue(stoi(value));
-  //      }},
-  //     {"v_color_red",
-  //      [&](const string& val) { conf_settings_.v_color.setRed(stoi(value));
-  //      }},
-  //     {"v_color_green",
-  //      [&](const string& val) {
-  //        conf_settings_.v_color.setGreen(stoi(value));
-  //      }},
-  //     {"v_color_blue",
-  //      [&](const string& val) { conf_settings_.v_color.setBlue(stoi(value));
-  //      }},
-  //     {"e_color_red",
-  //      [&](const string& val) { conf_settings_.e_color.setRed(stoi(value));
-  //      }},
-  //     {"e_color_green",
-  //      [&](const string& val) {
-  //        conf_settings_.e_color.setGreen(stoi(value));
-  //      }},
-  //     {"e_color_blue", [&](const string& val) {
-  //        conf_settings_.e_color.setBlue(stoi(value));
-  //      }}};
+  map<string, function<void(const string&)>> key_value_pairs = {
+      {"filePath", [&](const string& val) { conf_settings_.filePath = val; }},
+      {"x_rotation_deg",
+       [&](const string& val) { conf_settings_.x_rotation_deg = stoi(val); }},
+      {"y_rotation_deg",
+       [&](const std::string& val) {
+         conf_settings_.y_rotation_deg = stoi(val);
+       }},
+      {"z_rotation_deg",
+       [&](const string& val) { conf_settings_.z_rotation_deg = stoi(val); }},
+      {"x_shift",
+       [&](const string& val) { conf_settings_.x_shift = stoi(val); }},
+      {"y_shift",
+       [&](const string& val) { conf_settings_.y_shift = stoi(val); }},
+      {"z_shift",
+       [&](const string& val) { conf_settings_.z_shift = stoi(val); }},
+      {"user_scaler",
+       [&](const string& val) { conf_settings_.user_scaler = stoi(val); }},
+      {"perspective",
+       [&](const string& val) { conf_settings_.perspective = stoi(val); }},
+      {"e_style",
+       [&](const string& val) { conf_settings_.e_style = stoi(val); }},
+      {"e_size", [&](const string& val) { conf_settings_.e_size = stoi(val); }},
+      {"v_style",
+       [&](const string& val) { conf_settings_.v_style = stoi(val); }},
+      {"v_size", [&](const string& val) { conf_settings_.v_size = stoi(val); }},
+      {"n_verticies",
+       [&](const string& val) { conf_settings_.n_verticies = stoi(val); }},
+      {"n_indices",
+       [&](const string& val) { conf_settings_.n_indices = stoi(val); }},
+      {"bg_color_red",
+       [&](const string& val) { conf_settings_.bg_color.setRed(stoi(value)); }},
+      {"bg_color_green",
+       [&](const string& val) {
+         conf_settings_.bg_color.setGreen(stoi(value));
+       }},
+      {"bg_color_blue",
+       [&](const string& val) {
+         conf_settings_.bg_color.setBlue(stoi(value));
+       }},
+      {"v_color_red",
+       [&](const string& val) { conf_settings_.v_color.setRed(stoi(value)); }},
+      {"v_color_green",
+       [&](const string& val) {
+         conf_settings_.v_color.setGreen(stoi(value));
+       }},
+      {"v_color_blue",
+       [&](const string& val) { conf_settings_.v_color.setBlue(stoi(value)); }},
+      {"e_color_red",
+       [&](const string& val) { conf_settings_.e_color.setRed(stoi(value)); }},
+      {"e_color_green",
+       [&](const string& val) {
+         conf_settings_.e_color.setGreen(stoi(value));
+       }},
+      {"e_color_blue", [&](const string& val) {
+         conf_settings_.e_color.setBlue(stoi(value));
+       }}};
   while (getline(fileStream, line)) {
     separatorIdx = line.find("=");
     key = line.substr(0, separatorIdx);
@@ -94,8 +85,6 @@ void ViewerSettings::SaveConf(std::string& basePath, ViewerSettings& uiState) {
   using namespace filesystem;
   conf_settings_ = uiState.conf_settings_;
   string confPath = basePath + "/session.conf";
-  std::cout << "SaveConf confPath " << conf_settings_.filePath << std::endl;
-  std::cout << "SaveConf basePath " << basePath << std::endl;
   ofstream fileStream;
   fileStream.open(confPath);
   fileStream << "filePath=" << conf_settings_.filePath << endl;
