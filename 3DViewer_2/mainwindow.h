@@ -7,7 +7,7 @@
 #include <QMainWindow>
 
 #include "affine_transformations/s21_matrix4X4.h"
-#include "viewersettings.h"
+//#include "viewersettings.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -136,7 +136,7 @@ class MainWindow : public QMainWindow {
   void maximizeUiStyle();
 
   void showFileInfo();
-  ViewerSettings viewer_conf_;
+  //  ViewerSettings viewer_conf_;
   QString file_name;
   QTimer* timer;  // идентификатор таймера
   int frame;

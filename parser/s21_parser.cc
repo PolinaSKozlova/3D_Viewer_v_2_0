@@ -22,7 +22,6 @@ Model ObjParser::ParseData(const std::string& filename) {
 
   ifstream ifs(filename);
   if (!ifs.is_open()) {
-    std::cout << filename << '\n';
     throw runtime_error("Could not open file its me parser ");
   }
 
@@ -32,7 +31,6 @@ Model ObjParser::ParseData(const std::string& filename) {
     istringstream iss(line);
     std::string type{};
     iss >> type;
-    //    std::cout << line << '\n';
     if (type == "v") {
       float x{}, y{}, z{};
       if (!(iss >> x >> y >> z)) {
@@ -62,9 +60,6 @@ Model ObjParser::ParseData(const std::string& filename) {
           model.faces.push_back(face[i]);
           model.faces.push_back(face[i + 1]);
         }
-        //        model.faces.push_back(face[0]);
-        //        model.faces.push_back(face[1]);
-        //        model.faces.push_back(face[2]);
       } else {
         model.faces.insert(model.faces.end(), face.begin(), face.end());
       }
@@ -95,7 +90,6 @@ Model ObjParser::CalculateScaler(Model& model) {
 
   double max_val = std::max(std::max(x_max, y_max), z_max);
   model.scaler = 1.0 / max_val;
-  std::cout << "scaler in parser:" << model.scaler << std::endl;
   return std::move(model);
 }
 
