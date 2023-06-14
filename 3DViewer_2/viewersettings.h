@@ -8,7 +8,7 @@
 #include "QtWidgets/qapplication.h"
 
 namespace s21 {
-std::string FindOutBasePath() {
+std::string FindBasePath() {
   using namespace std;
   using namespace filesystem;
 
@@ -19,7 +19,7 @@ std::string FindOutBasePath() {
 
 struct UiState {
   UiState()
-      : filePath(FindOutBasePath() + "/logo.obj"),
+      : filePath(FindBasePath() + "/logo.obj"),
         n_verticies(0),
         n_indices(0),
         x_rotation_deg(0),
@@ -60,9 +60,9 @@ struct UiState {
 class ViewerSettings {
  public:
   ViewerSettings();
-  void SetState(UiState& uiState);
-  void LoadConf(std::string& confPath, UiState& uiState);
+  // void LoadConf(std::string& confPath, UiState& uiState);
   void SaveConf(std::string& basePath, UiState& uiState);
+  void LoadConf(std::string& confPath);
   void SetDefaultTransforms();
   void SetDefaultStyle();
 
