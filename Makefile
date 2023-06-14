@@ -19,7 +19,7 @@ all: install
 install:
 	cmake -S . -B build -G "Unix Makefiles"
 	make -C build
-#	cd ./build && rm -rf CMakeFiles 3DViewer_v_2_0_autogen cmake_install.cmake CMakeCache.txt Makefile
+	cd ./build && rm -rf CMakeFiles 3DViewer_2_autogen cmake_install.cmake CMakeCache.txt Makefile qrc*
 	open build
 
 uninstall:
