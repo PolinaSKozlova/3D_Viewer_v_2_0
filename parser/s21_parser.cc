@@ -22,7 +22,7 @@ Model ObjParser::ParseData(const std::string& filename) {
 
   ifstream ifs(filename);
   if (!ifs.is_open()) {
-    throw runtime_error("Could not open file its me parser ");
+    throw runtime_error("Could not open file");
   }
 
   Model model;
