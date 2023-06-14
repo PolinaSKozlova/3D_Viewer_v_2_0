@@ -6,13 +6,13 @@ static double DegreesToRadian(double degrees) { return degrees * (M_PI / 180); }
 void Matrix4X4::MakeMovement(const TransformData& other) {
   SetData(other);
   InitializeIdentityMatrix();
+  InitializeShiftMatrix();
   InitializeXRotationMatrix();
   InitializeYRotationMatrix();
   InitializeZRotationMatrix();
   InitializeScalerMatrix();
   // InitializeUserScalerMatrix();
   // InitializeModelScalerMatrix();
-  InitializeShiftMatrix();
 }
 
 void Matrix4X4::InitializeXRotationMatrix() {
@@ -60,6 +60,7 @@ void Matrix4X4::InitializeZRotationMatrix() {
 
 void Matrix4X4::InitializeScalerMatrix() noexcept {
   if (data_.model_scaler) MulNumber(data_.model_scaler);
+  matrix_[3][3] = 1;
   if (data_.user_scaler) MulNumber(data_.user_scaler);
   matrix_[3][3] = 1;
   matrix_[2][3] += -5;

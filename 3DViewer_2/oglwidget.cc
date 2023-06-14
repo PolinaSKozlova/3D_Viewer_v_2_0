@@ -68,7 +68,7 @@ void s21::OGLWidget::paintGL() {
   //  const float* p_to_transform = (const float*)p_to_data;
 
   affine_transformation_matrix_.MakeMovement(transformations);
-  affine_transformation_matrix_.print();
+  //  affine_transformation_matrix_.print();
   QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
   //  const float* p_to_transform =
   //      (const float*)affine_transformation_matrix_.GetMatrix();
@@ -146,7 +146,7 @@ void s21::OGLWidget::paintGL() {
   }
 
   if (style.e_style != 0) {
-    std::cout << "Tryna drawning" << '\n';
+    //    std::cout << "Tryna drawning" << '\n';
     glDrawElements(GL_TRIANGLES, model.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
 
@@ -164,7 +164,7 @@ void s21::OGLWidget::paintGL() {
     program_P.setUniformValue("dot_color", style.v_color.red() / 255.,
                               style.v_color.green() / 255.,
                               style.v_color.blue() / 255., 1.0);
-    glDrawElements(GL_POINTS, model.faces.size(), GL_INT, nullptr);
+    glDrawElements(GL_POINTS, model.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
   // Here the broken part is ended))
 
@@ -234,50 +234,49 @@ void s21::OGLWidget::initShaders() {
 
 // Загрузка модели
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
-  //    int return_code = load_model(file_path.c_str(), &modelData);
-  ObjParser parser{};
-  model = parser.Parse(file_path);
-  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!" << '\n';
-  std::cout << model.faces.size() << '\n';
-  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!" << '\n';
-  transformations.model_scaler = model.scaler;
+  try {
+    ObjParser parser{};
+    model = parser.Parse(file_path);
+    transformations.model_scaler = model.scaler;
 
-  //  if (return_code == 0) {
-  arrayBuf.create();  // Создаем буффер
-  arrayBuf.bind();    // Tell OpenGL which VBOs to use
+    arrayBuf.create();  // Создаем буффер
+    arrayBuf.bind();    // Tell OpenGL which VBOs to use
 
-  float* p_to_data = model.vertices.data();
-  //      *(float**)(model.vertices.begin());  // Вот тут получаем адрес
-  //                                            //          первой
-  //                                            // вершиной
+    float* p_to_data = model.vertices.data();
 
-  arrayBuf.allocate(
-      p_to_data,
-      model.vertices.size() * sizeof(float));  // Тут allocate - это
-  //  //                            одновременно и
-  // выделение памяти и загрузка
-  arrayBuf.release();  // Отвязываем буффер до момента отрисовки
+    arrayBuf.allocate(p_to_data,
+                      model.vertices.size() *
+                          sizeof(float));  // Тут allocate - это  одновременно и
+                                           // выделение памяти и загрузка
+    arrayBuf.release();  // Отвязываем буффер до момента отрисовки
 
-  // очистка памяти на указателе vertices_matrix
-  // после инициализации вершинного буфера, память, захваченную парсером,
-  // можно освобождать
-  //    s21_free_vertices_matrix((float**)modelData.p_to_vertices);
+    indexBuf.create();  // Создаем буффер
+    indexBuf.bind();    // Tell OpenGL which VBOs to use
 
-  indexBuf.create();  // Создаем буффер
-  indexBuf.bind();    // Tell OpenGL which VBOs to use
+    indexBuf.allocate(
+        model.faces.data(),
+        model.faces.size() *
+            sizeof(unsigned int));  // Тут allocate - это одновременно и
+    //                                  // выделение памяти и загрузка
 
-  indexBuf.allocate(
-      model.faces.data(),
-      model.faces.size() *
-          sizeof(unsigned int));  // Тут allocate - это одновременно и
-  //                                  // выделение памяти и загрузка
+    //  if (indexBuf.isCreated()) {
+    //    GLuint* bufferData =
+    //        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
+    //    for (int i = 0; i < model.faces.size(); i++) {
+    //      qDebug() << "Index in load " << i << ": " << bufferData[i];
+    //    }
+    //    indexBuf.unmap();
+    //  }
 
-  //  // очистка памяти на указателе indices_array
-  //  // после инициализации индексного буфера, память, захваченную парсером,
-  //  // можно освобождать
-  //    s21_free_indices_array((unsigned int*)modelData.p_to_indices);
+    //  // очистка памяти на указателе indices_array
+    //  // после инициализации индексного буфера, память, захваченную парсером,
+    //  // можно освобождать
+    //    s21_free_indices_array((unsigned int*)modelData.p_to_indices);
 
-  indexBuf.release();  // Отвязываем буффер до момента отрисовки
+    indexBuf.release();  // Отвязываем буффер до момента отрисовки
+  } catch (const std::exception& e) {
+    QMessageBox::critical(this, "Warning", e.what());
+  }
   //  //    } else {
   //  //      QMessageBox::critical(
   //  //          this, "Warning",

@@ -8,6 +8,7 @@
 namespace s21 {
 
 Model ObjParser::Parse(const std::string& filename) {
+  std::cout << "file in parser:" << filename << std::endl;
   Model model = ParseData(filename);
   return CalculateScaler(model);
 }
@@ -21,7 +22,6 @@ Model ObjParser::ParseData(const std::string& filename) {
 
   ifstream ifs(filename);
   if (!ifs.is_open()) {
-    std::cout << filename << '\n';
     throw runtime_error("Could not open file its me parser ");
   }
 
@@ -31,7 +31,6 @@ Model ObjParser::ParseData(const std::string& filename) {
     istringstream iss(line);
     std::string type{};
     iss >> type;
-    //    std::cout << line << '\n';
     if (type == "v") {
       float x{}, y{}, z{};
       if (!(iss >> x >> y >> z)) {
