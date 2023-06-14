@@ -290,22 +290,25 @@ void s21::OGLWidget::setNewGeometry() {
 }
 
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
-  filePath = uiState.filePath;
-  transformations.x_rotation_deg = uiState.x_rotation_deg;
-  transformations.y_rotation_deg = uiState.y_rotation_deg;
-  transformations.z_rotation_deg = uiState.z_rotation_deg;
-  transformations.x_shift = (uiState.x_shift / (double)100) * aspect;
-  transformations.y_shift = uiState.y_shift / (double)100;
-  transformations.z_shift = uiState.z_shift / (double)100;
-  transformations.user_scaler = 1 + uiState.user_scaler / (double)100.;
-  transformations.perspective_ortho = uiState.perspective;
-  style.bg_color = uiState.bg_color;
-  style.e_color = uiState.e_color;
-  style.v_color = uiState.v_color;
-  style.e_style = uiState.e_style;
-  style.e_size = uiState.e_size;
-  style.v_style = uiState.v_style;
-  style.v_size = uiState.v_size;
+  //  ui_conf_ = uiState;
+  filePath = uiState.GetUiState().filePath;
+  transformations.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
+  transformations.y_rotation_deg = uiState.GetUiState().y_rotation_deg;
+  transformations.z_rotation_deg = uiState.GetUiState().z_rotation_deg;
+  transformations.x_shift =
+      (uiState.GetUiState().x_shift / (double)100) * aspect;
+  transformations.y_shift = uiState.GetUiState().y_shift / (double)100;
+  transformations.z_shift = uiState.GetUiState().z_shift / (double)100;
+  transformations.user_scaler =
+      1 + uiState.GetUiState().user_scaler / (double)100.;
+  transformations.perspective_ortho = uiState.GetUiState().perspective;
+  style.bg_color = uiState.GetUiState().bg_color;
+  style.e_color = uiState.GetUiState().e_color;
+  style.v_color = uiState.GetUiState().v_color;
+  style.e_style = uiState.GetUiState().e_style;
+  style.e_size = uiState.GetUiState().e_size;
+  style.v_style = uiState.GetUiState().v_style;
+  style.v_size = uiState.GetUiState().v_size;
   update();
 }
 

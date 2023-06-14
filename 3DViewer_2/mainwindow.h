@@ -7,7 +7,8 @@
 #include <QMainWindow>
 
 #include "affine_transformations/s21_matrix4X4.h"
-//#include "viewersettings.h"
+#include "parser/s21_parser.h"
+#include "viewersettings.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -91,6 +92,7 @@ class MainWindow : public QMainWindow {
  private:
   Ui::MainWindow* ui;
   // s21::ui_state_t uiState;
+
   std::string basePath;
   void findOutBasePath(std::string& basePath);
   void setState(std::string& basePath, ViewerSettings& uiState);
@@ -98,8 +100,8 @@ class MainWindow : public QMainWindow {
   // void loadConf(std::string& confPath);
   void saveConf(std::string& basePath, ViewerSettings& uiState);
   void updateUiState(int value, std::string& valueType);
-  void setDefaultTransforms();
-  void setDefaultStyle();
+  //  void setDefaultTransforms();
+  //  void setDefaultStyle();
   void syncUi();
   void minimizeUi();
   void maximizeUi();
@@ -108,7 +110,7 @@ class MainWindow : public QMainWindow {
   void minimizeUiStyle();
   void maximizeUiStyle();
   void showFileInfo();
-  //  ViewerSettings viewer_conf_;
+  ViewerSettings viewer_conf_;
   QString file_name;
   QTimer* timer;  // идентификатор таймера
   int frame;

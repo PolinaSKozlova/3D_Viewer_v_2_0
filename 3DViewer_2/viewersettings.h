@@ -3,22 +3,25 @@
 
 #include <QColor>
 #include <QColorDialog>
+#include <functional>
+#include <map>
 #include <string>
 
 #include "QtWidgets/qapplication.h"
 
 namespace s21 {
-std::string FindBasePath() {
-  using namespace std;
-  using namespace filesystem;
-  QString QbasePath = QCoreApplication::applicationDirPath();
-  string basePath = QbasePath.toStdString();
-  return basePath;
-}
+// std::string FindBasePath() {
+//   using namespace std;
+//   using namespace filesystem;
+//   QString QbasePath = QCoreApplication::applicationDirPath();
+//   string basePath = QbasePath.toStdString();
+//   return basePath;
+// }
 
 struct UiState {
   UiState()
-      : filePath(FindBasePath() + "/logo.obj"),
+      : filePath(""),
+        //        filePath(FindBasePath() + "/logo.obj"),
         n_verticies(0),
         n_indices(0),
         x_rotation_deg(0),
@@ -85,10 +88,11 @@ class ViewerSettings {
   void SetDefaultTransforms();
   void SetDefaultStyle();
   void SetPath(std::string& path);
-  ViewerSettings& operator=(const ViewerSettings& other) {
+  ViewerSettings& operator=(ViewerSettings& other) {
     conf_settings_ = other.conf_settings_;
     return *this;
   }
+  UiState& GetUiState() { return conf_settings_; }
 
  private:
   UiState conf_settings_{};

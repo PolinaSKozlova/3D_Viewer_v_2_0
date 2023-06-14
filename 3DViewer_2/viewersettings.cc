@@ -1,8 +1,8 @@
 #include "viewersettings.h"
 
-// #include <filesystem>
-#include <functional>
-#include <map>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 
 namespace s21 {
 ViewerSettings::ViewerSettings() {}
@@ -45,7 +45,7 @@ void ViewerSettings::LoadConf(std::string& confPath) {
       {"e_size", [&](const string& val) { conf_settings_.e_size = stoi(val); }},
       {"v_style",
        [&](const string& val) { conf_settings_.v_style = stoi(val); }},
-      {"v_size", [&](const tring& val) { conf_settings_.v_size = stoi(val); }},
+      {"v_size", [&](const string& val) { conf_settings_.v_size = stoi(val); }},
       {"n_verticies",
        [&](const string& val) { conf_settings_.n_verticies = stoi(val); }},
       {"n_indices",
@@ -89,7 +89,7 @@ void ViewerSettings::LoadConf(std::string& confPath) {
 void ViewerSettings::SaveConf(std::string& basePath, ViewerSettings& uiState) {
   using namespace std;
   using namespace filesystem;
-  conf_settings_ = uiState;
+  conf_settings_ = uiState.conf_settings_;
   string confPath = basePath + "/session.conf";
   ofstream fileStream;
   fileStream.open(confPath);

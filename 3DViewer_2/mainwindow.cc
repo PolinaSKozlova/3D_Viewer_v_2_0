@@ -25,7 +25,7 @@ void s21::MainWindow::findOutBasePath(std::string& basePath) {
   std::cout << "base path " << basePath << std::endl;
 }
 
-void s21::MainWindow::setState(std::string& basePath, UiState& uiState) {
+void s21::MainWindow::setState(std::string& basePath, ViewerSettings& uiState) {
   using namespace std;
   using namespace filesystem;
   string confPath = basePath + "/session.conf";
@@ -38,7 +38,6 @@ void s21::MainWindow::setState(std::string& basePath, UiState& uiState) {
   } else {
     std::cout << "no config founded" << '\n';
     setDefaults(basePath);
-    // loadConf(confPath, uiState);
     std::cout << basePath;
     viewer_conf_.LoadConf(confPath);
     basePath += "/logo.obj";
@@ -60,40 +59,44 @@ void s21::MainWindow::setDefaults(std::string& basePath) {
 }
 
 void s21::MainWindow::updateUiState(int value, std::string& valueType) {
-  if (valueType == "x_rotation_deg") viewer_conf_.x_rotation_deg = value;
-  if (valueType == "y_rotation_deg") viewer_conf_.y_rotation_deg = value;
-  if (valueType == "z_rotation_deg") viewer_conf_.z_rotation_deg = value;
-  if (valueType == "x_shift") viewer_conf_.x_shift = value;
-  if (valueType == "y_shift") viewer_conf_.y_shift = value;
-  if (valueType == "z_shift") viewer_conf_.z_shift = value;
-  if (valueType == "user_scaler") viewer_conf_.user_scaler = value;
-  if (valueType == "perspective") viewer_conf_.perspective = value;
+  if (valueType == "x_rotation_deg")
+    viewer_conf_.GetUiState().x_rotation_deg = value;
+  if (valueType == "y_rotation_deg")
+    viewer_conf_.GetUiState().y_rotation_deg = value;
+  if (valueType == "z_rotation_deg")
+    viewer_conf_.GetUiState().z_rotation_deg = value;
+  if (valueType == "x_shift") viewer_conf_.GetUiState().x_shift = value;
+  if (valueType == "y_shift") viewer_conf_.GetUiState().y_shift = value;
+  if (valueType == "z_shift") viewer_conf_.GetUiState().z_shift = value;
+  if (valueType == "user_scaler") viewer_conf_.GetUiState().user_scaler = value;
+  if (valueType == "perspective") viewer_conf_.GetUiState().perspective = value;
   ui->widget->setWidgetState(viewer_conf_);
   syncUi();
 }
 
 void s21::MainWindow::syncUi() {
-  ui->xRotationSlider->setValue(viewer_conf_.x_rotation_deg);
-  ui->xRotationSpinBox->setValue(viewer_conf_.x_rotation_deg);
-  ui->yRotationSlider->setValue(viewer_conf_.y_rotation_deg);
-  ui->yRotationSpinBox->setValue(viewer_conf_.y_rotation_deg);
-  ui->zRotationSlider->setValue(viewer_conf_.z_rotation_deg);
-  ui->zRotationSpinBox->setValue(viewer_conf_.z_rotation_deg);
-  ui->xShiftSlider->setValue(viewer_conf_.x_shift);
-  ui->xShiftSpinBox->setValue(viewer_conf_.x_shift);
-  ui->yShiftSlider->setValue(viewer_conf_.y_shift);
-  ui->yShiftSpinBox->setValue(viewer_conf_.y_shift);
-  ui->zShiftSlider->setValue(viewer_conf_.z_shift);
-  ui->zShiftSpinBox->setValue(viewer_conf_.z_shift);
-  ui->userScalerSlider->setValue(viewer_conf_.user_scaler);
-  ui->userScalerSpinBox->setValue(viewer_conf_.user_scaler);
-  ui->persperctiveComboBox->setCurrentIndex(viewer_conf_.perspective);
-  ui->verticiesTypeComboBox->setCurrentIndex(viewer_conf_.v_style);
-  ui->verticiesSizeSlider->setValue(viewer_conf_.v_size);
-  ui->vertexSizeSpinBox->setValue(viewer_conf_.v_size);
-  ui->edgesTypeComboBox->setCurrentIndex(viewer_conf_.e_style);
-  ui->edgesSizeSlider->setValue(viewer_conf_.e_size);
-  ui->edgesSizeSpinBox->setValue(viewer_conf_.e_size);
+  ui->xRotationSlider->setValue(viewer_conf_.GetUiState().x_rotation_deg);
+  ui->xRotationSpinBox->setValue(viewer_conf_.GetUiState().x_rotation_deg);
+  ui->yRotationSlider->setValue(viewer_conf_.GetUiState().y_rotation_deg);
+  ui->yRotationSpinBox->setValue(viewer_conf_.GetUiState().y_rotation_deg);
+  ui->zRotationSlider->setValue(viewer_conf_.GetUiState().z_rotation_deg);
+  ui->zRotationSpinBox->setValue(viewer_conf_.GetUiState().z_rotation_deg);
+  ui->xShiftSlider->setValue(viewer_conf_.GetUiState().x_shift);
+  ui->xShiftSpinBox->setValue(viewer_conf_.GetUiState().x_shift);
+  ui->yShiftSlider->setValue(viewer_conf_.GetUiState().y_shift);
+  ui->yShiftSpinBox->setValue(viewer_conf_.GetUiState().y_shift);
+  ui->zShiftSlider->setValue(viewer_conf_.GetUiState().z_shift);
+  ui->zShiftSpinBox->setValue(viewer_conf_.GetUiState().z_shift);
+  ui->userScalerSlider->setValue(viewer_conf_.GetUiState().user_scaler);
+  ui->userScalerSpinBox->setValue(viewer_conf_.GetUiState().user_scaler);
+  ui->persperctiveComboBox->setCurrentIndex(
+      viewer_conf_.GetUiState().perspective);
+  ui->verticiesTypeComboBox->setCurrentIndex(viewer_conf_.GetUiState().v_style);
+  ui->verticiesSizeSlider->setValue(viewer_conf_.GetUiState().v_size);
+  ui->vertexSizeSpinBox->setValue(viewer_conf_.GetUiState().v_size);
+  ui->edgesTypeComboBox->setCurrentIndex(viewer_conf_.GetUiState().e_style);
+  ui->edgesSizeSlider->setValue(viewer_conf_.GetUiState().e_size);
+  ui->edgesSizeSpinBox->setValue(viewer_conf_.GetUiState().e_size);
 }
 
 void s21::MainWindow::on_uiShowButton_clicked() {
@@ -173,9 +176,10 @@ void s21::MainWindow::showFileInfo() {
 
   string fileInfo = ui->widget->getFilePath();
   fileInfo += " N indicies ";
-  fileInfo += to_string(uiState.n_indices);
+  fileInfo += to_string(viewer_conf_.GetUiState().n_indices);
   fileInfo += " N edges ";
-  fileInfo += to_string((uiState.n_indices / 3) + uiState.n_verticies - 2);
+  fileInfo += to_string((viewer_conf_.GetUiState().n_indices / 3) +
+                        viewer_conf_.GetUiState().n_verticies - 2);
 
   QString message = QString::fromStdString(fileInfo);
   ui->statusBar->showMessage(message);
@@ -262,7 +266,7 @@ void s21::MainWindow::on_userScalerSpinBox_valueChanged(double arg1) {
 void s21::MainWindow::on_setDefaultTransformsButton_clicked() {
   viewer_conf_.SetDefaultTransforms();
   syncUi();
-  ui->widget->setWidgetState(uiState);
+  ui->widget->setWidgetState(viewer_conf_);
 }
 
 void s21::MainWindow::on_persperctiveComboBox_activated(int index) {
@@ -275,14 +279,14 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
   QString inFileName = QFileDialog::getOpenFileName(
       this, "Open file", QString::fromStdString(basePath), filter);
   if (inFileName.isNull() == false) {
-    uiState.filePath = inFileName.toStdString();
+    viewer_conf_.GetUiState().filePath = inFileName.toStdString();
     viewer_conf_.SetDefaultTransforms();
     syncUi();
-    ui->widget->setWidgetState(uiState);
+    ui->widget->setWidgetState(viewer_conf_);
     ui->widget->setNewGeometry();
 
-    uiState.n_indices = ui->widget->getNIndicies();
-    uiState.n_verticies = ui->widget->getNVerticies();
+    viewer_conf_.GetUiState().n_indices = ui->widget->getNIndicies();
+    viewer_conf_.GetUiState().n_verticies = ui->widget->getNVerticies();
     showFileInfo();
   }
 }
@@ -290,65 +294,65 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
 void s21::MainWindow::on_bgColorButton_clicked() {
   QColor bgColor = QColorDialog::getColor(Qt::white, this, "Choose color");
   if (bgColor.isValid()) {
-    uiState.bg_color = bgColor;
-    ui->widget->setWidgetState(uiState);
+    viewer_conf_.GetUiState().bg_color = bgColor;
+    ui->widget->setWidgetState(viewer_conf_);
   }
 }
 
 void s21::MainWindow::on_edgesColorButton_clicked() {
   QColor eColor = QColorDialog::getColor(Qt::white, this, "Choose color");
   if (eColor.isValid()) {
-    uiState.e_color = eColor;
-    ui->widget->setWidgetState(uiState);
+    viewer_conf_.GetUiState().e_color = eColor;
+    ui->widget->setWidgetState(viewer_conf_);
   }
 }
 
 void s21::MainWindow::on_verticiesColorButton_clicked() {
   QColor vColor = QColorDialog::getColor(Qt::white, this, "Choose color");
   if (vColor.isValid()) {
-    uiState.v_color = vColor;
-    ui->widget->setWidgetState(uiState);
+    viewer_conf_.GetUiState().v_color = vColor;
+    ui->widget->setWidgetState(viewer_conf_);
   }
 }
 
 void s21::MainWindow::on_verticiesTypeComboBox_activated(int index) {
-  uiState.v_style = index;
-  ui->widget->setWidgetState(uiState);
+  viewer_conf_.GetUiState().v_style = index;
+  ui->widget->setWidgetState(viewer_conf_);
 }
 
 void s21::MainWindow::on_verticiesSizeSlider_valueChanged(int value) {
-  uiState.v_size = value;
+  viewer_conf_.GetUiState().v_size = value;
   syncUi();
-  ui->widget->setWidgetState(uiState);
+  ui->widget->setWidgetState(viewer_conf_);
 }
 
 void s21::MainWindow::on_vertexSizeSpinBox_valueChanged(double arg1) {
-  uiState.v_size = arg1;
-  ui->widget->setWidgetState(uiState);
+  viewer_conf_.GetUiState().v_size = arg1;
+  ui->widget->setWidgetState(viewer_conf_);
   syncUi();
 }
 
 void s21::MainWindow::on_edgesTypeComboBox_activated(int index) {
-  uiState.e_style = index;
-  ui->widget->setWidgetState(uiState);
+  viewer_conf_.GetUiState().e_style = index;
+  ui->widget->setWidgetState(viewer_conf_);
 }
 
 void s21::MainWindow::on_edgesSizeSlider_valueChanged(int value) {
-  uiState.e_size = value;
-  ui->widget->setWidgetState(uiState);
+  viewer_conf_.GetUiState().e_size = value;
+  ui->widget->setWidgetState(viewer_conf_);
   syncUi();
 }
 
 void s21::MainWindow::on_edgesSizeSpinBox_valueChanged(double arg1) {
-  uiState.e_size = arg1;
-  ui->widget->setWidgetState(uiState);
+  viewer_conf_.GetUiState().e_size = arg1;
+  ui->widget->setWidgetState(viewer_conf_);
   syncUi();
 }
 
 void s21::MainWindow::on_setDefaultStyleButton_clicked() {
   viewer_conf_.SetDefaultStyle();
   syncUi();
-  ui->widget->setWidgetState(uiState);
+  ui->widget->setWidgetState(viewer_conf_);
 }
 
 // void s21::MainWindow::on_Save_image_triggered() {

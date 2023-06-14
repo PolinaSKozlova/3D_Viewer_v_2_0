@@ -20,7 +20,7 @@
 
 // #include "affine_transformations/s21_matrix4X4.h"
 #include "mainwindow.h"
-#include "parser/s21_parser.h"
+//#include "parser/s21_parser.h"
 
 namespace s21 {
 // Colors, linetypes etc.
@@ -81,7 +81,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // default member initialisation, google it!
   TransformData transformations;
   style_data_t style;
-
+  //  ViewerSettings ui_conf_;
   QOpenGLShaderProgram
       program;  // Шейдерная программа, сюда собираются все шейдеры
   QOpenGLShaderProgram program_P;  // Шейдерная программа для вершин
