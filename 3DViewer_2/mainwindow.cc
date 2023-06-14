@@ -40,8 +40,8 @@ void s21::MainWindow::setState(std::string& basePath, ViewerSettings& uiState) {
     setDefaults(basePath);
     std::cout << basePath;
     viewer_conf_.LoadConf(confPath);
-    basePath += "/logo.obj";
-    viewer_conf_.SetPath(basePath);
+    string file_path = basePath + "/logo.obj";
+    viewer_conf_.SetPath(file_path);
   }
   syncUi();
   ui->widget->setWidgetState(uiState);
