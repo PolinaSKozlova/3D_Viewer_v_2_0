@@ -19,6 +19,10 @@ qt6_add_resources(SHADER_RSC_ADDED
     3DViewer_2/shaders.qrc
 )
 
+qt6_add_resources(DEFAULT_RSC_ADDED
+    3DViewer_2/defaults.qrc
+)
+
 set(PROJECT_SOURCES
     3DViewer_2/main.cpp
     3DViewer_2/mainwindow.cc
@@ -44,6 +48,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${SHADER_RSC_ADDED}
+        ${DEFAULT_RSC_ADDED}
     )
 
 # Define target properties for Android with Qt 6 as:
@@ -55,6 +60,7 @@ else()
         add_library(3DViewer_2 SHARED
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
+            ${DEFAULT_RSC_ADDED}
         )
 
     # Define properties for Android with Qt 5 after find_package() calls as:
@@ -63,6 +69,7 @@ else()
         add_executable(3DViewer_2
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
+            ${DEFAULT_RSC_ADDED}
         )
     endif()
 endif()
