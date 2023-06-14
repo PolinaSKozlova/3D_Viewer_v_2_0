@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef THREE_D_VIEWER_MAINWINDOW_H
+#define THREE_D_VIEWER_MAINWINDOW_H
 
 #include <QColor>
 #include <QColorDialog>
@@ -17,28 +17,6 @@ class MainWindow;
 QT_END_NAMESPACE
 
 namespace s21 {
-
-// typedef struct ui_state {
-//   std::string filePath;
-//   int n_verticies;
-//   int n_indices;
-//   int x_rotation_deg;
-//   int y_rotation_deg;
-//   int z_rotation_deg;
-//   int x_shift;
-//   int y_shift;
-//   int z_shift;
-//   int user_scaler;
-//   bool perspective;
-//   int v_style;
-//   int v_size;
-//   int e_style;
-//   int e_size;
-//   QColor v_color;
-//   QColor e_color;
-//   QColor bg_color;
-// } ui_state_t;
-
 #define FRAME_W 256
 #define FRAME_H_MIN 30
 #define FRAME_H_TR_CTRLS 284
@@ -91,17 +69,11 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow* ui;
-  // s21::ui_state_t uiState;
-
   std::string basePath;
   void findOutBasePath(std::string& basePath);
   void setState(std::string& basePath, ViewerSettings& uiState);
   void setDefaults(std::string& basePath);
-  // void loadConf(std::string& confPath);
-  void saveConf(std::string& basePath, ViewerSettings& uiState);
   void updateUiState(int value, std::string& valueType);
-  //  void setDefaultTransforms();
-  //  void setDefaultStyle();
   void syncUi();
   void minimizeUi();
   void maximizeUi();
@@ -118,4 +90,4 @@ class MainWindow : public QMainWindow {
   //     QFile* ptr_save_file;
 };
 };      // namespace s21
-#endif  // MAINWINDOW_H
+#endif  // THREE_D_VIEWER_MAINWINDOW_H

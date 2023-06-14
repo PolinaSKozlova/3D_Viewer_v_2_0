@@ -19,10 +19,8 @@ s21::MainWindow::~MainWindow() {
 void s21::MainWindow::findOutBasePath(std::string& basePath) {
   using namespace std;
   using namespace filesystem;
-
   QString QbasePath = QCoreApplication::applicationDirPath();
   basePath = QbasePath.toStdString();
-  std::cout << "base path " << basePath << std::endl;
 }
 
 void s21::MainWindow::setState(std::string& basePath, ViewerSettings& uiState) {
@@ -32,13 +30,10 @@ void s21::MainWindow::setState(std::string& basePath, ViewerSettings& uiState) {
   ifstream fileStream;
   fileStream.open(confPath);
   if (fileStream.good()) {
-    std::cout << "i found suitable config" << '\n';
     fileStream.close();
     viewer_conf_.LoadConf(confPath);
   } else {
-    std::cout << "no config founded" << '\n';
     setDefaults(basePath);
-    std::cout << basePath;
     viewer_conf_.LoadConf(confPath);
     string file_path = basePath + "/logo.obj";
     viewer_conf_.SetPath(file_path);
@@ -173,14 +168,12 @@ void s21::MainWindow::showFileInfo() {
   using namespace std;
   ui->widget->getNIndicies();
   ui->widget->getNVerticies();
-
   string fileInfo = ui->widget->getFilePath();
   fileInfo += " N indicies ";
   fileInfo += to_string(viewer_conf_.GetUiState().n_indices);
   fileInfo += " N edges ";
   fileInfo += to_string((viewer_conf_.GetUiState().n_indices / 3) +
                         viewer_conf_.GetUiState().n_verticies - 2);
-
   QString message = QString::fromStdString(fileInfo);
   ui->statusBar->showMessage(message);
 }
@@ -284,7 +277,6 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
     syncUi();
     ui->widget->setWidgetState(viewer_conf_);
     ui->widget->setNewGeometry();
-
     viewer_conf_.GetUiState().n_indices = ui->widget->getNIndicies();
     viewer_conf_.GetUiState().n_verticies = ui->widget->getNVerticies();
     showFileInfo();

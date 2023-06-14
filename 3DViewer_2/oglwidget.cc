@@ -39,56 +39,19 @@ void s21::OGLWidget::paintGL() {
   calculateProjection();
   // цвет должен меняться в paintGl чтоб его можно было выбрать
   glClearColor(
-      style.bg_color.red() / 255., style.bg_color.green() / 255.,
-      style.bg_color.blue() / 255.,
+      style_.bg_color.red() / 255., style_.bg_color.green() / 255.,
+      style_.bg_color.blue() / 255.,
       1);  // Здесь указывается цвет, с помощью которого будет очищаться
            // изображение (он же фон рендера), 4 цвет - альфа канал
            // (прозрачность, 0 ... 1) В glClear передаются флаги, указывающие,
            // какие буфферы должны быть очищены при перерисовке
   glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфферов цвета при перерисовке
-  /*
-  - В шейдер нам нужно подать QMatrix4x4,
-  - У класса QMatrix4x4 есть конструктор от const float*
-  Код ниже делает следующее:
-  - создает переменную float[16], инициализирует её 0
-  - адрес первого значения массива передается в вызов функции афинных
-  трансформаций как указатель float* (по усл. задачи модуль выполнен на С,
-  заголовочный файл transformations.h). После выполнения всех трансформаций в
-  исходном массиве float[16] окажутся модифицированные трансформациями значения.
-  Для создания модифицированной модельно-видовой матрицы:
-  - адрес массива float[16] помещается во вспомогательную переменную (const
-  float*)
-  - эта переменная передается в конструктор QMatrix4x4
-  */
-  //  float transform[16] = {0};  // В этом массиве будет содержаться композиция
-  //                              // афинных преобразований модели.
-  //  float* p_to_data = (float*)transform;
-  //  transform_matrix(p_to_data, &transformations);
 
-  //  const float* p_to_transform = (const float*)p_to_data;
+  affine_transformation_matrix_.MakeMovement(transformations_);
 
-  affine_transformation_matrix_.MakeMovement(transformations);
-  //  affine_transformation_matrix_.print();
   QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
-  //  const float* p_to_transform =
-  //      (const float*)affine_transformation_matrix_.GetMatrix();
 
-  /*QMatrix4x4 matrix(
-      p_to_transform);*/  // Инициируем модельно - видовую матрицу матрицей
-  //                        // трансформаций, вычисленной из афинных
-  //                        преобразований
-  //                        //  matrix *= 1e6;
-  //  std::cout << *matrix.data() << '\n';
-
-  // Temp code
-  //  QMatrix4x4 matrix{};
-  //  matrix.setToIdentity();
-
-  //  matrix.scale(model.scaler);
-  //  matrix.translate(0, 0, -1);
-  //  matrix.rotate(-45, 1, 1, 1);
   program.bind();  // Снова биндим шейдерную программу
-
   program_P.bind();
 
   // Set modelview-projection matrix
@@ -97,32 +60,13 @@ void s21::OGLWidget::paintGL() {
       projection *
           matrix);  // Тут происходит связывание переменной внутри вершинного
                     // шейдера с переменной matrix из виджета
-  program.setUniformValue("line_color", style.e_color.red() / 255.,
-                          style.e_color.green() / 255.,
-                          style.e_color.blue() / 255., 1.0);
+  program.setUniformValue("line_color", style_.e_color.red() / 255.,
+                          style_.e_color.green() / 255.,
+                          style_.e_color.blue() / 255., 1.0);
 
   // Тут мы снова привязываем вершинный и индексный буферы
   arrayBuf.bind();
   indexBuf.bind();
-
-  //  if (arrayBuf.isCreated()) {
-  //    float* bufferData =
-  //        static_cast<float*>(arrayBuf.map(QOpenGLBuffer::ReadOnly));
-  //    for (int i = 0; i < model.vertices.size() / 3; i++) {
-  //      qDebug() << "Vertex " << i << ": " << bufferData[i * 3] << ", "
-  //               << bufferData[i * 3 + 1] << ", " << bufferData[i * 3 + 2];
-  //    }
-  //    arrayBuf.unmap();
-  //  }
-
-  //  if (indexBuf.isCreated()) {
-  //    GLuint* bufferData =
-  //        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
-  //    for (int i = 0; i < model.faces.size(); i++) {
-  //      qDebug() << "Index " << i << ": " << bufferData[i];
-  //    }
-  //    indexBuf.unmap();
-  //  }
 
   // Offset for position
   quintptr offset = 0;
@@ -137,33 +81,32 @@ void s21::OGLWidget::paintGL() {
   //    glEnable(GL_CULL_FACE);
   //    glCullFace(GL_BACK);
 
-  glLineWidth(style.e_size);
-  if (style.e_style == 2) {
+  glLineWidth(style_.e_size);
+  if (style_.e_style == 2) {
     glLineStipple(4, 0x0C0F);
     glEnable(GL_LINE_STIPPLE);
   } else {
     glDisable(GL_LINE_STIPPLE);
   }
 
-  if (style.e_style != 0) {
-    //    std::cout << "Tryna drawning" << '\n';
+  if (style_.e_style != 0) {
     glDrawElements(GL_TRIANGLES, model.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
 
   // That part not so good, need to refactor it
-  float pointSize = (style.v_size != 0) ? style.v_size : 0;
+  float pointSize = (style_.v_size != 0) ? style_.v_size : 0;
   program_P.setUniformValue("point_size", pointSize);
 
-  if (style.v_style != 0) {
-    if (style.v_style == 1) {
+  if (style_.v_style != 0) {
+    if (style_.v_style == 1) {
       glEnable(GL_POINT_SMOOTH);
     } else {
       glDisable(GL_POINT_SMOOTH);
     }
     program_P.setUniformValue("mvp_matrix", projection * matrix);
-    program_P.setUniformValue("dot_color", style.v_color.red() / 255.,
-                              style.v_color.green() / 255.,
-                              style.v_color.blue() / 255., 1.0);
+    program_P.setUniformValue("dot_color", style_.v_color.red() / 255.,
+                              style_.v_color.green() / 255.,
+                              style_.v_color.blue() / 255., 1.0);
     glDrawElements(GL_POINTS, model.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
   // Here the broken part is ended))
@@ -173,16 +116,14 @@ void s21::OGLWidget::paintGL() {
 }
 // Этот метод вызывается один раз, при изменении размеров виджета
 void s21::OGLWidget::resizeGL(int w, int h) {
-  aspect =
-      w / float(h ? h : 1);  // не очень понятно, зачем тут тернарный оператор
+  aspect = w / float(h ? h : 1);
   calculateProjection();
-  // update() // Работает и без этого
 }
 
 void s21::OGLWidget::calculateProjection() {
   projection
       .setToIdentity();  // Инициализируем матрицу проекции единичной матрицей
-  if (transformations.perspective_ortho == false) {
+  if (transformations_.perspective_ortho == false) {
     projection.perspective(
         22.5, aspect, 0.1,
         10.0);  // C помощью метода perspective формируем матрицу, необходимую
@@ -237,7 +178,7 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
     ObjParser parser{};
     model = parser.Parse(file_path);
-    transformations.model_scaler = model.scaler;
+    transformations_.model_scaler = model.scaler;
 
     arrayBuf.create();  // Создаем буффер
     arrayBuf.bind();    // Tell OpenGL which VBOs to use
@@ -257,31 +198,12 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
         model.faces.data(),
         model.faces.size() *
             sizeof(unsigned int));  // Тут allocate - это одновременно и
-    //                                  // выделение памяти и загрузка
-
-    //  if (indexBuf.isCreated()) {
-    //    GLuint* bufferData =
-    //        static_cast<GLuint*>(indexBuf.map(QOpenGLBuffer::ReadOnly));
-    //    for (int i = 0; i < model.faces.size(); i++) {
-    //      qDebug() << "Index in load " << i << ": " << bufferData[i];
-    //    }
-    //    indexBuf.unmap();
-    //  }
-
-    //  // очистка памяти на указателе indices_array
-    //  // после инициализации индексного буфера, память, захваченную парсером,
-    //  // можно освобождать
-    //    s21_free_indices_array((unsigned int*)modelData.p_to_indices);
+                                    // выделение памяти и загрузка
 
     indexBuf.release();  // Отвязываем буффер до момента отрисовки
   } catch (const std::exception& e) {
     QMessageBox::critical(this, "Warning", e.what());
   }
-  //  //    } else {
-  //  //      QMessageBox::critical(
-  //  //          this, "Warning",
-  //  //          "Ошибка чтения файла: " + QString::fromStdString(filePath));
-  //  //    }
 }
 
 void s21::OGLWidget::setNewGeometry() {
@@ -290,25 +212,22 @@ void s21::OGLWidget::setNewGeometry() {
 }
 
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
-  //  ui_conf_ = uiState;
   filePath = uiState.GetUiState().filePath;
-  transformations.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
-  transformations.y_rotation_deg = uiState.GetUiState().y_rotation_deg;
-  transformations.z_rotation_deg = uiState.GetUiState().z_rotation_deg;
-  transformations.x_shift =
-      (uiState.GetUiState().x_shift / (double)100) * aspect;
-  transformations.y_shift = uiState.GetUiState().y_shift / (double)100;
-  transformations.z_shift = uiState.GetUiState().z_shift / (double)100;
-  transformations.user_scaler =
-      1 + uiState.GetUiState().user_scaler / (double)100.;
-  transformations.perspective_ortho = uiState.GetUiState().perspective;
-  style.bg_color = uiState.GetUiState().bg_color;
-  style.e_color = uiState.GetUiState().e_color;
-  style.v_color = uiState.GetUiState().v_color;
-  style.e_style = uiState.GetUiState().e_style;
-  style.e_size = uiState.GetUiState().e_size;
-  style.v_style = uiState.GetUiState().v_style;
-  style.v_size = uiState.GetUiState().v_size;
+  transformations_.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
+  transformations_.y_rotation_deg = uiState.GetUiState().y_rotation_deg;
+  transformations_.z_rotation_deg = uiState.GetUiState().z_rotation_deg;
+  transformations_.x_shift = (uiState.GetUiState().x_shift / 100.0) * aspect;
+  transformations_.y_shift = uiState.GetUiState().y_shift / 100.0;
+  transformations_.z_shift = uiState.GetUiState().z_shift / 100.0;
+  transformations_.user_scaler = 1 + uiState.GetUiState().user_scaler / 100.0;
+  transformations_.perspective_ortho = uiState.GetUiState().perspective;
+  style_.bg_color = uiState.GetUiState().bg_color;
+  style_.e_color = uiState.GetUiState().e_color;
+  style_.v_color = uiState.GetUiState().v_color;
+  style_.e_style = uiState.GetUiState().e_style;
+  style_.e_size = uiState.GetUiState().e_size;
+  style_.v_style = uiState.GetUiState().v_style;
+  style_.v_size = uiState.GetUiState().v_size;
   update();
 }
 
@@ -320,6 +239,5 @@ std::string s21::OGLWidget::getFilePath() {
   using namespace std;
   string modelFilePath = "Model file: ";
   modelFilePath += filePath;
-
   return modelFilePath;
 }

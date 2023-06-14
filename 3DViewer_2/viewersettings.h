@@ -1,5 +1,5 @@
-#ifndef VIEWERSETTINGS_H
-#define VIEWERSETTINGS_H
+#ifndef THREE_D_VIEWER_VIEWERSETTINGS_H
+#define THREE_D_VIEWER_VIEWERSETTINGS_H
 
 #include <QColor>
 #include <QColorDialog>
@@ -10,18 +10,89 @@
 #include "QtWidgets/qapplication.h"
 
 namespace s21 {
-// std::string FindBasePath() {
-//   using namespace std;
-//   using namespace filesystem;
-//   QString QbasePath = QCoreApplication::applicationDirPath();
-//   string basePath = QbasePath.toStdString();
-//   return basePath;
-// }
+const std::map<std::string, std::function<void(const std::string&)>>
+    key_value_pairs = {
+        {"filePath",
+         [&](const std::string& val) { conf_settings_.filePath = val; }},
+        {"x_rotation_deg",
+         [&](const std::string& val) {
+           conf_settings_.x_rotation_deg = stoi(val);
+         }},
+        {"y_rotation_deg",
+         [&](const std::string& val) {
+           conf_settings_.y_rotation_deg = stoi(val);
+         }},
+        {"z_rotation_deg",
+         [&](const std::string& val) {
+           conf_settings_.z_rotation_deg = stoi(val);
+         }},
+        {"x_shift",
+         [&](const std::string& val) { conf_settings_.x_shift = stoi(val); }},
+        {"y_shift",
+         [&](const std::string& val) { conf_settings_.y_shift = stoi(val); }},
+        {"z_shift",
+         [&](const std::string& val) { conf_settings_.z_shift = stoi(val); }},
+        {"user_scaler",
+         [&](const std::string& val) {
+           conf_settings_.user_scaler = stoi(val);
+         }},
+        {"perspective",
+         [&](const std::string& val) {
+           conf_settings_.perspective = stoi(val);
+         }},
+        {"e_style",
+         [&](const std::string& val) { conf_settings_.e_style = stoi(val); }},
+        {"e_size",
+         [&](const std::string& val) { conf_settings_.e_size = stoi(val); }},
+        {"v_style",
+         [&](const std::string& val) { conf_settings_.v_style = stoi(val); }},
+        {"v_size",
+         [&](const std::string& val) { conf_settings_.v_size = stoi(val); }},
+        {"n_verticies",
+         [&](const std::string& val) {
+           conf_settings_.n_verticies = stoi(val);
+         }},
+        {"n_indices",
+         [&](const std::string& val) { conf_settings_.n_indices = stoi(val); }},
+        {"bg_color_red",
+         [&](const std::string& val) {
+           conf_settings_.bg_color.setRed(stoi(value));
+         }},
+        {"bg_color_green",
+         [&](const std::string& val) {
+           conf_settings_.bg_color.setGreen(stoi(value));
+         }},
+        {"bg_color_blue",
+         [&](const std::string& val) {
+           conf_settings_.bg_color.setBlue(stoi(value));
+         }},
+        {"v_color_red",
+         [&](const std::string& val) {
+           conf_settings_.v_color.setRed(stoi(value));
+         }},
+        {"v_color_green",
+         [&](const std::string& val) {
+           conf_settings_.v_color.setGreen(stoi(value));
+         }},
+        {"v_color_blue",
+         [&](const std::string& val) {
+           conf_settings_.v_color.setBlue(stoi(value));
+         }},
+        {"e_color_red",
+         [&](const std::string& val) {
+           conf_settings_.e_color.setRed(stoi(value));
+         }},
+        {"e_color_green",
+         [&](const std::string& val) {
+           conf_settings_.e_color.setGreen(stoi(value));
+         }},
+        {"e_color_blue", [&](const std::string& val) {
+           conf_settings_.e_color.setBlue(stoi(value));
+         }}};
 
 struct UiState {
   UiState()
       : filePath(""),
-        //        filePath(FindBasePath() + "/logo.obj"),
         n_verticies(0),
         n_indices(0),
         x_rotation_deg(0),
@@ -99,4 +170,4 @@ class ViewerSettings {
 };
 
 };      // namespace s21
-#endif  // VIEWERSETTINGS_H
+#endif  // THREE_D_VIEWER_VIEWERSETTINGS_H

@@ -1,5 +1,5 @@
-#ifndef OGLWIDGET_H
-#define OGLWIDGET_H
+#ifndef THREE_D_VIEWER_OGLWIDGET_H
+#define THREE_D_VIEWER_OGLWIDGET_H
 
 // QT includes
 #include <QMatrix4x4>
@@ -18,23 +18,19 @@
 #include <fstream>
 #include <iostream>
 
-// #include "affine_transformations/s21_matrix4X4.h"
 #include "mainwindow.h"
-//#include "parser/s21_parser.h"
 
 namespace s21 {
 // Colors, linetypes etc.
-typedef struct style_data {
+struct StyleData {
   int v_style;
   int v_size;
-
   int e_style;
   int e_size;
-
   QColor v_color;
   QColor e_color;
   QColor bg_color;
-} style_data_t;
+};
 
 typedef enum { PERSPECTIVE, ORTHO } projection_t;
 
@@ -72,30 +68,24 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  private:
   std::string filePath;
-
   float aspect = DEFAULT_ASPECT_RATIO;
-
   //  model_data_t modelData;  // Модель
   Model model;
-
   // default member initialisation, google it!
   TransformData transformations;
-  style_data_t style;
+  StyleData style_;
   //  ViewerSettings ui_conf_;
   QOpenGLShaderProgram
       program;  // Шейдерная программа, сюда собираются все шейдеры
   QOpenGLShaderProgram program_P;  // Шейдерная программа для вершин
   QOpenGLShaderProgram
       program_dash;  // Шейдерная программа для модификации начертания линий
-
   QMatrix4x4 projection;  // Матрица проекций, используется при отображении,
                           // разобраться как это работает
-
   Matrix4X4 affine_transformation_matrix_{};
   QOpenGLBuffer arrayBuf;  // Вершинный буффер
   QOpenGLBuffer indexBuf;  // Индексный буффер
-
   void calculateProjection();
 };
 };      // namespace s21
-#endif  // OGLWIDGET_H
+#endif  // THREE_D_VIEWER_OGLWIDGET_H
