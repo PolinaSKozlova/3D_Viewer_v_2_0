@@ -42,14 +42,15 @@ Model ObjParser::ParseData(const std::string& filename) {
       model.vertices.push_back(y);
       model.vertices.push_back(z);
     } else if (type == "f") {
-      vector<unsigned int> face{};
+      vector<int> face{};
       string token;
       while (iss >> token) {
         istringstream sub_iss(token);
         string sub_token;
         getline(sub_iss, sub_token, '/');
         if (!sub_token.empty()) {
-          face.push_back(std::stoi(sub_token));
+          face.push_back(std::stoi(sub_token) -
+                         1);  // Вот тут эта -1 должна всё исправить
         }
       }
       if (face.size() < 3) {
