@@ -8,7 +8,6 @@
 namespace s21 {
 
 Model ObjParser::Parse(const std::string& filename) {
-  std::cout << "file in parser:" << filename << std::endl;
   Model model = ParseData(filename);
   return CalculateScaler(model);
 }
@@ -34,7 +33,7 @@ Model ObjParser::ParseData(const std::string& filename) {
     if (type == "v") {
       float x{}, y{}, z{};
       if (!(iss >> x >> y >> z)) {
-        throw runtime_error("Invalid vertex");
+        throw runtime_error("Could not open file: invalid vertex");
       }
       model.vertices.push_back(x);
       model.vertices.push_back(y);
@@ -47,12 +46,11 @@ Model ObjParser::ParseData(const std::string& filename) {
         string sub_token;
         getline(sub_iss, sub_token, '/');
         if (!sub_token.empty()) {
-          face.push_back(std::stoi(sub_token) -
-                         1);  // Вот тут эта -1 должна всё исправить
+          face.push_back(std::stoi(sub_token) - 1);
         }
       }
       if (face.size() < 3) {
-        throw runtime_error("Invalid face");
+        throw runtime_error("Could not open file: invalid face");
       } else if (face.size() > 3) {
         // triangulating faces
         for (size_t i = 1; i < face.size() - 1; ++i) {
@@ -66,7 +64,7 @@ Model ObjParser::ParseData(const std::string& filename) {
     }
   }
   if (model.vertices.empty() || model.faces.empty()) {
-    throw runtime_error("No vertices");
+    throw runtime_error("Could not open file: no vertices");
   }
   return model;
 }
