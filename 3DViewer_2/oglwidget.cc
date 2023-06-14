@@ -290,44 +290,23 @@ void s21::OGLWidget::setNewGeometry() {
   update();
 }
 
-void s21::OGLWidget::setWidgetState(s21::ui_state_t& uiState) {
-  //  TransformData& T = transformations;
-  s21::ui_state_t& S = uiState;
-
-  filePath = S.filePath;
-
-  //  T.x_rotation_deg = S.x_rotation_deg;
-  //  T.y_rotation_deg = S.y_rotation_deg;
-  //  T.z_rotation_deg = S.z_rotation_deg;
-
-  //  T.x_shift = (S.x_shift / (double)100) * aspect;
-  //  T.y_shift = S.y_shift / (double)100;
-  //  T.z_shift = S.z_shift / (double)100;
-
-  //  T.user_scaler = 1 + S.user_scaler / (double)100.;
-  //  T.perspective_ortho = (char)S.perspective;
-
-  transformations.x_rotation_deg = S.x_rotation_deg;
-  transformations.y_rotation_deg = S.y_rotation_deg;
-  transformations.z_rotation_deg = S.z_rotation_deg;
-
-  transformations.x_shift = (S.x_shift / (double)100) * aspect;
-  transformations.y_shift = S.y_shift / (double)100;
-  transformations.z_shift = S.z_shift / (double)100;
-
-  transformations.user_scaler = 1 + S.user_scaler / (double)100.;
-  transformations.perspective_ortho = S.perspective;
-
-  style.bg_color = S.bg_color;
-  style.e_color = S.e_color;
-  style.v_color = S.v_color;
-
-  style.e_style = S.e_style;
-  style.e_size = S.e_size;
-
-  style.v_style = S.v_style;
-  style.v_size = S.v_size;
-
+void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
+  filePath = uiState.filePath;
+  transformations.x_rotation_deg = uiState.x_rotation_deg;
+  transformations.y_rotation_deg = uiState.y_rotation_deg;
+  transformations.z_rotation_deg = uiState.z_rotation_deg;
+  transformations.x_shift = (uiState.x_shift / (double)100) * aspect;
+  transformations.y_shift = uiState.y_shift / (double)100;
+  transformations.z_shift = uiState.z_shift / (double)100;
+  transformations.user_scaler = 1 + uiState.user_scaler / (double)100.;
+  transformations.perspective_ortho = uiState.perspective;
+  style.bg_color = uiState.bg_color;
+  style.e_color = uiState.e_color;
+  style.v_color = uiState.v_color;
+  style.e_style = uiState.e_style;
+  style.e_size = uiState.e_size;
+  style.v_style = uiState.v_style;
+  style.v_size = uiState.v_size;
   update();
 }
 

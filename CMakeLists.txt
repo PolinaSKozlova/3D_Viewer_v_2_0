@@ -26,8 +26,8 @@ set(PROJECT_SOURCES
     3DViewer_2/oglwidget.h
     3DViewer_2/mainwindow.h
     3DViewer_2/mainwindow.ui
-    3DViewer_2/viewersettings.h
-    3DViewer_2/viewersettings.cc
+#    3DViewer_2/viewersettings.h
+#    3DViewer_2/viewersettings.cc
     parser/s21_parser.cc
     parser/s21_parser.h
     affine_transformations/s21_matrix4X4.h

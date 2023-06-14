@@ -6,14 +6,13 @@ s21::MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   findOutBasePath(basePath);
-  setState(basePath, uiState);
+  setState(basePath, viewer_conf_);
   showFileInfo();
-
   minimizeUi();
 }
 
 s21::MainWindow::~MainWindow() {
-  saveConf(basePath, uiState);
+  viewer_conf_.SaveConf(basePath, viewer_conf_);
   delete ui;
 }
 
@@ -26,88 +25,32 @@ void s21::MainWindow::findOutBasePath(std::string& basePath) {
   std::cout << "base path " << basePath << std::endl;
 }
 
-void s21::MainWindow::setState(std::string& basePath, ui_state_t& uiState) {
+void s21::MainWindow::setState(std::string& basePath, UiState& uiState) {
   using namespace std;
   using namespace filesystem;
-
   string confPath = basePath + "/session.conf";
   ifstream fileStream;
   fileStream.open(confPath);
   if (fileStream.good()) {
     std::cout << "i found suitable config" << '\n';
     fileStream.close();
-    loadConf(confPath, uiState);
+    viewer_conf_.LoadConf(confPath);
   } else {
     std::cout << "no config founded" << '\n';
     setDefaults(basePath);
-    loadConf(confPath, uiState);
+    // loadConf(confPath, uiState);
     std::cout << basePath;
-    uiState.filePath = basePath + "/logo.obj";
+    viewer_conf_.LoadConf(confPath);
+    basePath += "/logo.obj";
+    viewer_conf_.SetPath(basePath);
   }
   syncUi();
   ui->widget->setWidgetState(uiState);
 }
 
-void s21::MainWindow::loadConf(std::string& confPath, ui_state_t& uiState) {
-  using namespace std;
-  using namespace filesystem;
-
-  ifstream fileStream;
-  fileStream.open(confPath);
-
-  string line, key, value;
-  int separatorIdx;
-  ui_state_t& S = uiState;
-  while (getline(fileStream, line)) {
-    separatorIdx = line.find("=");
-    key = line.substr(0, separatorIdx);
-    value = line.substr(separatorIdx + 1, line.length());
-
-    if (key == "filePath") {
-      S.filePath = value;
-      std::cout << "filepath from load conf:\n" << value << '\n';
-    }
-
-    if (key == "x_rotation_deg") S.x_rotation_deg = stoi(value);
-    if (key == "y_rotation_deg") S.y_rotation_deg = stoi(value);
-    if (key == "z_rotation_deg") S.z_rotation_deg = stoi(value);
-
-    if (key == "x_shift") S.x_shift = stoi(value);
-    if (key == "y_shift") S.y_shift = stoi(value);
-    if (key == "z_shift") S.z_shift = stoi(value);
-
-    if (key == "user_scaler") S.user_scaler = stoi(value);
-
-    if (key == "perspective") S.perspective = stoi(value);
-
-    if (key == "bg_color_red") S.bg_color.setRed(stoi(value));
-    if (key == "bg_color_green") S.bg_color.setGreen(stoi(value));
-    if (key == "bg_color_blue") S.bg_color.setBlue(stoi(value));
-
-    if (key == "v_color_red") S.v_color.setRed(stoi(value));
-    if (key == "v_color_green") S.v_color.setGreen(stoi(value));
-    if (key == "v_color_blue") S.v_color.setBlue(stoi(value));
-
-    if (key == "e_color_red") S.e_color.setRed(stoi(value));
-    if (key == "e_color_green") S.e_color.setGreen(stoi(value));
-    if (key == "e_color_blue") S.e_color.setBlue(stoi(value));
-
-    if (key == "e_style") S.e_style = stoi(value);
-    if (key == "e_size") S.e_size = stoi(value);
-
-    if (key == "v_style") S.v_style = stoi(value);
-    if (key == "v_size") S.v_size = stoi(value);
-
-    if (key == "n_verticies") S.n_verticies = stoi(value);
-    if (key == "n_indices") S.n_indices = stoi(value);
-  }
-  fileStream.close();
-}
-
 void s21::MainWindow::setDefaults(std::string& basePath) {
   QString defaultConfPath = QString::fromStdString(basePath) + "/session.conf";
   QString defaultModelPath = QString::fromStdString(basePath) + "/logo.obj";
-
   QFile::copy(":/defaults/session.conf", defaultConfPath);
   QFile::setPermissions(defaultConfPath,
                         QFileDevice::ReadOwner | QFileDevice::WriteOwner);
@@ -116,128 +59,41 @@ void s21::MainWindow::setDefaults(std::string& basePath) {
                         QFileDevice::ReadOwner | QFileDevice::WriteOwner);
 }
 
-void s21::MainWindow::setDefaultTransforms() {
-  uiState.x_rotation_deg = 0;
-  uiState.y_rotation_deg = 0;
-  uiState.z_rotation_deg = 0;
-
-  uiState.x_shift = 0;
-  uiState.y_shift = 0;
-  uiState.z_shift = 0;
-
-  uiState.user_scaler = 1;
-
-  uiState.perspective = false;
-}
-
-void s21::MainWindow::setDefaultStyle() {
-  uiState.e_style = 1;
-  uiState.e_size = 0;
-
-  uiState.v_style = 0;
-  uiState.v_size = 0;
-
-  uiState.bg_color = QColor(25, 39, 52);
-  uiState.e_color = QColor(136, 153, 166);
-  uiState.v_color = QColor(255, 255, 255);
-}
-
-void s21::MainWindow::saveConf(std::string& basePath, ui_state_t& uiState) {
-  using namespace std;
-  using namespace filesystem;
-
-  string confPath = basePath + "/session.conf";
-  ofstream fileStream;
-  ui_state_t& S = uiState;
-  fileStream.open(confPath);
-
-  fileStream << "filePath=" << S.filePath << endl;
-  fileStream << "n_verticies=" << ui->widget->getNVerticies() << endl;
-  fileStream << "n_indices=" << ui->widget->getNIndicies() << endl;
-
-  fileStream << "x_rotation_deg=" << S.x_rotation_deg << endl;
-  fileStream << "y_rotation_deg=" << S.y_rotation_deg << endl;
-  fileStream << "z_rotation_deg=" << S.z_rotation_deg << endl;
-
-  fileStream << "x_shift=" << S.x_shift << endl;
-  fileStream << "y_shift=" << S.y_shift << endl;
-  fileStream << "z_shift=" << S.z_shift << endl;
-
-  fileStream << "user_scaler=" << S.user_scaler << endl;
-
-  fileStream << "perspective=" << (int)S.perspective << endl;
-
-  fileStream << "bg_color_red=" << S.bg_color.red() << endl;
-  fileStream << "bg_color_green=" << S.bg_color.green() << endl;
-  fileStream << "bg_color_blue=" << S.bg_color.blue() << endl;
-
-  fileStream << "v_color_red=" << S.v_color.red() << endl;
-  fileStream << "v_color_green=" << S.v_color.green() << endl;
-  fileStream << "v_color_blue=" << S.v_color.blue() << endl;
-
-  fileStream << "e_color_red=" << S.e_color.red() << endl;
-  fileStream << "e_color_green=" << S.e_color.green() << endl;
-  fileStream << "e_color_blue=" << S.e_color.blue() << endl;
-
-  fileStream << "e_style=" << S.e_style << endl;
-  fileStream << "e_size=" << S.e_size << endl;
-
-  fileStream << "v_style=" << S.v_style << endl;
-  fileStream << "v_size=" << S.v_size << endl;
-
-  fileStream.close();
-}
-
 void s21::MainWindow::updateUiState(int value, std::string& valueType) {
-  if (valueType == "x_rotation_deg") uiState.x_rotation_deg = value;
-  if (valueType == "y_rotation_deg") uiState.y_rotation_deg = value;
-  if (valueType == "z_rotation_deg") uiState.z_rotation_deg = value;
-
-  if (valueType == "x_shift") uiState.x_shift = value;
-  if (valueType == "y_shift") uiState.y_shift = value;
-  if (valueType == "z_shift") uiState.z_shift = value;
-
-  if (valueType == "user_scaler") uiState.user_scaler = value;
-
-  if (valueType == "perspective") uiState.perspective = value;
-
-  ui->widget->setWidgetState(uiState);
+  if (valueType == "x_rotation_deg") viewer_conf_.x_rotation_deg = value;
+  if (valueType == "y_rotation_deg") viewer_conf_.y_rotation_deg = value;
+  if (valueType == "z_rotation_deg") viewer_conf_.z_rotation_deg = value;
+  if (valueType == "x_shift") viewer_conf_.x_shift = value;
+  if (valueType == "y_shift") viewer_conf_.y_shift = value;
+  if (valueType == "z_shift") viewer_conf_.z_shift = value;
+  if (valueType == "user_scaler") viewer_conf_.user_scaler = value;
+  if (valueType == "perspective") viewer_conf_.perspective = value;
+  ui->widget->setWidgetState(viewer_conf_);
   syncUi();
 }
 
 void s21::MainWindow::syncUi() {
-  ui_state_t& S = uiState;
-
-  ui->xRotationSlider->setValue(S.x_rotation_deg);
-  ui->xRotationSpinBox->setValue(S.x_rotation_deg);
-
-  ui->yRotationSlider->setValue(S.y_rotation_deg);
-  ui->yRotationSpinBox->setValue(S.y_rotation_deg);
-
-  ui->zRotationSlider->setValue(S.z_rotation_deg);
-  ui->zRotationSpinBox->setValue(S.z_rotation_deg);
-
-  ui->xShiftSlider->setValue(S.x_shift);
-  ui->xShiftSpinBox->setValue(S.x_shift);
-
-  ui->yShiftSlider->setValue(S.y_shift);
-  ui->yShiftSpinBox->setValue(S.y_shift);
-
-  ui->zShiftSlider->setValue(S.z_shift);
-  ui->zShiftSpinBox->setValue(S.z_shift);
-
-  ui->userScalerSlider->setValue(S.user_scaler);
-  ui->userScalerSpinBox->setValue(S.user_scaler);
-
-  ui->persperctiveComboBox->setCurrentIndex(S.perspective);
-
-  ui->verticiesTypeComboBox->setCurrentIndex(S.v_style);
-  ui->verticiesSizeSlider->setValue(S.v_size);
-  ui->vertexSizeSpinBox->setValue(S.v_size);
-
-  ui->edgesTypeComboBox->setCurrentIndex(S.e_style);
-  ui->edgesSizeSlider->setValue(S.e_size);
-  ui->edgesSizeSpinBox->setValue(S.e_size);
+  ui->xRotationSlider->setValue(viewer_conf_.x_rotation_deg);
+  ui->xRotationSpinBox->setValue(viewer_conf_.x_rotation_deg);
+  ui->yRotationSlider->setValue(viewer_conf_.y_rotation_deg);
+  ui->yRotationSpinBox->setValue(viewer_conf_.y_rotation_deg);
+  ui->zRotationSlider->setValue(viewer_conf_.z_rotation_deg);
+  ui->zRotationSpinBox->setValue(viewer_conf_.z_rotation_deg);
+  ui->xShiftSlider->setValue(viewer_conf_.x_shift);
+  ui->xShiftSpinBox->setValue(viewer_conf_.x_shift);
+  ui->yShiftSlider->setValue(viewer_conf_.y_shift);
+  ui->yShiftSpinBox->setValue(viewer_conf_.y_shift);
+  ui->zShiftSlider->setValue(viewer_conf_.z_shift);
+  ui->zShiftSpinBox->setValue(viewer_conf_.z_shift);
+  ui->userScalerSlider->setValue(viewer_conf_.user_scaler);
+  ui->userScalerSpinBox->setValue(viewer_conf_.user_scaler);
+  ui->persperctiveComboBox->setCurrentIndex(viewer_conf_.perspective);
+  ui->verticiesTypeComboBox->setCurrentIndex(viewer_conf_.v_style);
+  ui->verticiesSizeSlider->setValue(viewer_conf_.v_size);
+  ui->vertexSizeSpinBox->setValue(viewer_conf_.v_size);
+  ui->edgesTypeComboBox->setCurrentIndex(viewer_conf_.e_style);
+  ui->edgesSizeSlider->setValue(viewer_conf_.e_size);
+  ui->edgesSizeSpinBox->setValue(viewer_conf_.e_size);
 }
 
 void s21::MainWindow::on_uiShowButton_clicked() {
@@ -404,7 +260,7 @@ void s21::MainWindow::on_userScalerSpinBox_valueChanged(double arg1) {
 }
 
 void s21::MainWindow::on_setDefaultTransformsButton_clicked() {
-  setDefaultTransforms();
+  viewer_conf_.SetDefaultTransforms();
   syncUi();
   ui->widget->setWidgetState(uiState);
 }
@@ -420,7 +276,7 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
       this, "Open file", QString::fromStdString(basePath), filter);
   if (inFileName.isNull() == false) {
     uiState.filePath = inFileName.toStdString();
-    setDefaultTransforms();
+    viewer_conf_.SetDefaultTransforms();
     syncUi();
     ui->widget->setWidgetState(uiState);
     ui->widget->setNewGeometry();
@@ -490,7 +346,7 @@ void s21::MainWindow::on_edgesSizeSpinBox_valueChanged(double arg1) {
 }
 
 void s21::MainWindow::on_setDefaultStyleButton_clicked() {
-  setDefaultStyle();
+  viewer_conf_.SetDefaultStyle();
   syncUi();
   ui->widget->setWidgetState(uiState);
 }

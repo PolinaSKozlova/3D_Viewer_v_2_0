@@ -11,7 +11,6 @@ namespace s21 {
 std::string FindBasePath() {
   using namespace std;
   using namespace filesystem;
-
   QString QbasePath = QCoreApplication::applicationDirPath();
   string basePath = QbasePath.toStdString();
   return basePath;
@@ -37,6 +36,27 @@ struct UiState {
         v_color(QColor(255, 255, 255)),
         e_color(QColor(136, 153, 166)),
         bg_color(QColor(25, 39, 52)) {}
+  UiState& operator=(const UiState& other) {
+    filePath = other.filePath;
+    n_verticies = other.n_verticies;
+    n_indices = other.n_indices;
+    x_rotation_deg = other.x_rotation_deg;
+    y_rotation_deg = other.y_rotation_deg;
+    z_rotation_deg = other.z_rotation_deg;
+    x_shift = other.x_shift;
+    y_shift = other.y_shift;
+    z_shift = other.z_shift;
+    user_scaler = other.user_scaler;
+    perspective = other.perspective;
+    v_style = other.v_style;
+    v_size = other.v_size;
+    e_style = other.e_style;
+    e_size = other.e_size;
+    v_color = other.v_color;
+    e_color = other.e_color;
+    bg_color = other.bg_color;
+    return *this;
+  }
   std::string filePath;
   int n_verticies;
   int n_indices;
@@ -60,11 +80,15 @@ struct UiState {
 class ViewerSettings {
  public:
   ViewerSettings();
-  // void LoadConf(std::string& confPath, UiState& uiState);
-  void SaveConf(std::string& basePath, UiState& uiState);
+  void SaveConf(std::string& basePath, ViewerSettings& uiState);
   void LoadConf(std::string& confPath);
   void SetDefaultTransforms();
   void SetDefaultStyle();
+  void SetPath(std::string& path);
+  ViewerSettings& operator=(const ViewerSettings& other) {
+    conf_settings_ = other.conf_settings_;
+    return *this;
+  }
 
  private:
   UiState conf_settings_{};

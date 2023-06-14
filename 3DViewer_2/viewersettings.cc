@@ -16,7 +16,6 @@ ViewerSettings::ViewerSettings() {}
 void ViewerSettings::LoadConf(std::string& confPath) {
   using namespace std;
   using namespace filesystem;
-
   ifstream fileStream;
   fileStream.open(confPath);
   string line, key, value;
@@ -82,40 +81,44 @@ void ViewerSettings::LoadConf(std::string& confPath) {
     separatorIdx = line.find("=");
     key = line.substr(0, separatorIdx);
     value = line.substr(separatorIdx + 1, line.length());
-    // if (key == "filePath") {
-    //   conf_settings_.filePath = value;
-    //   //      std::cout << "filepath from load conf:\n" << value << '\n';
-    // }
     key_value_pairs.find(key)->second(value);
-    // if (key == "x_rotation_deg") conf_settings_.x_rotation_deg = stoi(value);
-    // if (key == "y_rotation_deg") conf_settings_.y_rotation_deg = stoi(value);
-    // if (key == "z_rotation_deg") conf_settings_.z_rotation_deg = stoi(value);
-    // if (key == "x_shift") conf_settings_.x_shift = stoi(value);
-    // if (key == "y_shift") conf_settings_.y_shift = stoi(value);
-    // if (key == "z_shift") conf_settings_.z_shift = stoi(value);
-    // if (key == "user_scaler") conf_settings_.user_scaler = stoi(value);
-    // if (key == "perspective") conf_settings_.perspective = stoi(value);
-    // if (key == "bg_color_red") conf_settings_.bg_color.setRed(stoi(value));
-    // if (key == "bg_color_green")
-    // conf_settings_.bg_color.setGreen(stoi(value)); if (key ==
-    // "bg_color_blue") conf_settings_.bg_color.setBlue(stoi(value)); if (key ==
-    // "v_color_red") conf_settings_.v_color.setRed(stoi(value)); if (key ==
-    // "v_color_green") conf_settings_.v_color.setGreen(stoi(value)); if (key ==
-    // "v_color_blue") conf_settings_.v_color.setBlue(stoi(value)); if (key ==
-    // "e_color_red") conf_settings_.e_color.setRed(stoi(value)); if (key ==
-    // "e_color_green") conf_settings_.e_color.setGreen(stoi(value)); if (key ==
-    // "e_color_blue") conf_settings_.e_color.setBlue(stoi(value)); if (key ==
-    // "e_style") conf_settings_.e_style = stoi(value); if (key == "e_size")
-    // conf_settings_.e_size = stoi(value); if (key == "v_style")
-    // conf_settings_.v_style = stoi(value); if (key == "v_size")
-    // conf_settings_.v_size = stoi(value); if (key == "n_verticies")
-    // conf_settings_.n_verticies = stoi(value); if (key == "n_indices")
-    // conf_settings_.n_indices = stoi(value);
   }
   fileStream.close();
 }
 
-void ViewerSettings::SaveConf(std::string& basePath, UiState& uiState) {}
+void ViewerSettings::SaveConf(std::string& basePath, ViewerSettings& uiState) {
+  using namespace std;
+  using namespace filesystem;
+  conf_settings_ = uiState;
+  string confPath = basePath + "/session.conf";
+  ofstream fileStream;
+  fileStream.open(confPath);
+  fileStream << "filePath=" << conf_settings_.filePath << endl;
+  fileStream << "n_verticies=" << conf_settings_.n_verticies << endl;
+  fileStream << "n_indices=" << conf_settings_.n_indices << endl;
+  fileStream << "x_rotation_deg=" << conf_settings_.x_rotation_deg << endl;
+  fileStream << "y_rotation_deg=" << conf_settings_.y_rotation_deg << endl;
+  fileStream << "z_rotation_deg=" << conf_settings_.z_rotation_deg << endl;
+  fileStream << "x_shift=" << conf_settings_.x_shift << endl;
+  fileStream << "y_shift=" << conf_settings_.y_shift << endl;
+  fileStream << "z_shift=" << conf_settings_.z_shift << endl;
+  fileStream << "user_scaler=" << conf_settings_.user_scaler << endl;
+  fileStream << "perspective=" << conf_settings_.perspective << endl;
+  fileStream << "bg_color_red=" << conf_settings_.bg_color.red() << endl;
+  fileStream << "bg_color_green=" << conf_settings_.bg_color.green() << endl;
+  fileStream << "bg_color_blue=" << conf_settings_.bg_color.blue() << endl;
+  fileStream << "v_color_red=" << conf_settings_.v_color.red() << endl;
+  fileStream << "v_color_green=" << conf_settings_.v_color.green() << endl;
+  fileStream << "v_color_blue=" << conf_settings_.v_color.blue() << endl;
+  fileStream << "e_color_red=" << conf_settings_.e_color.red() << endl;
+  fileStream << "e_color_green=" << conf_settings_.e_color.green() << endl;
+  fileStream << "e_color_blue=" << conf_settings_.e_color.blue() << endl;
+  fileStream << "e_style=" << conf_settings_.e_style << endl;
+  fileStream << "e_size=" << conf_settings_.e_size << endl;
+  fileStream << "v_style=" << conf_settings_.v_style << endl;
+  fileStream << "v_size=" << conf_settings_.v_size << endl;
+  fileStream.close();
+}
 
 void ViewerSettings::SetDefaultTransforms() {
   conf_settings_.x_rotation_deg = 0;
@@ -136,5 +139,8 @@ void ViewerSettings::SetDefaultStyle() {
   conf_settings_.bg_color = QColor(25, 39, 52);
   conf_settings_.e_color = QColor(136, 153, 166);
   conf_settings_.v_color = QColor(255, 255, 255);
+}
+void ViewerSettings::SetPath(std::string& path) {
+  conf_settings_.filePath = path;
 }
 };  // namespace s21

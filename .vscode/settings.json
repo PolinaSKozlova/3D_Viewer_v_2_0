@@ -87,6 +87,7 @@
         "codecvt": "cpp",
         "fstream": "cpp",
         "list": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "future": "cpp"
     }
 }

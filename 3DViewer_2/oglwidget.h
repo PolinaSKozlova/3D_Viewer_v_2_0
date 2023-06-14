@@ -18,7 +18,7 @@
 #include <fstream>
 #include <iostream>
 
-//#include "affine_transformations/s21_matrix4X4.h"
+// #include "affine_transformations/s21_matrix4X4.h"
 #include "mainwindow.h"
 #include "parser/s21_parser.h"
 
@@ -46,7 +46,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
  public:
   OGLWidget(QWidget* parent = nullptr);
   ~OGLWidget();
-  void setWidgetState(s21::ui_state_t& uiState);
+  void setWidgetState(ViewerSettings& uiState);
   void setNewGeometry();
   int getNVerticies();
   int getNIndicies();
