@@ -31,7 +31,7 @@ void s21::OGLWidget::initializeGL() {
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
   initShaders();
 
-  loadGeometry(filePath);
+  loadGeometry(filePath_);
 }
 
 // Вызывается каждый раз при перерисовке
@@ -57,7 +57,7 @@ void s21::OGLWidget::paintGL() {
   // Set modelview-projection matrix
   program.setUniformValue(
       "mvp_matrix",
-      projection *
+      projection_ *
           matrix);  // Тут происходит связывание переменной внутри вершинного
                     // шейдера с переменной matrix из виджета
   program.setUniformValue("line_color", style_.e_color.red() / 255.,
@@ -90,7 +90,7 @@ void s21::OGLWidget::paintGL() {
   }
 
   if (style_.e_style != 0) {
-    glDrawElements(GL_TRIANGLES, model.faces.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, model_.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
 
   // That part not so good, need to refactor it
@@ -103,11 +103,11 @@ void s21::OGLWidget::paintGL() {
     } else {
       glDisable(GL_POINT_SMOOTH);
     }
-    program_P.setUniformValue("mvp_matrix", projection * matrix);
+    program_P.setUniformValue("mvp_matrix", projection_ * matrix);
     program_P.setUniformValue("dot_color", style_.v_color.red() / 255.,
                               style_.v_color.green() / 255.,
                               style_.v_color.blue() / 255., 1.0);
-    glDrawElements(GL_POINTS, model.faces.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_POINTS, model_.faces.size(), GL_UNSIGNED_INT, nullptr);
   }
   // Here the broken part is ended))
 
@@ -121,17 +121,17 @@ void s21::OGLWidget::resizeGL(int w, int h) {
 }
 
 void s21::OGLWidget::calculateProjection() {
-  projection
+  projection_
       .setToIdentity();  // Инициализируем матрицу проекции единичной матрицей
   if (transformations_.perspective_ortho == false) {
-    projection.perspective(
+    projection_.perspective(
         22.5, aspect, 0.1,
         10.0);  // C помощью метода perspective формируем матрицу, необходимую
                 // для задания перспективы
   } else {
     double scaler = 1.;
-    projection.ortho(-scaler * aspect, scaler * aspect, -scaler, scaler, 0.1,
-                     10.0);
+    projection_.ortho(-scaler * aspect, scaler * aspect, -scaler, scaler, 0.1,
+                      10.0);
   }
   // в вызове perspective:
   // 1 - угол наклона камеры
@@ -177,16 +177,16 @@ void s21::OGLWidget::initShaders() {
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
     ObjParser parser{};
-    model = parser.Parse(file_path);
-    transformations_.model_scaler = model.scaler;
+    model_ = parser.Parse(file_path);
+    transformations_.model_scaler = model_.scaler;
 
     arrayBuf.create();  // Создаем буффер
     arrayBuf.bind();    // Tell OpenGL which VBOs to use
 
-    float* p_to_data = model.vertices.data();
+    float* p_to_data = model_.vertices.data();
 
     arrayBuf.allocate(p_to_data,
-                      model.vertices.size() *
+                      model_.vertices.size() *
                           sizeof(float));  // Тут allocate - это  одновременно и
                                            // выделение памяти и загрузка
     arrayBuf.release();  // Отвязываем буффер до момента отрисовки
@@ -195,8 +195,8 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
     indexBuf.bind();    // Tell OpenGL which VBOs to use
 
     indexBuf.allocate(
-        model.faces.data(),
-        model.faces.size() *
+        model_.faces.data(),
+        model_.faces.size() *
             sizeof(unsigned int));  // Тут allocate - это одновременно и
                                     // выделение памяти и загрузка
 
@@ -207,12 +207,12 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
 }
 
 void s21::OGLWidget::setNewGeometry() {
-  loadGeometry(filePath);
+  loadGeometry(filePath_);
   update();
 }
 
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
-  filePath = uiState.GetUiState().filePath;
+  filePath_ = uiState.GetUiState().filePath;
   transformations_.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
   transformations_.y_rotation_deg = uiState.GetUiState().y_rotation_deg;
   transformations_.z_rotation_deg = uiState.GetUiState().z_rotation_deg;
@@ -231,13 +231,13 @@ void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
   update();
 }
 
-int s21::OGLWidget::getNVerticies() { return model.vertices.size(); }
+int s21::OGLWidget::getNVerticies() { return model_.vertices.size(); }
 
-int s21::OGLWidget::getNIndicies() { return model.faces.size(); }
+int s21::OGLWidget::getNIndicies() { return model_.faces.size(); }
 
 std::string s21::OGLWidget::getFilePath() {
   using namespace std;
   string modelFilePath = "Model file: ";
-  modelFilePath += filePath;
+  modelFilePath += filePath_;
   return modelFilePath;
 }

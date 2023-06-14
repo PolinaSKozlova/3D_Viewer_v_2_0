@@ -67,12 +67,12 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void cleanUp();
 
  private:
-  std::string filePath;
+  std::string filePath_;
   float aspect = DEFAULT_ASPECT_RATIO;
   //  model_data_t modelData;  // Модель
-  Model model;
+  Model model_;
   // default member initialisation, google it!
-  TransformData transformations;
+  TransformData transformations_;
   StyleData style_;
   //  ViewerSettings ui_conf_;
   QOpenGLShaderProgram
@@ -80,8 +80,8 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   QOpenGLShaderProgram program_P;  // Шейдерная программа для вершин
   QOpenGLShaderProgram
       program_dash;  // Шейдерная программа для модификации начертания линий
-  QMatrix4x4 projection;  // Матрица проекций, используется при отображении,
-                          // разобраться как это работает
+  QMatrix4x4 projection_;  // Матрица проекций, используется при отображении,
+                           // разобраться как это работает
   Matrix4X4 affine_transformation_matrix_{};
   QOpenGLBuffer arrayBuf;  // Вершинный буффер
   QOpenGLBuffer indexBuf;  // Индексный буффер
