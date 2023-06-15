@@ -21,15 +21,12 @@ struct TransformData {
         user_scaler(scaler_user),
         model_scaler(scaler_model),
         perspective_ortho(perspective) {}
-  // Углы поворота
   float x_rotation_deg;
   float y_rotation_deg;
   float z_rotation_deg;
-  // Смещения вдоль осей
   float x_shift;
   float y_shift;
   float z_shift;
-  // Коэффициент масштабирования
   float user_scaler;
   float model_scaler;
   bool perspective_ortho;
@@ -38,15 +35,10 @@ struct TransformData {
 class Matrix4X4 {
  public:
   Matrix4X4();
-  // explicit Matrix4X4(int size);
   Matrix4X4(const Matrix4X4& other);
   ~Matrix4X4();
   Matrix4X4& operator=(const Matrix4X4& other) noexcept;
-  Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
-  Matrix4X4& operator*=(const double& num) noexcept;
   void MakeMovement(const TransformData& other);
-  void MulMatrix(const Matrix4X4& other);
-  void MulNumber(const double& num) noexcept;
   float** GetMatrix() const noexcept;
   void SetData(const TransformData& other);
   float* CreateOneRowMatrix() const noexcept;
@@ -61,17 +53,21 @@ class Matrix4X4 {
   }
 
  private:
+  Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
+  Matrix4X4& operator*=(const double& num) noexcept;
+  void MulMatrix(const Matrix4X4& other);
+  void MulNumber(const double& num) noexcept;
   void MemoryAllocate();
   void MemoryFree();
   void InitializeIdentityMatrix();
   void InitializeXRotationMatrix();
   void InitializeYRotationMatrix();
   void InitializeZRotationMatrix();
-  // void InitializeUserScalerMatrix();
-  // void InitializeModelScalerMatrix();
+  void InitializeUserScalerMatrix();
+  void InitializeModelScalerMatrix();
   void InitializeScalerMatrix() noexcept;
   void InitializeShiftMatrix();
-  // void SetNullMatrix();
+  void SetNullMatrix();
   int rows_, cols_;
   float** matrix_;
   TransformData data_;
