@@ -347,50 +347,50 @@ void s21::MainWindow::on_setDefaultStyleButton_clicked() {
   ui->widget->setWidgetState(viewer_conf_);
 }
 
-// void s21::MainWindow::on_Save_image_triggered() {
-//   QString filter = "*.bmp;; *.jpeg";
-//   file_name = "/0";
-//   file_name = QFileDialog::getSaveFileName(this, "Сохранить файл",
-//                                            QDir::homePath(), filter);
-//   ui->widget->grabFramebuffer().save(file_name);
-//   if (file_name.isNull() == false) {
-//     QMessageBox::about(this, "Статус", "Изображение сохранено");
-//   }
-// }
+void s21::MainWindow::on_Save_image_triggered() {
+  QString filter = "*.bmp;; *.jpeg";
+  file_name = "/0";
+  file_name = QFileDialog::getSaveFileName(this, "Сохранить файл",
+                                           QDir::homePath(), filter);
+  ui->widget->grabFramebuffer().save(file_name);
+  if (file_name.isNull() == false) {
+    QMessageBox::about(this, "Статус", "Изображение сохранено");
+  }
+}
 
-// void s21::MainWindow::on_Save_gif_triggered() {
-//     QString filter = "*.gif";
-//     file_name = "/0";
-//     file_name = QFileDialog::getSaveFileName(this, "Сохранить GIF",
-//                                              QDir::homePath(), filter);
+void s21::MainWindow::on_Save_gif_triggered() {
+  QString filter = "*.gif";
+  file_name = "/0";
+  file_name = QFileDialog::getSaveFileName(this, "Сохранить GIF",
+                                           QDir::homePath(), filter);
 
-//    ptr_save_file = new QFile(file_name);
-//    if (!ptr_save_file->open(QIODevice::WriteOnly)) {
-//        QMessageBox::critical(this, "Warning", "Не удалось записать файл");
-//    } else {
-//        start_timer_gif();
-//    }
-//}
+  ptr_save_file = new QFile(file_name);
+  if (!ptr_save_file->open(QIODevice::WriteOnly)) {
+    QMessageBox::critical(this, "Warning", "Не удалось записать файл");
+  } else {
+    start_timer_gif();
+  }
+}
 
-// void s21::MainWindow::start_timer_gif() {
-//     gif = new QGifImage(QSize(640, 480));
-//     timer = new QTimer(this);
-//     connect(timer, &QTimer::timeout, this, &MainWindow::record_gif);
-//     timer->start(100);
-//     frame = 0;
-// }
+void s21::MainWindow::start_timer_gif() {
+  gif = new QGifImage(QSize(640, 480));
+  timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, &MainWindow::record_gif);
+  timer->start(100);
+  frame = 0;
+}
 
-// void s21::MainWindow::record_gif() {
-//     frame++;
-//     gif->addFrame(ui->widget->grabFramebuffer(), 100);
-//     if (frame == 50) {
-//         timer->stop();
-//         gif->save(ptr_save_file);
-//         ptr_save_file->close();
-//         delete ptr_save_file;
-//         ptr_save_file = nullptr;
-//         delete gif;
-//         gif = nullptr;
-//         QMessageBox::about(this, "Статус", "GIF сохранена");
-//     }
-// }
+void s21::MainWindow::record_gif() {
+  frame++;
+  gif->addFrame(ui->widget->grabFramebuffer(), 100);
+  if (frame == 50) {
+    timer->stop();
+    gif->save(ptr_save_file);
+    ptr_save_file->close();
+    delete ptr_save_file;
+    ptr_save_file = nullptr;
+    delete gif;
+    gif = nullptr;
+    QMessageBox::about(this, "Статус", "GIF сохранена");
+  }
+}

@@ -1,12 +1,16 @@
 #ifndef THREE_D_VIEWER_MAINWINDOW_H
 #define THREE_D_VIEWER_MAINWINDOW_H
 
+#include <QBuffer>
 #include <QColor>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMainWindow>
+#include <QTimer>
 
 #include "affine_transformations/s21_matrix4X4.h"
+#include "gif_image/gifimage/qgifimage.h"
+//#include "gif_image/gifimage/qgifimage_p.h"
 #include "parser/s21_parser.h"
 #include "viewersettings.h"
 
@@ -62,14 +66,12 @@ class MainWindow : public QMainWindow {
   void on_vertexSizeSpinBox_valueChanged(double arg1);
   void on_edgesSizeSpinBox_valueChanged(double arg1);
 
-  //  void on_Save_image_triggered();
-  //  void on_Save_gif_triggered();
-  //  void record_gif();
-  //  void start_timer_gif();
+  void on_Save_image_triggered();
+  void on_Save_gif_triggered();
+  void record_gif();
+  void start_timer_gif();
 
  private:
-  Ui::MainWindow* ui;
-  std::string basePath;
   void findOutBasePath(std::string& basePath);
   void setState(std::string& basePath, ViewerSettings& uiState);
   void setDefaults(std::string& basePath);
@@ -82,12 +84,14 @@ class MainWindow : public QMainWindow {
   void minimizeUiStyle();
   void maximizeUiStyle();
   void showFileInfo();
+  Ui::MainWindow* ui;
+  std::string basePath;
   ViewerSettings viewer_conf_;
   QString file_name;
   QTimer* timer;  // идентификатор таймера
   int frame;
-  //     QGifImage* gif;
-  //     QFile* ptr_save_file;
+  QGifImage* gif;
+  QFile* ptr_save_file;
 };
 };      // namespace s21
 #endif  // THREE_D_VIEWER_MAINWINDOW_H
