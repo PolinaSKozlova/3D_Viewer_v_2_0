@@ -33,6 +33,7 @@ void s21::OGLWidget::initializeGL() {
   initShaders();
 
   loadGeometry(file_path_);
+  std::cout << "after loadgeometry\n";
 }
 
 // Вызывается каждый раз при перерисовке
@@ -179,6 +180,7 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
     ObjParser parser{};
     model_ = parser.Parse(file_path);
+
     transformations_.model_scaler = model_.scaler;
 
     array_buf_.create();  // Создаем буффер
@@ -202,12 +204,13 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
                                     // выделение памяти и загрузка
 
     index_buf_.release();  // Отвязываем буффер до момента отрисовки
-  } catch (const std::exception& e) {
+  } catch (const std::invalid_argument& e) {
     // придумать решение получше
+    std::cout << "i'm here" << std::endl;
+    std::cout << file_path_ << std::endl;
     file_path_ =
         QCoreApplication::applicationDirPath().toStdString() + "/logo.obj";
     QMessageBox::critical(this, "Warning", e.what());
-    loadGeometry(file_path_);
   }
 }
 
@@ -221,10 +224,10 @@ void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
   transformations_.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
   transformations_.y_rotation_deg = uiState.GetUiState().y_rotation_deg;
   transformations_.z_rotation_deg = uiState.GetUiState().z_rotation_deg;
-  transformations_.x_shift = (uiState.GetUiState().x_shift / 100.0) * aspect;
-  transformations_.y_shift = uiState.GetUiState().y_shift / 100.0;
-  transformations_.z_shift = uiState.GetUiState().z_shift / 100.0;
-  transformations_.user_scaler = 1 + uiState.GetUiState().user_scaler / 100.0;
+  transformations_.x_shift = (uiState.GetUiState().x_shift / 50.0) * aspect;
+  transformations_.y_shift = uiState.GetUiState().y_shift / 50.0;
+  transformations_.z_shift = uiState.GetUiState().z_shift / 50.0;
+  transformations_.user_scaler = 1 + uiState.GetUiState().user_scaler / 101.0;
   transformations_.perspective_ortho = uiState.GetUiState().perspective;
   style_.bg_color = uiState.GetUiState().bg_color;
   style_.e_color = uiState.GetUiState().e_color;
