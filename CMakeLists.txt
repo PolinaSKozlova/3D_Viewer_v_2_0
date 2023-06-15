@@ -10,7 +10,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(GL_SILENCE_DEPRECATION)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -26,9 +25,6 @@ qt6_add_resources(DEFAULT_RSC_ADDED
 
 include_directories(3DViewer_2 3DViewer_2/gif_image/3rdParty/giflib 3DViewer_2/gif_image/gifimage)
 
-# qt6_add_resources(GIF_IMAGE_RSC_ADDED
-# 3DViewer_2/gif_image/gifimage/gifimage.pro
-# )
 set(PROJECT_SOURCES
     3DViewer_2/main.cpp
     3DViewer_2/mainwindow.cc
@@ -53,7 +49,6 @@ set(PROJECT_SOURCES
     3DViewer_2/gif_image/3rdParty/giflib/gif_hash.h
     3DViewer_2/gif_image/3rdParty/giflib/gif_lib.h
     3DViewer_2/gif_image/3rdParty/giflib/gif_lib_private.h
-
     3DViewer_2/gif_image/gifimage/qgifimage.cpp
     3DViewer_2/gif_image/gifimage/qgifglobal.h
     3DViewer_2/gif_image/gifimage/qgifimage.h
@@ -67,8 +62,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         ${SHADER_RSC_ADDED}
         ${DEFAULT_RSC_ADDED}
-
-        # ${GIF_IMAGE_RSC_ADDED}
     )
 
 # Define target properties for Android with Qt 6 as:
@@ -81,8 +74,6 @@ else()
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
             ${DEFAULT_RSC_ADDED}
-
-            # ${GIF_IMAGE_RSC_ADDED}
         )
 
     # Define properties for Android with Qt 5 after find_package() calls as:
@@ -92,13 +83,10 @@ else()
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
             ${DEFAULT_RSC_ADDED}
-
-            # ${GIF_IMAGE_RSC_ADDED}
         )
     endif()
 endif()
 
-# target_link_libraries(3DViewer_2 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(3DViewer_2 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGLWidgets Qt${QT_VERSION_MAJOR}::OpenGL ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 set_target_properties(3DViewer_2 PROPERTIES
