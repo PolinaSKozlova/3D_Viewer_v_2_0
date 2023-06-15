@@ -4,18 +4,18 @@
 s21::OGLWidget::OGLWidget(QWidget* parent)
     // Список инициализации, индексный буффер должен быть проинициализирован
     // явно
-    : QOpenGLWidget(parent), indexBuf(QOpenGLBuffer::IndexBuffer) {}
+    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {}
 
-s21::OGLWidget::~OGLWidget() { cleanUp(); }
+s21::OGLWidget::~OGLWidget() { CleanUp(); }
 
-void s21::OGLWidget::cleanUp() {
-  arrayBuf.destroy();
-  indexBuf.destroy();
+void s21::OGLWidget::CleanUp() {
+  array_buf_.destroy();
+  index_buf_.destroy();
 }
 
 // Вызывается один раз при создании нового OpenGL контекста, т.е. при
 // инициализации виджета
-void s21::OGLWidget::initializeGL() {
+void s21::OGLWidget::InitializeGL() {
   /*
   After calling this function,
   the QOpenGLFunctions object can only be used with the current context
@@ -30,15 +30,15 @@ void s21::OGLWidget::initializeGL() {
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnable(GL_PROGRAM_POINT_SIZE);
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-  initShaders();
+  InitShaders();
 
-  loadGeometry(filePath_);
+  LoadGeometry(file_path_);
 }
 
 // Вызывается каждый раз при перерисовке
-void s21::OGLWidget::paintGL() {
-  calculateProjection();
-  // цвет должен меняться в paintGl чтоб его можно было выбрать
+void s21::OGLWidget::PaintGL() {
+  CalculateProjection();
+  // цвет должен меняться в PaintGL чтоб его можно было выбрать
   glClearColor(
       style_.bg_color.red() / 255., style_.bg_color.green() / 255.,
       style_.bg_color.blue() / 255.,
@@ -66,8 +66,8 @@ void s21::OGLWidget::paintGL() {
                           style_.e_color.blue() / 255., 1.0);
 
   // Тут мы снова привязываем вершинный и индексный буферы
-  arrayBuf.bind();
-  indexBuf.bind();
+  array_buf_.bind();
+  index_buf_.bind();
 
   // Offset for position
   quintptr offset = 0;
@@ -116,12 +116,12 @@ void s21::OGLWidget::paintGL() {
   program_P.release();
 }
 // Этот метод вызывается один раз, при изменении размеров виджета
-void s21::OGLWidget::resizeGL(int w, int h) {
+void s21::OGLWidget::ResizeGL(int w, int h) {
   aspect = w / float(h ? h : 1);
-  calculateProjection();
+  CalculateProjection();
 }
 
-void s21::OGLWidget::calculateProjection() {
+void s21::OGLWidget::CalculateProjection() {
   projection_
       .setToIdentity();  // Инициализируем матрицу проекции единичной матрицей
   if (transformations_.perspective_ortho == false) {
@@ -146,7 +146,7 @@ void s21::OGLWidget::calculateProjection() {
 }
 
 // Метод для компиляции и сборки шейдеров
-void s21::OGLWidget::initShaders() {
+void s21::OGLWidget::InitShaders() {
   // Compile vertex shader
   if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
     close();
@@ -175,45 +175,45 @@ void s21::OGLWidget::initShaders() {
 }
 
 // Загрузка модели
-void s21::OGLWidget::loadGeometry(std::string& file_path) {
+void s21::OGLWidget::LoadGeometry(std::string& file_path) {
   try {
     ObjParser parser{};
     model_ = parser.Parse(file_path);
     transformations_.model_scaler = model_.scaler;
 
-    arrayBuf.create();  // Создаем буффер
-    arrayBuf.bind();    // Tell OpenGL which VBOs to use
+    array_buf_.create();  // Создаем буффер
+    array_buf_.bind();    // Tell OpenGL which VBOs to use
 
     float* p_to_data = model_.vertices.data();
 
-    arrayBuf.allocate(p_to_data,
-                      model_.vertices.size() *
-                          sizeof(float));  // Тут allocate - это  одновременно и
-                                           // выделение памяти и загрузка
-    arrayBuf.release();  // Отвязываем буффер до момента отрисовки
+    array_buf_.allocate(p_to_data,
+                        model_.vertices.size() *
+                            sizeof(float));  // Тут allocate - это  одновременно
+                                             // и выделение памяти и загрузка
+    array_buf_.release();  // Отвязываем буффер до момента отрисовки
 
-    indexBuf.create();  // Создаем буффер
-    indexBuf.bind();    // Tell OpenGL which VBOs to use
+    index_buf_.create();  // Создаем буффер
+    index_buf_.bind();    // Tell OpenGL which VBOs to use
 
-    indexBuf.allocate(
+    index_buf_.allocate(
         model_.faces.data(),
         model_.faces.size() *
             sizeof(unsigned int));  // Тут allocate - это одновременно и
                                     // выделение памяти и загрузка
 
-    indexBuf.release();  // Отвязываем буффер до момента отрисовки
+    index_buf_.release();  // Отвязываем буффер до момента отрисовки
   } catch (const std::exception& e) {
     QMessageBox::critical(this, "Warning", e.what());
   }
 }
 
 void s21::OGLWidget::setNewGeometry() {
-  loadGeometry(filePath_);
+  LoadGeometry(file_path_);
   update();
 }
 
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
-  filePath_ = uiState.GetUiState().filePath;
+  file_path_ = uiState.GetUiState().filePath;
   transformations_.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
   transformations_.y_rotation_deg = uiState.GetUiState().y_rotation_deg;
   transformations_.z_rotation_deg = uiState.GetUiState().z_rotation_deg;
@@ -238,7 +238,7 @@ int s21::OGLWidget::getNIndicies() { return model_.faces.size(); }
 
 std::string s21::OGLWidget::getFilePath() {
   using namespace std;
-  string modelFilePath = "Model file: ";
-  modelFilePath += filePath_;
-  return modelFilePath;
+  string model_file_path = "Model file: ";
+  model_file_path += file_path_;
+  return model_file_path;
 }

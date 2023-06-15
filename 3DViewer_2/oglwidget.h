@@ -34,7 +34,7 @@ struct StyleData {
 
 typedef enum { PERSPECTIVE, ORTHO } projection_t;
 
-//#define DEFAULT_ASPECT_RATIO 1.865889
+// #define DEFAULT_ASPECT_RATIO 1.865889
 constexpr double DEFAULT_ASPECT_RATIO = 1.865889;
 
 class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
@@ -57,18 +57,18 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
    * изображение?
    */
  protected:
-  void initializeGL() override;  // TODO(weldonfe): Разобраться с override
-  void paintGL() override;
-  void resizeGL(int width, int height) override;
+  void InitializeGL() override;
+  void PaintGL() override;
+  void ResizeGL(int width, int height) override;
   // Эта функция компилирует и линкует шейдеры,
   // Если шейдеры не компилируются, всё приложение закрывается
-  void initShaders();
+  void InitShaders();
   // Функция ниже загружает геометрию модели
-  void loadGeometry(std::string& file_path);
-  void cleanUp();
+  void LoadGeometry(std::string& file_path);
+  void CleanUp();
 
  private:
-  std::string filePath_;
+  std::string file_path_;
   float aspect = DEFAULT_ASPECT_RATIO;
   //  model_data_t modelData;  // Модель
   Model model_;
@@ -79,14 +79,14 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   QOpenGLShaderProgram
       program;  // Шейдерная программа, сюда собираются все шейдеры
   QOpenGLShaderProgram program_P;  // Шейдерная программа для вершин
-  QOpenGLShaderProgram
-      program_dash;  // Шейдерная программа для модификации начертания линий
+  // QOpenGLShaderProgram
+  //     program_dash;  // Шейдерная программа для модификации начертания линий
   QMatrix4x4 projection_;  // Матрица проекций, используется при отображении,
                            // разобраться как это работает
   Matrix4X4 affine_transformation_matrix_{};
-  QOpenGLBuffer arrayBuf;  // Вершинный буффер
-  QOpenGLBuffer indexBuf;  // Индексный буффер
-  void calculateProjection();
+  QOpenGLBuffer array_buf_;  // Вершинный буффер
+  QOpenGLBuffer index_buf_;  // Индексный буффер
+  void CalculateProjection();
 };
 };      // namespace s21
 #endif  // THREE_D_VIEWER_OGLWIDGET_H
