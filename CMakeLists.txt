@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(3DViewer_2 VERSION 0.1 LANGUAGES CXX)
+project(3DViewer_2 VERSION 0.1 LANGUAGES CXX C)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_WARN_DEPRECATED ON)
+set(GL_SILENCE_DEPRECATION)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -24,6 +24,11 @@ qt6_add_resources(DEFAULT_RSC_ADDED
     3DViewer_2/defaults.qrc
 )
 
+include_directories(3DViewer_2 3DViewer_2/gif_image/3rdParty/giflib 3DViewer_2/gif_image/gifimage)
+
+# qt6_add_resources(GIF_IMAGE_RSC_ADDED
+# 3DViewer_2/gif_image/gifimage/gifimage.pro
+# )
 set(PROJECT_SOURCES
     3DViewer_2/main.cpp
     3DViewer_2/mainwindow.cc
@@ -37,10 +42,23 @@ set(PROJECT_SOURCES
     parser/s21_parser.h
     affine_transformations/s21_matrix4X4.h
     affine_transformations/s21_matrix4X4.cc
-    affine_transformations/s21_matrix_transform.cc
-)
+    affine_transformations/s21_matrix4X4_transform.cc
+    3DViewer_2/gif_image/3rdParty/giflib/dgif_lib.c
+    3DViewer_2/gif_image/3rdParty/giflib/egif_lib.c
+    3DViewer_2/gif_image/3rdParty/giflib/gif_err.c
+    3DViewer_2/gif_image/3rdParty/giflib/gif_font.c
+    3DViewer_2/gif_image/3rdParty/giflib/gif_hash.c
+    3DViewer_2/gif_image/3rdParty/giflib/gifalloc.c
+    3DViewer_2/gif_image/3rdParty/giflib/quantize.c
+    3DViewer_2/gif_image/3rdParty/giflib/gif_hash.h
+    3DViewer_2/gif_image/3rdParty/giflib/gif_lib.h
+    3DViewer_2/gif_image/3rdParty/giflib/gif_lib_private.h
 
-include_directories(3DViewer_2)
+    3DViewer_2/gif_image/gifimage/qgifimage.cpp
+    3DViewer_2/gif_image/gifimage/qgifglobal.h
+    3DViewer_2/gif_image/gifimage/qgifimage.h
+    3DViewer_2/gif_image/gifimage/qgifimage_p.h
+)
 
 # option(USE_OGLWidget_NAMESPACE "s21" ON)
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -49,6 +67,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         ${SHADER_RSC_ADDED}
         ${DEFAULT_RSC_ADDED}
+
+        # ${GIF_IMAGE_RSC_ADDED}
     )
 
 # Define target properties for Android with Qt 6 as:
@@ -61,6 +81,8 @@ else()
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
             ${DEFAULT_RSC_ADDED}
+
+            # ${GIF_IMAGE_RSC_ADDED}
         )
 
     # Define properties for Android with Qt 5 after find_package() calls as:
@@ -70,6 +92,8 @@ else()
             ${PROJECT_SOURCES}
             ${SHADER_RSC_ADDED}
             ${DEFAULT_RSC_ADDED}
+
+            # ${GIF_IMAGE_RSC_ADDED}
         )
     endif()
 endif()
