@@ -10,7 +10,6 @@
 
 #include "affine_transformations/s21_matrix4X4.h"
 #include "gif_image/gifimage/qgifimage.h"
-//#include "gif_image/gifimage/qgifimage_p.h"
 #include "parser/s21_parser.h"
 #include "viewersettings.h"
 
@@ -68,14 +67,14 @@ class MainWindow : public QMainWindow {
 
   void on_Save_image_triggered();
   void on_Save_gif_triggered();
-  void record_gif();
-  void start_timer_gif();
+  void RecordGif();
+  void StartTimerGif();
 
  private:
-  void findOutBasePath(std::string& basePath);
-  void setState(std::string& basePath, ViewerSettings& uiState);
-  void setDefaults(std::string& basePath);
-  void updateUiState(int value, std::string& valueType);
+  void FindOutBasePath();
+  void SetState(ViewerSettings& uiState);
+  void SetDefaults();
+  void UpdateUiState(int value, std::string& value_type);
   void syncUi();
   void minimizeUi();
   void maximizeUi();
@@ -85,13 +84,13 @@ class MainWindow : public QMainWindow {
   void maximizeUiStyle();
   void showFileInfo();
   Ui::MainWindow* ui;
-  std::string basePath;
+  std::string base_path_;
   ViewerSettings viewer_conf_;
-  QString file_name;
-  QTimer* timer;  // идентификатор таймера
-  int frame;
-  QGifImage* gif;
-  QFile* ptr_save_file;
+  QString image_file_name_;
+  QTimer* timer_;  // идентификатор таймера
+  int frame_;
+  QGifImage* gif_;
+  QFile* ptr_save_file_;
 };
 };      // namespace s21
 #endif  // THREE_D_VIEWER_MAINWINDOW_H

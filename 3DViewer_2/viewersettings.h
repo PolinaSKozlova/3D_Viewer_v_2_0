@@ -76,6 +76,7 @@ class ViewerSettings {
   ViewerSettings();
   void SaveConf(std::string& basePath, ViewerSettings& uiState);
   void LoadConf(std::string& confPath);
+  void UpdateState(int value, const std::string& value_type);
   void SetDefaultTransforms();
   void SetDefaultStyle();
   void SetPath(std::string& path);

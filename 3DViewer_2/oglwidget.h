@@ -34,7 +34,8 @@ struct StyleData {
 
 typedef enum { PERSPECTIVE, ORTHO } projection_t;
 
-#define DEFAULT_ASPECT_RATIO 1.865889
+//#define DEFAULT_ASPECT_RATIO 1.865889
+constexpr double DEFAULT_ASPECT_RATIO = 1.865889;
 
 class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT

@@ -114,6 +114,26 @@ void ViewerSettings::SaveConf(std::string& basePath, ViewerSettings& uiState) {
   fileStream.close();
 }
 
+void ViewerSettings::UpdateState(int value, const std::string& value_type) {
+  using namespace std;
+  map<string, function<void(const int&)>> conf_state = {
+      {"x_rotation_deg",
+       [&](const int& val) { conf_settings_.x_rotation_deg = val; }},
+      {"y_rotation_deg",
+       [&](const int& val) { conf_settings_.y_rotation_deg = val; }},
+      {"z_rotation_deg",
+       [&](const int& val) { conf_settings_.z_rotation_deg = val; }},
+      {"x_shift", [&](const int& val) { conf_settings_.x_shift = val; }},
+      {"y_shift", [&](const int& val) { conf_settings_.y_shift = val; }},
+      {"z_shift", [&](const int& val) { conf_settings_.z_shift = val; }},
+      {"user_scaler",
+       [&](const int& val) { conf_settings_.user_scaler = val; }},
+      {"perspective",
+       [&](const int& val) { conf_settings_.perspective = val; }},
+  };
+  conf_state.find(value_type)->second(value);
+}
+
 void ViewerSettings::SetDefaultTransforms() {
   conf_settings_.x_rotation_deg = 0;
   conf_settings_.y_rotation_deg = 0;

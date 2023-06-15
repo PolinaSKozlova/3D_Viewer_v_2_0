@@ -1,3 +1,4 @@
+#define GL_SILENCE_DEPRECATION
 #include "oglwidget.h"
 
 s21::OGLWidget::OGLWidget(QWidget* parent)
