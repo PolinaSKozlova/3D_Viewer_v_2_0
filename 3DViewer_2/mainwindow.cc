@@ -7,8 +7,8 @@ s21::MainWindow::MainWindow(QWidget* parent)
   ui->setupUi(this);
   FindOutBasePath();
   SetState(viewer_conf_);
-  showFileInfo();
-  minimizeUi();
+  ShowFileInfo();
+  MinimizeUi();
 }
 
 s21::MainWindow::~MainWindow() {
@@ -38,7 +38,7 @@ void s21::MainWindow::SetState(ViewerSettings& uiState) {
     string file_path = base_path_ + "/logo.obj";
     viewer_conf_.SetPath(file_path);
   }
-  syncUi();
+  SyncUi();
   ui->widget->setWidgetState(uiState);
 }
 
@@ -55,24 +55,12 @@ void s21::MainWindow::SetDefaults() {
 }
 
 void s21::MainWindow::UpdateUiState(int value, std::string& value_type) {
-  // if (valueType == "x_rotation_deg")
-  //   viewer_conf_.GetUiState().x_rotation_deg = value;
-  // if (valueType == "y_rotation_deg")
-  //   viewer_conf_.GetUiState().y_rotation_deg = value;
-  // if (valueType == "z_rotation_deg")
-  //   viewer_conf_.GetUiState().z_rotation_deg = value;
-  // if (valueType == "x_shift") viewer_conf_.GetUiState().x_shift = value;
-  // if (valueType == "y_shift") viewer_conf_.GetUiState().y_shift = value;
-  // if (valueType == "z_shift") viewer_conf_.GetUiState().z_shift = value;
-  // if (valueType == "user_scaler") viewer_conf_.GetUiState().user_scaler =
-  // value; if (valueType == "perspective")
-  // viewer_conf_.GetUiState().perspective = value;
   viewer_conf_.UpdateState(value, value_type);
   ui->widget->setWidgetState(viewer_conf_);
-  syncUi();
+  SyncUi();
 }
 
-void s21::MainWindow::syncUi() {
+void s21::MainWindow::SyncUi() {
   ui->xRotationSlider->setValue(viewer_conf_.GetUiState().x_rotation_deg);
   ui->xRotationSpinBox->setValue(viewer_conf_.GetUiState().x_rotation_deg);
   ui->yRotationSlider->setValue(viewer_conf_.GetUiState().y_rotation_deg);
@@ -99,9 +87,9 @@ void s21::MainWindow::syncUi() {
 
 void s21::MainWindow::on_uiShowButton_clicked() {
   if (ui->uiFrame->size().height() == FRAME_H_MIN) {
-    maximizeUi();
+    MaximizeUi();
   } else {
-    minimizeUi();
+    MinimizeUi();
   }
 }
 
@@ -113,10 +101,10 @@ void s21::MainWindow::on_uiCloseButton_clicked() {
 void s21::MainWindow::on_showTransformsButton_clicked() {
   int currentUiH = ui->uiFrame->size().height();
   if (ui->uiTransformsFrame->size().height() == FRAME_H_MIN) {
-    maximizeUiTransforms();
+    MaximizeUiTransforms();
     ui->uiFrame->setFixedSize(FRAME_W, currentUiH + FRAME_H_TR_CTRLS);
   } else {
-    minimizeUiTransforms();
+    MinimizeUiTransforms();
     ui->uiFrame->setFixedSize(FRAME_W, currentUiH - FRAME_H_TR_CTRLS);
   }
 }
@@ -124,50 +112,50 @@ void s21::MainWindow::on_showTransformsButton_clicked() {
 void s21::MainWindow::on_showStyleButton_clicked() {
   int currentUiH = ui->uiFrame->size().height();
   if (ui->uiStyleFrame->size().height() == FRAME_H_MIN) {
-    maximizeUiStyle();
+    MaximizeUiStyle();
     ui->uiFrame->setFixedSize(FRAME_W, currentUiH + FRAME_H_ST_CTRLS);
   } else {
-    minimizeUiStyle();
+    MinimizeUiStyle();
     ui->uiFrame->setFixedSize(FRAME_W, currentUiH - FRAME_H_ST_CTRLS);
   }
 }
 
-void s21::MainWindow::minimizeUi() {
+void s21::MainWindow::MinimizeUi() {
   ui->uiFrame->setFixedSize(FRAME_W, FRAME_H_MIN);
   ui->uiTransformsFrame->setVisible(false);
   ui->uiStyleFrame->setVisible(false);
 }
 
-void s21::MainWindow::maximizeUi() {
+void s21::MainWindow::MaximizeUi() {
   ui->uiFrame->setFixedSize(FRAME_W, FRAME_H_MIN * 3);
 
-  minimizeUiTransforms();
+  MinimizeUiTransforms();
   ui->uiTransformsFrame->setVisible(true);
-  minimizeUiStyle();
+  MinimizeUiStyle();
   ui->uiStyleFrame->setVisible(true);
 }
 
-void s21::MainWindow::minimizeUiTransforms() {
+void s21::MainWindow::MinimizeUiTransforms() {
   ui->uiTransformsFrame->setFixedSize(FRAME_W, FRAME_H_MIN);
   ui->uiTransformsCtrlFrame->setVisible(false);
 }
 
-void s21::MainWindow::maximizeUiTransforms() {
+void s21::MainWindow::MaximizeUiTransforms() {
   ui->uiTransformsFrame->setFixedSize(FRAME_W, FRAME_H_MIN + FRAME_H_TR_CTRLS);
   ui->uiTransformsCtrlFrame->setVisible(true);
 }
 
-void s21::MainWindow::minimizeUiStyle() {
+void s21::MainWindow::MinimizeUiStyle() {
   ui->uiStyleFrame->setFixedSize(FRAME_W, FRAME_H_MIN);
   ui->uiStyleCtrlFrame->setVisible(false);
 }
 
-void s21::MainWindow::maximizeUiStyle() {
+void s21::MainWindow::MaximizeUiStyle() {
   ui->uiStyleFrame->setFixedSize(FRAME_W, FRAME_H_MIN + FRAME_H_ST_CTRLS);
   ui->uiStyleCtrlFrame->setVisible(true);
 }
 
-void s21::MainWindow::showFileInfo() {
+void s21::MainWindow::ShowFileInfo() {
   using namespace std;
   ui->widget->getNIndicies();
   ui->widget->getNVerticies();
@@ -206,17 +194,17 @@ void s21::MainWindow::on_zRotationSlider_valueChanged(int value) {
 
 void s21::MainWindow::on_xRotationSpinBox_valueChanged(double arg1) {
   std::string valueType = "x_rotation_deg";
-  UpdateUiState((int)arg1, valueType);
+  UpdateUiState(static_cast<int>(arg1), valueType);
 }
 
 void s21::MainWindow::on_yRotationSpinBox_valueChanged(double arg1) {
   std::string valueType = "y_rotation_deg";
-  UpdateUiState((int)arg1, valueType);
+  UpdateUiState(static_cast<int>(arg1), valueType);
 }
 
 void s21::MainWindow::on_zRotationSpinBox_valueChanged(double arg1) {
   std::string valueType = "z_rotation_deg";
-  UpdateUiState((int)arg1, valueType);
+  UpdateUiState(static_cast<int>(arg1), valueType);
 }
 
 void s21::MainWindow::on_xShiftSlider_valueChanged(int value) {
@@ -236,17 +224,17 @@ void s21::MainWindow::on_zShiftSlider_valueChanged(int value) {
 
 void s21::MainWindow::on_xShiftSpinBox_valueChanged(double arg1) {
   std::string valueType = "x_shift";
-  UpdateUiState((int)arg1, valueType);
+  UpdateUiState(static_cast<int>(arg1), valueType);
 }
 
 void s21::MainWindow::on_yShiftSpinBox_valueChanged(double arg1) {
   std::string valueType = "y_shift";
-  UpdateUiState((int)arg1, valueType);
+  UpdateUiState(static_cast<int>(arg1), valueType);
 }
 
 void s21::MainWindow::on_zShiftSpinBox_valueChanged(double arg1) {
   std::string valueType = "z_shift";
-  UpdateUiState((int)arg1, valueType);
+  UpdateUiState(static_cast<int>(arg1), valueType);
 }
 
 void s21::MainWindow::on_userScalerSlider_valueChanged(int value) {
@@ -261,7 +249,7 @@ void s21::MainWindow::on_userScalerSpinBox_valueChanged(double arg1) {
 
 void s21::MainWindow::on_setDefaultTransformsButton_clicked() {
   viewer_conf_.SetDefaultTransforms();
-  syncUi();
+  SyncUi();
   ui->widget->setWidgetState(viewer_conf_);
 }
 
@@ -277,12 +265,12 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
   if (inFileName.isNull() == false) {
     viewer_conf_.GetUiState().filePath = inFileName.toStdString();
     viewer_conf_.SetDefaultTransforms();
-    syncUi();
+    SyncUi();
     ui->widget->setWidgetState(viewer_conf_);
     ui->widget->setNewGeometry();
     viewer_conf_.GetUiState().n_indices = ui->widget->getNIndicies();
     viewer_conf_.GetUiState().n_verticies = ui->widget->getNVerticies();
-    showFileInfo();
+    ShowFileInfo();
   }
 }
 
@@ -317,14 +305,14 @@ void s21::MainWindow::on_verticiesTypeComboBox_activated(int index) {
 
 void s21::MainWindow::on_verticiesSizeSlider_valueChanged(int value) {
   viewer_conf_.GetUiState().v_size = value;
-  syncUi();
+  SyncUi();
   ui->widget->setWidgetState(viewer_conf_);
 }
 
 void s21::MainWindow::on_vertexSizeSpinBox_valueChanged(double arg1) {
   viewer_conf_.GetUiState().v_size = arg1;
   ui->widget->setWidgetState(viewer_conf_);
-  syncUi();
+  SyncUi();
 }
 
 void s21::MainWindow::on_edgesTypeComboBox_activated(int index) {
@@ -335,18 +323,18 @@ void s21::MainWindow::on_edgesTypeComboBox_activated(int index) {
 void s21::MainWindow::on_edgesSizeSlider_valueChanged(int value) {
   viewer_conf_.GetUiState().e_size = value;
   ui->widget->setWidgetState(viewer_conf_);
-  syncUi();
+  SyncUi();
 }
 
 void s21::MainWindow::on_edgesSizeSpinBox_valueChanged(double arg1) {
   viewer_conf_.GetUiState().e_size = arg1;
   ui->widget->setWidgetState(viewer_conf_);
-  syncUi();
+  SyncUi();
 }
 
 void s21::MainWindow::on_setDefaultStyleButton_clicked() {
   viewer_conf_.SetDefaultStyle();
-  syncUi();
+  SyncUi();
   ui->widget->setWidgetState(viewer_conf_);
 }
 
