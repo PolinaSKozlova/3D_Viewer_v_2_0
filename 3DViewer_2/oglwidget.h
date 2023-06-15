@@ -34,7 +34,6 @@ struct StyleData {
 
 typedef enum { PERSPECTIVE, ORTHO } projection_t;
 
-// #define DEFAULT_ASPECT_RATIO 1.865889
 constexpr double DEFAULT_ASPECT_RATIO = 1.865889;
 
 class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
@@ -57,15 +56,15 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
    * изображение?
    */
  protected:
-  void InitializeGL() override;
-  void PaintGL() override;
-  void ResizeGL(int width, int height) override;
+  void initializeGL() override;
+  void paintGL() override;
+  void resizeGL(int width, int height) override;
   // Эта функция компилирует и линкует шейдеры,
   // Если шейдеры не компилируются, всё приложение закрывается
-  void InitShaders();
+  void initShaders();
   // Функция ниже загружает геометрию модели
-  void LoadGeometry(std::string& file_path);
-  void CleanUp();
+  void loadGeometry(std::string& file_path);
+  void cleanUp();
 
  private:
   std::string file_path_;
@@ -79,8 +78,8 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   QOpenGLShaderProgram
       program;  // Шейдерная программа, сюда собираются все шейдеры
   QOpenGLShaderProgram program_P;  // Шейдерная программа для вершин
-  // QOpenGLShaderProgram
-  //     program_dash;  // Шейдерная программа для модификации начертания линий
+  QOpenGLShaderProgram
+      program_dash;  // Шейдерная программа для модификации начертания линий
   QMatrix4x4 projection_;  // Матрица проекций, используется при отображении,
                            // разобраться как это работает
   Matrix4X4 affine_transformation_matrix_{};

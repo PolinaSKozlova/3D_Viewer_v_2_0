@@ -19,8 +19,10 @@ s21::MainWindow::~MainWindow() {
 void s21::MainWindow::FindOutBasePath() {
   using namespace std;
   using namespace filesystem;
-  QString QbasePath = QCoreApplication::applicationDirPath();
-  base_path_ = QbasePath.toStdString();
+  //  QString QbasePath = QCoreApplication::applicationDirPath();
+  //  base_path_ = QbasePath.toStdString();
+
+  base_path_ = QCoreApplication::applicationDirPath().toStdString();
 }
 
 void s21::MainWindow::SetState(ViewerSettings& uiState) {

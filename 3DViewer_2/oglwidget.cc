@@ -6,16 +6,16 @@ s21::OGLWidget::OGLWidget(QWidget* parent)
     // явно
     : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {}
 
-s21::OGLWidget::~OGLWidget() { CleanUp(); }
+s21::OGLWidget::~OGLWidget() { cleanUp(); }
 
-void s21::OGLWidget::CleanUp() {
+void s21::OGLWidget::cleanUp() {
   array_buf_.destroy();
   index_buf_.destroy();
 }
 
 // Вызывается один раз при создании нового OpenGL контекста, т.е. при
 // инициализации виджета
-void s21::OGLWidget::InitializeGL() {
+void s21::OGLWidget::initializeGL() {
   /*
   After calling this function,
   the QOpenGLFunctions object can only be used with the current context
@@ -30,15 +30,15 @@ void s21::OGLWidget::InitializeGL() {
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnable(GL_PROGRAM_POINT_SIZE);
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-  InitShaders();
+  initShaders();
 
-  LoadGeometry(file_path_);
+  loadGeometry(file_path_);
 }
 
 // Вызывается каждый раз при перерисовке
-void s21::OGLWidget::PaintGL() {
+void s21::OGLWidget::paintGL() {
   CalculateProjection();
-  // цвет должен меняться в PaintGL чтоб его можно было выбрать
+  // цвет должен меняться в paintGL чтоб его можно было выбрать
   glClearColor(
       style_.bg_color.red() / 255., style_.bg_color.green() / 255.,
       style_.bg_color.blue() / 255.,
@@ -116,7 +116,7 @@ void s21::OGLWidget::PaintGL() {
   program_P.release();
 }
 // Этот метод вызывается один раз, при изменении размеров виджета
-void s21::OGLWidget::ResizeGL(int w, int h) {
+void s21::OGLWidget::resizeGL(int w, int h) {
   aspect = w / float(h ? h : 1);
   CalculateProjection();
 }
@@ -146,7 +146,7 @@ void s21::OGLWidget::CalculateProjection() {
 }
 
 // Метод для компиляции и сборки шейдеров
-void s21::OGLWidget::InitShaders() {
+void s21::OGLWidget::initShaders() {
   // Compile vertex shader
   if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
     close();
@@ -175,7 +175,7 @@ void s21::OGLWidget::InitShaders() {
 }
 
 // Загрузка модели
-void s21::OGLWidget::LoadGeometry(std::string& file_path) {
+void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
     ObjParser parser{};
     model_ = parser.Parse(file_path);
@@ -203,12 +203,16 @@ void s21::OGLWidget::LoadGeometry(std::string& file_path) {
 
     index_buf_.release();  // Отвязываем буффер до момента отрисовки
   } catch (const std::exception& e) {
+    // придумать решение получше
+    file_path_ =
+        QCoreApplication::applicationDirPath().toStdString() + "/logo.obj";
     QMessageBox::critical(this, "Warning", e.what());
+    loadGeometry(file_path_);
   }
 }
 
 void s21::OGLWidget::setNewGeometry() {
-  LoadGeometry(file_path_);
+  loadGeometry(file_path_);
   update();
 }
 
