@@ -14,6 +14,7 @@ Model ObjParser::Parse(const std::string& filename) {
 Model ObjParser::ParseData(const std::string& filename) {
   using std::getline;
   using std::ifstream;
+  using std::invalid_argument;
   using std::istringstream;
   using std::runtime_error;
   using std::string;
@@ -33,7 +34,7 @@ Model ObjParser::ParseData(const std::string& filename) {
     if (type == "v") {
       float x{}, y{}, z{};
       if (!(iss >> x >> y >> z)) {
-        throw runtime_error("Could not open file: invalid vertex");
+        throw invalid_argument("Could not open file: invalid vertex");
       }
       model.vertices.push_back(x);
       model.vertices.push_back(y);
@@ -50,7 +51,7 @@ Model ObjParser::ParseData(const std::string& filename) {
         }
       }
       if (face.size() < 3) {
-        throw runtime_error("Could not open file: invalid face");
+        throw invalid_argument("Could not open file: invalid face");
       } else if (face.size() > 3) {
         // triangulating faces
         for (size_t i = 1; i < face.size() - 1; ++i) {
@@ -64,7 +65,7 @@ Model ObjParser::ParseData(const std::string& filename) {
     }
   }
   if (model.vertices.empty() || model.faces.empty()) {
-    throw runtime_error("Could not open file: no vertices");
+    throw invalid_argument("Could not open file: no vertices");
   }
   return model;
 }
