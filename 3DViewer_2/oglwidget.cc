@@ -31,9 +31,14 @@ void s21::OGLWidget::initializeGL() {
   glEnable(GL_PROGRAM_POINT_SIZE);
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
   initShaders();
-
-  loadGeometry(file_path_);
-  std::cout << "after loadgeometry\n";
+  try {
+    loadGeometry(file_path_);
+  } catch (std::runtime_error& e) {
+    QMessageBox::information(this, "Warning", e.what());
+    file_path_ =
+        QCoreApplication::applicationDirPath().toStdString() + "/logo.obj";
+    std::cout << "initializeGL " << file_path_ << std::endl;
+  }
 }
 
 // Вызывается каждый раз при перерисовке
@@ -178,6 +183,7 @@ void s21::OGLWidget::initShaders() {
 // Загрузка модели
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
+    std::cout << file_path_ << std::endl;
     ObjParser parser{};
     model_ = parser.Parse(file_path);
 
@@ -204,9 +210,10 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
                                     // выделение памяти и загрузка
 
     index_buf_.release();  // Отвязываем буффер до момента отрисовки
+
   } catch (const std::invalid_argument& e) {
     // придумать решение получше
-    std::cout << "i'm here" << std::endl;
+    std::cout << "i'm in loadgeometry" << std::endl;
     std::cout << file_path_ << std::endl;
     file_path_ =
         QCoreApplication::applicationDirPath().toStdString() + "/logo.obj";
