@@ -1,6 +1,7 @@
 #ifndef THREE_D_VIEWER_MAINWINDOW_H
 #define THREE_D_VIEWER_MAINWINDOW_H
 
+#include <QAbstractButton>
 #include <QBuffer>
 #include <QColor>
 #include <QColorDialog>
@@ -47,9 +48,6 @@ class MainWindow : public QMainWindow {
   void on_setDefaultTransformsButton_clicked();
   void on_persperctiveComboBox_activated(int index);
   void on_actionOpen_File_triggered();
-  void on_bgColorButton_clicked();
-  void on_edgesColorButton_clicked();
-  void on_verticiesColorButton_clicked();
   void on_verticiesTypeComboBox_activated(int index);
   void on_edgesTypeComboBox_activated(int index);
   void on_verticiesSizeSlider_valueChanged(int value);
@@ -64,6 +62,7 @@ class MainWindow : public QMainWindow {
   void on_setDefaultStyleButton_clicked();
   void on_vertexSizeSpinBox_valueChanged(double arg1);
   void on_edgesSizeSpinBox_valueChanged(double arg1);
+  void colorSettings(QAbstractButton* button);
 
   void on_Save_image_triggered();
   void on_Save_gif_triggered();

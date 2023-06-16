@@ -9,6 +9,8 @@ s21::MainWindow::MainWindow(QWidget* parent)
   SetState(viewer_conf_);
   ShowFileInfo();
   MinimizeUi();
+  connect(ui->group_colors, &QButtonGroup::buttonClicked, this,
+          &MainWindow::colorSettings);
 }
 
 s21::MainWindow::~MainWindow() {
@@ -273,28 +275,20 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
   }
 }
 
-void s21::MainWindow::on_bgColorButton_clicked() {
-  QColor bgColor = QColorDialog::getColor(Qt::white, this, "Choose color");
-  if (bgColor.isValid()) {
-    viewer_conf_.GetUiState().bg_color = bgColor;
-    ui->widget->setWidgetState(viewer_conf_);
+void s21::MainWindow::colorSettings(QAbstractButton* button) {
+  QColor color = QColorDialog::getColor(Qt::white, this, "Choose color");
+  if (color.isValid()) {
+    std::map<std::string, std::function<void(QColor&)>> set_colors = {
+        {"verticies",
+         [&](QColor& colour) { viewer_conf_.GetUiState().v_color = colour; }},
+        {"edges",
+         [&](QColor& colour) { viewer_conf_.GetUiState().e_color = colour; }},
+        {"BG",
+         [&](QColor& colour) { viewer_conf_.GetUiState().bg_color = colour; }}};
+    std::string key = button->text().toStdString();
+    set_colors.find(key)->second(color);
   }
-}
-
-void s21::MainWindow::on_edgesColorButton_clicked() {
-  QColor eColor = QColorDialog::getColor(Qt::white, this, "Choose color");
-  if (eColor.isValid()) {
-    viewer_conf_.GetUiState().e_color = eColor;
-    ui->widget->setWidgetState(viewer_conf_);
-  }
-}
-
-void s21::MainWindow::on_verticiesColorButton_clicked() {
-  QColor vColor = QColorDialog::getColor(Qt::white, this, "Choose color");
-  if (vColor.isValid()) {
-    viewer_conf_.GetUiState().v_color = vColor;
-    ui->widget->setWidgetState(viewer_conf_);
-  }
+  ui->widget->setWidgetState(viewer_conf_);
 }
 
 void s21::MainWindow::on_verticiesTypeComboBox_activated(int index) {

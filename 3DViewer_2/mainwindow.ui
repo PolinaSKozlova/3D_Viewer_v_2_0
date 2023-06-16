@@ -316,7 +316,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-138</y>
                 <width>246</width>
                 <height>405</height>
                </rect>
@@ -1123,7 +1123,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-19</y>
                 <width>240</width>
                 <height>286</height>
                </rect>
@@ -1365,6 +1365,9 @@
                     <property name="text">
                      <string>verticies</string>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">group_colors</string>
+                    </attribute>
                    </widget>
                   </item>
                   <item row="5" column="0" colspan="3">
@@ -1403,6 +1406,9 @@
                     <property name="text">
                      <string>edges</string>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">group_colors</string>
+                    </attribute>
                    </widget>
                   </item>
                   <item row="9" column="2">
@@ -1422,6 +1428,9 @@
                     <property name="text">
                      <string>BG</string>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">group_colors</string>
+                    </attribute>
                    </widget>
                   </item>
                   <item row="10" column="0" colspan="3">
@@ -1657,4 +1666,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="group_colors"/>
+ </buttongroups>
 </ui>
