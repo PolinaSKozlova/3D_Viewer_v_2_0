@@ -11,6 +11,34 @@ s21::MainWindow::MainWindow(QWidget* parent)
   MinimizeUi();
   connect(ui->group_colors, &QButtonGroup::buttonClicked, this,
           &MainWindow::colorSettings);
+  connect(ui->userScalerSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->xRotationSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->yRotationSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->zRotationSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->xShiftSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->yShiftSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->zShiftSlider, &QSlider::valueChanged, this,
+          &MainWindow::changeSliders);
+  connect(ui->userScalerSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
+  connect(ui->xRotationSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
+  connect(ui->yRotationSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
+  connect(ui->zRotationSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
+  connect(ui->xShiftSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
+  connect(ui->yShiftSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
+  connect(ui->zShiftSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::changeSpinBoxes);
 }
 
 s21::MainWindow::~MainWindow() {
@@ -178,74 +206,68 @@ void s21::MainWindow::on_actionShowUi_triggered() {
   }
 }
 
-void s21::MainWindow::on_xRotationSlider_valueChanged(int value) {
-  std::string valueType = "x_rotation_deg";
-  UpdateUiState(value, valueType);
+void s21::MainWindow::changeSliders(int value) {
+  std::string src;
+  if (ui->userScalerSlider->hasFocus()) {
+    src = "user_scaler";
+    UpdateUiState(value, src);
+  }
+  if (ui->xRotationSlider->hasFocus()) {
+    src = "x_rotation_deg";
+    UpdateUiState(value, src);
+  }
+  if (ui->yRotationSlider->hasFocus()) {
+    src = "y_rotation_deg";
+    UpdateUiState(value, src);
+  }
+  if (ui->zRotationSlider->hasFocus()) {
+    src = "z_rotation_deg";
+    UpdateUiState(value, src);
+  }
+  if (ui->xShiftSlider->hasFocus()) {
+    src = "x_shift";
+    UpdateUiState(value, src);
+  }
+  if (ui->yShiftSlider->hasFocus()) {
+    src = "y_shift";
+    UpdateUiState(value, src);
+  }
+  if (ui->zShiftSlider->hasFocus()) {
+    src = "z_shift";
+    UpdateUiState(value, src);
+  }
 }
 
-void s21::MainWindow::on_yRotationSlider_valueChanged(int value) {
-  std::string valueType = "y_rotation_deg";
-  UpdateUiState(value, valueType);
-}
-
-void s21::MainWindow::on_zRotationSlider_valueChanged(int value) {
-  std::string valueType = "z_rotation_deg";
-  UpdateUiState(value, valueType);
-}
-
-void s21::MainWindow::on_xRotationSpinBox_valueChanged(double arg1) {
-  std::string valueType = "x_rotation_deg";
-  UpdateUiState(static_cast<int>(arg1), valueType);
-}
-
-void s21::MainWindow::on_yRotationSpinBox_valueChanged(double arg1) {
-  std::string valueType = "y_rotation_deg";
-  UpdateUiState(static_cast<int>(arg1), valueType);
-}
-
-void s21::MainWindow::on_zRotationSpinBox_valueChanged(double arg1) {
-  std::string valueType = "z_rotation_deg";
-  UpdateUiState(static_cast<int>(arg1), valueType);
-}
-
-void s21::MainWindow::on_xShiftSlider_valueChanged(int value) {
-  std::string valueType = "x_shift";
-  UpdateUiState(value, valueType);
-}
-
-void s21::MainWindow::on_yShiftSlider_valueChanged(int value) {
-  std::string valueType = "y_shift";
-  UpdateUiState(value, valueType);
-}
-
-void s21::MainWindow::on_zShiftSlider_valueChanged(int value) {
-  std::string valueType = "z_shift";
-  UpdateUiState(value, valueType);
-}
-
-void s21::MainWindow::on_xShiftSpinBox_valueChanged(double arg1) {
-  std::string valueType = "x_shift";
-  UpdateUiState(static_cast<int>(arg1), valueType);
-}
-
-void s21::MainWindow::on_yShiftSpinBox_valueChanged(double arg1) {
-  std::string valueType = "y_shift";
-  UpdateUiState(static_cast<int>(arg1), valueType);
-}
-
-void s21::MainWindow::on_zShiftSpinBox_valueChanged(double arg1) {
-  std::string valueType = "z_shift";
-  UpdateUiState(static_cast<int>(arg1), valueType);
-}
-
-void s21::MainWindow::on_userScalerSlider_valueChanged(int value) {
-  std::string valueType = "user_scaler";
-  UpdateUiState(value, valueType);
-}
-
-void s21::MainWindow::on_userScalerSpinBox_valueChanged(double arg1) {
-  std::string valueType = "user_scaler";
-  UpdateUiState((int)arg1, valueType);
+void s21::MainWindow::changeSpinBoxes(double arg) {
+  std::string src;
+  if (ui->userScalerSpinBox->hasFocus()) {
+    src = "user_scaler";
+    UpdateUiState((int)arg, src);
+  }
+  if (ui->xRotationSpinBox->hasFocus()) {
+    src = "x_rotation_deg";
+    UpdateUiState(arg, src);
+  }
+  if (ui->yRotationSpinBox->hasFocus()) {
+    src = "y_rotation_deg";
+    UpdateUiState(arg, src);
+  }
+  if (ui->zRotationSpinBox->hasFocus()) {
+    src = "z_rotation_deg";
+    UpdateUiState(arg, src);
+  }
+  if (ui->xShiftSpinBox->hasFocus()) {
+    src = "x_shift";
+    UpdateUiState(arg, src);
+  }
+  if (ui->yShiftSpinBox->hasFocus()) {
+    src = "y_shift";
+    UpdateUiState(arg, src);
+  }
+  if (ui->zShiftSpinBox->hasFocus()) {
+    src = "z_shift";
+    UpdateUiState(arg, src);
+  }
 }
 
 void s21::MainWindow::on_setDefaultTransformsButton_clicked() {

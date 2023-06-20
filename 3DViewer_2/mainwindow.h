@@ -33,18 +33,14 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  private slots:
-  void on_xRotationSlider_valueChanged(int value);
-  void on_yRotationSlider_valueChanged(int value);
-  void on_zRotationSlider_valueChanged(int value);
+
   void on_uiShowButton_clicked();
   void on_showTransformsButton_clicked();
   void on_showStyleButton_clicked();
   void on_uiCloseButton_clicked();
   void on_actionShowUi_triggered();
-  void on_xShiftSlider_valueChanged(int value);
-  void on_yShiftSlider_valueChanged(int value);
-  void on_zShiftSlider_valueChanged(int value);
-  void on_userScalerSlider_valueChanged(int value);
+  void changeSliders(int value);
+  void changeSpinBoxes(double arg);
   void on_setDefaultTransformsButton_clicked();
   void on_persperctiveComboBox_activated(int index);
   void on_actionOpen_File_triggered();
@@ -52,18 +48,10 @@ class MainWindow : public QMainWindow {
   void on_edgesTypeComboBox_activated(int index);
   void on_verticiesSizeSlider_valueChanged(int value);
   void on_edgesSizeSlider_valueChanged(int value);
-  void on_xRotationSpinBox_valueChanged(double arg1);
-  void on_yRotationSpinBox_valueChanged(double arg1);
-  void on_zRotationSpinBox_valueChanged(double arg1);
-  void on_xShiftSpinBox_valueChanged(double arg1);
-  void on_yShiftSpinBox_valueChanged(double arg1);
-  void on_zShiftSpinBox_valueChanged(double arg1);
-  void on_userScalerSpinBox_valueChanged(double arg1);
   void on_setDefaultStyleButton_clicked();
   void on_vertexSizeSpinBox_valueChanged(double arg1);
   void on_edgesSizeSpinBox_valueChanged(double arg1);
   void colorSettings(QAbstractButton* button);
-
   void on_Save_image_triggered();
   void on_Save_gif_triggered();
   void RecordGif();
