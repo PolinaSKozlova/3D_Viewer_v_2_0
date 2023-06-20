@@ -97,7 +97,8 @@ void s21::OGLWidget::paintGL() {
   }
 
   if (style_.e_style != 0) {
-    glDrawElements(GL_TRIANGLES, model_.faces.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, model_obj_.faces.size(), GL_UNSIGNED_INT,
+                   nullptr);
   }
 
   // That part not so good, need to refactor it
@@ -114,7 +115,8 @@ void s21::OGLWidget::paintGL() {
     program_P.setUniformValue("dot_color", style_.v_color.red() / 255.,
                               style_.v_color.green() / 255.,
                               style_.v_color.blue() / 255., 1.0);
-    glDrawElements(GL_POINTS, model_.faces.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_POINTS, model_obj_.faces.size(), GL_UNSIGNED_INT,
+                   nullptr);
   }
   // Here the broken part is ended))
 
@@ -185,17 +187,17 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
     std::cout << file_path_ << std::endl;
     ObjParser parser{};
-    model_ = parser.Parse(file_path);
+    model_obj_ = parser.Parse(file_path);
 
-    transformations_.model_scaler = model_.scaler;
+    transformations_.model_scaler = model_obj_.scaler;
 
     array_buf_.create();  // Создаем буффер
     array_buf_.bind();    // Tell OpenGL which VBOs to use
 
-    float* p_to_data = model_.vertices.data();
+    float* p_to_data = model_obj_.vertices.data();
 
     array_buf_.allocate(p_to_data,
-                        model_.vertices.size() *
+                        model_obj_.vertices.size() *
                             sizeof(float));  // Тут allocate - это  одновременно
                                              // и выделение памяти и загрузка
     array_buf_.release();  // Отвязываем буффер до момента отрисовки
@@ -204,8 +206,8 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
     index_buf_.bind();    // Tell OpenGL which VBOs to use
 
     index_buf_.allocate(
-        model_.faces.data(),
-        model_.faces.size() *
+        model_obj_.faces.data(),
+        model_obj_.faces.size() *
             sizeof(unsigned int));  // Тут allocate - это одновременно и
                                     // выделение памяти и загрузка
 
@@ -246,9 +248,9 @@ void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
   update();
 }
 
-int s21::OGLWidget::getNVerticies() { return model_.vertices.size(); }
+int s21::OGLWidget::getNVerticies() { return model_obj_.vertices.size(); }
 
-int s21::OGLWidget::getNIndicies() { return model_.faces.size(); }
+int s21::OGLWidget::getNIndicies() { return model_obj_.faces.size(); }
 
 std::string s21::OGLWidget::getFilePath() {
   using namespace std;

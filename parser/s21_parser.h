@@ -9,16 +9,16 @@
 #include <vector>
 
 namespace s21 {
-struct Model {
-  Model() : vertices{}, faces{}, scaler{} {}
-  Model(Model&& other) noexcept
+struct ModelObj {
+  ModelObj() : vertices{}, faces{}, scaler{} {}
+  ModelObj(ModelObj&& other) noexcept
       : vertices(std::move(other.vertices)),
         faces(std::move(other.faces)),
         scaler(other.scaler) {}
 
-  Model(const Model& other) = delete;
+  ModelObj(const ModelObj& other) = delete;
 
-  Model& operator=(Model&& other) noexcept {
+  ModelObj& operator=(ModelObj&& other) noexcept {
     if (this != &other) {
       vertices = std::move(other.vertices);
       faces = std::move(other.faces);
@@ -27,7 +27,7 @@ struct Model {
     return *this;
   }
 
-  Model& operator=(const Model& other) = delete;
+  ModelObj& operator=(const ModelObj& other) = delete;
 
   std::vector<float> vertices;
   std::vector<unsigned int> faces;
@@ -36,14 +36,14 @@ struct Model {
 
 class ObjParser {
  public:
-  Model Parse(const std::string& filename);
+  ModelObj Parse(const std::string& filename);
 
  private:
-  Model ParseData(const std::string& filename);
-  Model CalculateScaler(Model& model);
+  ModelObj ParseData(const std::string& filename);
+  ModelObj CalculateScaler(ModelObj& model);
 };
 
-std::ostream& operator<<(std::ostream& os, const Model& model);
+std::ostream& operator<<(std::ostream& os, const ModelObj& model);
 };  // namespace s21
 
 #endif  // THREE_D_VIEWER_S21_PARSER_H_

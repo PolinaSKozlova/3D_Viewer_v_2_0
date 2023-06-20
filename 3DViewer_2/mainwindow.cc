@@ -208,6 +208,7 @@ void s21::MainWindow::on_actionShowUi_triggered() {
 
 void s21::MainWindow::changeSliders(int value) {
   std::string src;
+  using namespace std::string_literals;
   if (ui->userScalerSlider->hasFocus()) {
     src = "user_scaler";
     UpdateUiState(value, src);
@@ -221,7 +222,7 @@ void s21::MainWindow::changeSliders(int value) {
     UpdateUiState(value, src);
   }
   if (ui->zRotationSlider->hasFocus()) {
-    src = "z_rotation_deg";
+    src = "z_rotation_deg"s;
     UpdateUiState(value, src);
   }
   if (ui->xShiftSlider->hasFocus()) {
@@ -242,7 +243,7 @@ void s21::MainWindow::changeSpinBoxes(double arg) {
   std::string src;
   if (ui->userScalerSpinBox->hasFocus()) {
     src = "user_scaler";
-    UpdateUiState((int)arg, src);
+    UpdateUiState(arg, src);
   }
   if (ui->xRotationSpinBox->hasFocus()) {
     src = "x_rotation_deg";

@@ -70,7 +70,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   std::string file_path_;
   float aspect = DEFAULT_ASPECT_RATIO;
   //  model_data_t modelData;  // Модель
-  Model model_;
+  ModelObj model_obj_;
   // default member initialisation, google it!
   TransformData transformations_;
   StyleData style_;

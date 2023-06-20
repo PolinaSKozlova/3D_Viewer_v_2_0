@@ -7,11 +7,11 @@
 
 namespace s21 {
 
-Model ObjParser::Parse(const std::string& filename) {
-  Model model = ParseData(filename);
+ModelObj ObjParser::Parse(const std::string& filename) {
+  ModelObj model = ParseData(filename);
   return CalculateScaler(model);
 }
-Model ObjParser::ParseData(const std::string& filename) {
+ModelObj ObjParser::ParseData(const std::string& filename) {
   using std::getline;
   using std::ifstream;
   using std::invalid_argument;
@@ -25,7 +25,7 @@ Model ObjParser::ParseData(const std::string& filename) {
     throw runtime_error("Could not open file");
   }
 
-  Model model;
+  ModelObj model;
   string line;
   while (getline(ifs, line)) {
     istringstream iss(line);
@@ -70,7 +70,7 @@ Model ObjParser::ParseData(const std::string& filename) {
   return model;
 }
 
-Model ObjParser::CalculateScaler(Model& model) {
+ModelObj ObjParser::CalculateScaler(ModelObj& model) {
   double x_max = model.vertices[0];
   double y_max = model.vertices[1];
   double z_max = model.vertices[2];
@@ -92,7 +92,7 @@ Model ObjParser::CalculateScaler(Model& model) {
   return std::move(model);
 }
 
-std::ostream& operator<<(std::ostream& os, const Model& model) {
+std::ostream& operator<<(std::ostream& os, const ModelObj& model) {
   os << "Vertices:\n";
   for (size_t i = 0; i < model.vertices.size(); i += 3) {
     os << "(" << model.vertices[i] << ", " << model.vertices[i + 1] << ", "
