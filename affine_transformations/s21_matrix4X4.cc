@@ -61,6 +61,7 @@ void Matrix4X4::MulNumber(const double& num) noexcept {
 float** Matrix4X4::GetMatrix() const noexcept { return matrix_; }
 
 void Matrix4X4::SetData(const TransformData& other) {
+  std::cout << "i set data" << data_.y_rotation_deg << std::endl;
   data_.x_rotation_deg = other.x_rotation_deg;
   data_.y_rotation_deg = other.y_rotation_deg;
   data_.z_rotation_deg = other.z_rotation_deg;

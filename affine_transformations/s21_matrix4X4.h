@@ -51,6 +51,11 @@ class Matrix4X4 {
       std::cout << std::endl;
     }
   }
+  void print_transformation() {
+    std::cout << data_.x_rotation_deg << std::endl;
+    std::cout << data_.y_rotation_deg << std::endl;
+    std::cout << data_.z_rotation_deg << std::endl;
+  }
 
  private:
   Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
@@ -70,7 +75,7 @@ class Matrix4X4 {
   void SetNullMatrix();
   int rows_, cols_;
   float** matrix_;
-  TransformData data_;
+  TransformData data_{};
 };
 };  // namespace s21
 

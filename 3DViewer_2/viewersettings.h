@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 
+#include "../affine_transformations/s21_matrix4X4.h"
 #include "QtWidgets/qapplication.h"
 
 namespace s21 {
@@ -85,6 +86,7 @@ class ViewerSettings {
     return *this;
   }
   UiState& GetUiState() { return conf_settings_; }
+  TransformData GetTransformDataFromSettings();
 
  private:
   UiState conf_settings_{};

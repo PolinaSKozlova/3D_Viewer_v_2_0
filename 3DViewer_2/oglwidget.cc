@@ -1,12 +1,10 @@
 #define GL_SILENCE_DEPRECATION
 #include "oglwidget.h"
 
-s21::OGLWidget::OGLWidget(QWidget* parent, s21::Controller* controller)
+s21::OGLWidget::OGLWidget(QWidget* parent)
     // Список инициализации, индексный буффер должен быть проинициализирован
     // явно
-    : QOpenGLWidget(parent),
-      controller_(controller),
-      index_buf_(QOpenGLBuffer::IndexBuffer) {}
+    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {}
 
 s21::OGLWidget::~OGLWidget() { cleanUp(); }
 
@@ -59,6 +57,13 @@ void s21::OGLWidget::paintGL() {
   affine_transformation_matrix_.MakeMovement(transformations_);
 
   QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
+  //  float* matrixOne_row =
+  //      controller_->CreateMatrixForMovements(transformations_);
+
+  //  affine_transformation_matrix_ =
+  //      controller_->CreateMatrixForMovements(transformations_);
+
+  //  QMatrix4x4 matrix(matrixOne_row);
 
   program.bind();  // Снова биндим шейдерную программу
   program_P.bind();
@@ -188,9 +193,9 @@ void s21::OGLWidget::initShaders() {
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
     // std::cout << file_path_ << std::endl;
-    // ObjParser parser{};
-    // model_obj_ = parser.Parse(file_path);
-    model_obj_ = controller_->StartParsingFile(file_path);
+    ObjParser parser{};
+    model_obj_ = parser.Parse(file_path);
+    //    model_obj_ = controller_->StartParsingFile(file_path);
 
     transformations_.model_scaler = model_obj_.scaler;
 

@@ -4,6 +4,7 @@ namespace s21 {
 static double DegreesToRadian(double degrees) { return degrees * (M_PI / 180); }
 
 void Matrix4X4::MakeMovement(const TransformData& other) {
+  std::cout << "matrix " << other.y_rotation_deg << std::endl;
   SetData(other);
   SetNullMatrix();
   InitializeIdentityMatrix();

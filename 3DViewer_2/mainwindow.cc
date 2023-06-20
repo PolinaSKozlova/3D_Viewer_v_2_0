@@ -9,6 +9,7 @@ s21::MainWindow::MainWindow(s21::Controller* controller, QWidget* parent)
   SetState(viewer_conf_);
   ShowFileInfo();
   MinimizeUi();
+  //  ui->widget->
   connect(ui->group_colors, &QButtonGroup::buttonClicked, this,
           &MainWindow::colorSettings);
   connect(ui->userScalerSlider, &QSlider::valueChanged, this,
@@ -288,7 +289,8 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
       this, "Open file", QString::fromStdString(base_path_), filter);
   if (inFileName.isNull() == false) {
     viewer_conf_.GetUiState().filePath = inFileName.toStdString();
-    viewer_conf_.SetDefaultTransforms();
+    // сохраняет настройки для новой модели
+    //    viewer_conf_.SetDefaultTransforms();
     SyncUi();
     ui->widget->setWidgetState(viewer_conf_);
     ui->widget->setNewGeometry();
