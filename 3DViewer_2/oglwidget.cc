@@ -1,10 +1,12 @@
 #define GL_SILENCE_DEPRECATION
 #include "oglwidget.h"
 
-s21::OGLWidget::OGLWidget(QWidget* parent)
+s21::OGLWidget::OGLWidget(QWidget* parent, s21::Controller* controller)
     // Список инициализации, индексный буффер должен быть проинициализирован
     // явно
-    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {}
+    : QOpenGLWidget(parent),
+      controller_(controller),
+      index_buf_(QOpenGLBuffer::IndexBuffer) {}
 
 s21::OGLWidget::~OGLWidget() { cleanUp(); }
 
@@ -185,9 +187,10 @@ void s21::OGLWidget::initShaders() {
 // Загрузка модели
 void s21::OGLWidget::loadGeometry(std::string& file_path) {
   try {
-    std::cout << file_path_ << std::endl;
-    ObjParser parser{};
-    model_obj_ = parser.Parse(file_path);
+    // std::cout << file_path_ << std::endl;
+    // ObjParser parser{};
+    // model_obj_ = parser.Parse(file_path);
+    model_obj_ = controller_->StartParsingFile(file_path);
 
     transformations_.model_scaler = model_obj_.scaler;
 

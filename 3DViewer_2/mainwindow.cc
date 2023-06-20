@@ -2,8 +2,8 @@
 
 #include "./ui_mainwindow.h"
 
-s21::MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+s21::MainWindow::MainWindow(s21::Controller* controller, QWidget* parent)
+    : controller_(controller), QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   FindOutBasePath();
   SetState(viewer_conf_);

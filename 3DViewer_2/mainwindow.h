@@ -12,6 +12,7 @@
 #include "affine_transformations/s21_matrix4X4.h"
 #include "gif_image/gifimage/qgifimage.h"
 #include "parser/s21_parser.h"
+#include "s21_controller.h"
 #include "viewersettings.h"
 
 QT_BEGIN_NAMESPACE
@@ -29,7 +30,7 @@ namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
  public:
-  MainWindow(QWidget* parent = nullptr);
+  MainWindow(s21::Controller* controller, QWidget* parent = nullptr);
   ~MainWindow();
 
  private slots:
@@ -71,6 +72,7 @@ class MainWindow : public QMainWindow {
   void MaximizeUiStyle();
   void ShowFileInfo();
   Ui::MainWindow* ui;
+  s21::Controller* controller_;
   std::string base_path_;
   ViewerSettings viewer_conf_;
   QString image_file_name_;

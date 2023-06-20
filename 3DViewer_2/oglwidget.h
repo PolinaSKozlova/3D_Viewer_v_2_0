@@ -40,7 +40,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
  public:
-  OGLWidget(QWidget* parent = nullptr);
+  OGLWidget(QWidget* parent = nullptr, s21::Controller* controller = nullptr);
   ~OGLWidget();
   void setWidgetState(ViewerSettings& uiState);
   void setNewGeometry();
@@ -67,6 +67,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void cleanUp();
 
  private:
+  s21::Controller* controller_;
   std::string file_path_;
   float aspect = DEFAULT_ASPECT_RATIO;
   //  model_data_t modelData;  // Модель
