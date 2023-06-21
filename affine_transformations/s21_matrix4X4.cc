@@ -17,8 +17,6 @@ Matrix4X4::~Matrix4X4() {
 void Matrix4X4::MulMatrix(const Matrix4X4& other) { *this *= other; }
 
 Matrix4X4& Matrix4X4::operator=(const Matrix4X4& other) noexcept {
-  std::cout << "crash in operator=" << std::endl;
-  print();
   for (int i = 0; i < rows_; ++i) {
     for (int j = 0; j < cols_; ++j) {
       matrix_[i][j] = other.matrix_[i][j];
