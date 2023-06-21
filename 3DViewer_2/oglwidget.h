@@ -44,6 +44,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   ~OGLWidget();
   void setWidgetState(ViewerSettings& uiState);
   void setNewGeometry(ModelObj&& other);
+  void setMatrix4x4(float* new_matrix);
   int getNVerticies();
   int getNIndicies();
   std::string getFilePath();
@@ -63,7 +64,6 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // Если шейдеры не компилируются, всё приложение закрывается
   void initShaders();
   // Функция ниже загружает геометрию модели
-  // void loadGeometry(std::string& file_path);
   void loadGeometry();
   void cleanUp();
 
@@ -73,6 +73,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   float aspect = DEFAULT_ASPECT_RATIO;
   //  model_data_t modelData;  // Модель
   ModelObj model_obj_;
+  float* matrix4X4_;
   // default member initialisation, google it!
   TransformData transformations_;
   StyleData style_;

@@ -4,9 +4,14 @@
 s21::OGLWidget::OGLWidget(QWidget* parent)
     // Список инициализации, индексный буффер должен быть проинициализирован
     // явно
-    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {}
+    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {
+  matrix4X4_ = new float();
+}
 
-s21::OGLWidget::~OGLWidget() { cleanUp(); }
+s21::OGLWidget::~OGLWidget() {
+  cleanUp();
+  delete matrix4X4_;
+}
 
 void s21::OGLWidget::cleanUp() {
   array_buf_.destroy();
@@ -55,16 +60,10 @@ void s21::OGLWidget::paintGL() {
            // какие буфферы должны быть очищены при перерисовке
   glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфферов цвета при перерисовке
 
-  affine_transformation_matrix_.MakeMovement(transformations_);
+  // affine_transformation_matrix_.MakeMovement(transformations_);
 
-  QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
-  //  float* matrixOne_row =
-  //      controller_->CreateMatrixForMovements(transformations_);
-
-  //  affine_transformation_matrix_ =
-  //      controller_->CreateMatrixForMovements(transformations_);
-
-  //  QMatrix4x4 matrix(matrixOne_row);
+  // QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
+  QMatrix4x4 matrix(matrix4X4_);
 
   program.bind();  // Снова биндим шейдерную программу
   program_P.bind();
@@ -191,14 +190,8 @@ void s21::OGLWidget::initShaders() {
 }
 
 // Загрузка модели
-// void s21::OGLWidget::loadGeometry(std::string& file_path) {
 void s21::OGLWidget::loadGeometry() {
   try {
-    // std::cout << file_path_ << std::endl;
-    // ObjParser parser{};
-    // model_obj_ = parser.Parse(file_path);
-    //    model_obj_ = controller_->StartParsingFile(file_path);
-
     transformations_.model_scaler = model_obj_.scaler;
 
     array_buf_.create();  // Создаем буффер
@@ -236,8 +229,11 @@ void s21::OGLWidget::loadGeometry() {
 void s21::OGLWidget::setNewGeometry(ModelObj&& other) {
   model_obj_ = std::move(other);
   loadGeometry();
-  // loadGeometry(file_path_);
   update();
+}
+
+void s21::OGLWidget::setMatrix4x4(float* new_matrix) {
+  matrix4X4_ = new_matrix;
 }
 
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
