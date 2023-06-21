@@ -15,19 +15,9 @@ class Controller {
     return parser_.Parse(filename);
   }
 
-  // float* CreateMatrixForMovements(ViewerSettings& settings) {
-  // s21::Matrix4X4 CreateMatrixForMovements(ViewerSettings& settings) {
-  s21::Matrix4X4 CreateMatrixForMovements(s21::TransformData&& settings) {
-    matrix4X4_.MakeMovement(settings);
-    // std::cout << "CreateMatrixForMovements in controller" << std::endl;
-    // return matrix4X4_.CreateOneRowMatrix();
-    return matrix4X4_;
-  }
-
  private:
   s21::ModelObj model_obj_;
   s21::ObjParser parser_;
-  s21::Matrix4X4 matrix4X4_{};
 };
 
 };  // namespace s21
