@@ -1,8 +1,6 @@
 #ifndef THREE_D_VIEWER_CONTROLLER_H_
 #define THREE_D_VIEWER_CONTROLLER_H_
 
-#include "3DViewer_2/viewersettings.h"
-#include "affine_transformations/s21_matrix4X4.h"
 #include "parser/s21_parser.h"
 
 namespace s21 {
@@ -11,13 +9,23 @@ class Controller {
   Controller() = default;
   ~Controller() = default;
 
-  ModelObj StartParsingFile(const std::string& filename) {
-    return parser_.Parse(filename);
+  s21::ModelObj StartParsingFile(const std::string& filename) {
+    s21::ModelObj result;
+    try {
+      output_ = "";
+      result = parser_.Parse(filename);
+    } catch (std::exception& e) {
+      output_ = e.what();
+    }
+    // return parser_.Parse(filename);
+    return result;
   }
+  std::string GetOutput() const { return output_; }
 
  private:
-  s21::ModelObj model_obj_;
+  // s21::ModelObj model_obj_;
   s21::ObjParser parser_;
+  std::string output_{};
 };
 
 };  // namespace s21

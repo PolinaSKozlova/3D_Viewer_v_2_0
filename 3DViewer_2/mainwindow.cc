@@ -71,6 +71,10 @@ void s21::MainWindow::SetState(ViewerSettings& uiState) {
   ui->widget->setWidgetState(uiState);
   ui->widget->setNewGeometry(
       controller_->StartParsingFile(viewer_conf_.GetUiState().filePath));
+  if (controller_->GetOutput() != "") {
+    QMessageBox::critical(this, "Error",
+                          QString::fromStdString(controller_->GetOutput()));
+  }
 }
 
 void s21::MainWindow::SetDefaults() {
@@ -159,7 +163,6 @@ void s21::MainWindow::MinimizeUi() {
 
 void s21::MainWindow::MaximizeUi() {
   ui->uiFrame->setFixedSize(FRAME_W, FRAME_H_MIN * 3);
-
   MinimizeUiTransforms();
   ui->uiTransformsFrame->setVisible(true);
   MinimizeUiStyle();
@@ -285,6 +288,7 @@ void s21::MainWindow::on_persperctiveComboBox_activated(int index) {
 }
 
 void s21::MainWindow::on_actionOpen_File_triggered() {
+  using namespace std::string_literals;
   QString filter = "Obj File (*.obj)";
   QString inFileName = QFileDialog::getOpenFileName(
       this, "Open file", QString::fromStdString(base_path_), filter);
@@ -296,6 +300,10 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
     ui->widget->setWidgetState(viewer_conf_);
     ui->widget->setNewGeometry(
         controller_->StartParsingFile(viewer_conf_.GetUiState().filePath));
+    if (controller_->GetOutput() != "") {
+      QMessageBox::critical(this, "Error",
+                            QString::fromStdString(controller_->GetOutput()));
+    }
     viewer_conf_.GetUiState().n_indices = ui->widget->getNIndicies();
     viewer_conf_.GetUiState().n_verticies = ui->widget->getNVerticies();
     ShowFileInfo();

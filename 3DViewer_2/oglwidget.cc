@@ -24,22 +24,13 @@ void s21::OGLWidget::initializeGL() {
   association.
   */
   initializeOpenGLFunctions();
-
   // Вызов ниже переопределяет режим отрисовки примитивов,
   // Мы переопределяем стандартный сплошной рендер на рендер только граней
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glEnable(GL_PROGRAM_POINT_SIZE);
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
   initShaders();
-  try {
-    //    loadGeometry(file_path_);
-    loadGeometry();
-  } catch (std::runtime_error& e) {
-    QMessageBox::information(this, "Warning", e.what());
-    file_path_ =
-        QCoreApplication::applicationDirPath().toStdString() + "/logo.obj";
-    std::cout << "initializeGL " << file_path_ << std::endl;
-  }
+  loadGeometry();
 }
 
 // Вызывается каждый раз при перерисовке
@@ -185,39 +176,29 @@ void s21::OGLWidget::initShaders() {
 
 // Загрузка модели
 void s21::OGLWidget::loadGeometry() {
-  try {
-    transformations_.model_scaler = model_obj_.scaler;
+  transformations_.model_scaler = model_obj_.scaler;
 
-    array_buf_.create();  // Создаем буффер
-    array_buf_.bind();    // Tell OpenGL which VBOs to use
+  array_buf_.create();  // Создаем буффер
+  array_buf_.bind();    // Tell OpenGL which VBOs to use
 
-    float* p_to_data = model_obj_.vertices.data();
+  float* p_to_data = model_obj_.vertices.data();
 
-    array_buf_.allocate(p_to_data,
-                        model_obj_.vertices.size() *
-                            sizeof(float));  // Тут allocate - это  одновременно
-                                             // и выделение памяти и загрузка
-    array_buf_.release();  // Отвязываем буффер до момента отрисовки
+  array_buf_.allocate(p_to_data,
+                      model_obj_.vertices.size() *
+                          sizeof(float));  // Тут allocate - это  одновременно
+                                           // и выделение памяти и загрузка
+  array_buf_.release();  // Отвязываем буффер до момента отрисовки
 
-    index_buf_.create();  // Создаем буффер
-    index_buf_.bind();    // Tell OpenGL which VBOs to use
+  index_buf_.create();  // Создаем буффер
+  index_buf_.bind();    // Tell OpenGL which VBOs to use
 
-    index_buf_.allocate(
-        model_obj_.faces.data(),
-        model_obj_.faces.size() *
-            sizeof(unsigned int));  // Тут allocate - это одновременно и
-                                    // выделение памяти и загрузка
+  index_buf_.allocate(
+      model_obj_.faces.data(),
+      model_obj_.faces.size() *
+          sizeof(unsigned int));  // Тут allocate - это одновременно и
+                                  // выделение памяти и загрузка
 
-    index_buf_.release();  // Отвязываем буффер до момента отрисовки
-
-  } catch (const std::invalid_argument& e) {
-    // придумать решение получше
-    std::cout << "i'm in loadgeometry" << std::endl;
-    std::cout << file_path_ << std::endl;
-    file_path_ =
-        QCoreApplication::applicationDirPath().toStdString() + "/logo.obj";
-    QMessageBox::critical(this, "Warning", e.what());
-  }
+  index_buf_.release();  // Отвязываем буффер до момента отрисовки
 }
 
 void s21::OGLWidget::setNewGeometry(ModelObj&& other) {

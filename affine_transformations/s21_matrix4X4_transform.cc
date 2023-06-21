@@ -11,9 +11,8 @@ void Matrix4X4::MakeMovement(const TransformData& other) {
   InitializeXRotationMatrix();
   InitializeYRotationMatrix();
   InitializeZRotationMatrix();
-  InitializeScalerMatrix();
-  // InitializeUserScalerMatrix();
-  // InitializeModelScalerMatrix();
+  InitializeUserScalerMatrix();
+  InitializeModelScalerMatrix();
 }
 
 void Matrix4X4::InitializeXRotationMatrix() {
@@ -54,13 +53,7 @@ void Matrix4X4::InitializeUserScalerMatrix() {
 void Matrix4X4::InitializeModelScalerMatrix() {
   if (data_.model_scaler) MulNumber(data_.model_scaler);
   matrix_[2][3] += -5;
-}
-
-void Matrix4X4::InitializeScalerMatrix() noexcept {
-  if (data_.model_scaler) MulNumber(data_.model_scaler);
-  if (data_.user_scaler) MulNumber(data_.user_scaler);
   matrix_[3][3] = 1;
-  matrix_[2][3] += -5;
 }
 
 void Matrix4X4::InitializeShiftMatrix() {
