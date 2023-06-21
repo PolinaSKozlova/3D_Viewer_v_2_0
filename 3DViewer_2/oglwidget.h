@@ -44,7 +44,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   ~OGLWidget();
   void setWidgetState(ViewerSettings& uiState);
   void setNewGeometry(ModelObj&& other);
-  void setMatrix4x4(float* new_matrix);
+  void setMatrix4x4(const s21::Matrix4X4& new_matrix);
   int getNVerticies();
   int getNIndicies();
   std::string getFilePath();

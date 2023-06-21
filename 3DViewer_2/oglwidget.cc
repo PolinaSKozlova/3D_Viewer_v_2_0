@@ -62,8 +62,8 @@ void s21::OGLWidget::paintGL() {
 
   // affine_transformation_matrix_.MakeMovement(transformations_);
 
-  // QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
-  QMatrix4x4 matrix(matrix4X4_);
+  QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
+  // QMatrix4x4 matrix(matrix4X4_);
 
   program.bind();  // Снова биндим шейдерную программу
   program_P.bind();
@@ -232,8 +232,8 @@ void s21::OGLWidget::setNewGeometry(ModelObj&& other) {
   update();
 }
 
-void s21::OGLWidget::setMatrix4x4(float* new_matrix) {
-  matrix4X4_ = new_matrix;
+void s21::OGLWidget::setMatrix4x4(const Matrix4X4& new_matrix) {
+  affine_transformation_matrix_ = new_matrix;
 }
 
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
