@@ -16,9 +16,10 @@ class Controller {
   }
 
   // float* CreateMatrixForMovements(ViewerSettings& settings) {
-  s21::Matrix4X4 CreateMatrixForMovements(ViewerSettings& settings) {
-    matrix4X4_.MakeMovement(settings.GetTransformDataFromSettings());
-    std::cout << "CreateMatrixForMovements in controller" << std::endl;
+  // s21::Matrix4X4 CreateMatrixForMovements(ViewerSettings& settings) {
+  s21::Matrix4X4 CreateMatrixForMovements(s21::TransformData&& settings) {
+    matrix4X4_.MakeMovement(settings);
+    // std::cout << "CreateMatrixForMovements in controller" << std::endl;
     // return matrix4X4_.CreateOneRowMatrix();
     return matrix4X4_;
   }
