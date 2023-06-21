@@ -4,14 +4,9 @@
 s21::OGLWidget::OGLWidget(QWidget* parent)
     // Список инициализации, индексный буффер должен быть проинициализирован
     // явно
-    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {
-  matrix4X4_ = new float();
-}
+    : QOpenGLWidget(parent), index_buf_(QOpenGLBuffer::IndexBuffer) {}
 
-s21::OGLWidget::~OGLWidget() {
-  cleanUp();
-  delete matrix4X4_;
-}
+s21::OGLWidget::~OGLWidget() { cleanUp(); }
 
 void s21::OGLWidget::cleanUp() {
   array_buf_.destroy();
@@ -60,10 +55,9 @@ void s21::OGLWidget::paintGL() {
            // какие буфферы должны быть очищены при перерисовке
   glClear(GL_COLOR_BUFFER_BIT);  // Очистка буфферов цвета при перерисовке
 
-  // affine_transformation_matrix_.MakeMovement(transformations_);
+  affine_transformation_matrix_.MakeMovement(transformations_);
 
   QMatrix4x4 matrix(affine_transformation_matrix_.CreateOneRowMatrix());
-  // QMatrix4x4 matrix(matrix4X4_);
 
   program.bind();  // Снова биндим шейдерную программу
   program_P.bind();
@@ -232,10 +226,6 @@ void s21::OGLWidget::setNewGeometry(ModelObj&& other) {
   update();
 }
 
-void s21::OGLWidget::setMatrix4x4(const Matrix4X4& new_matrix) {
-  affine_transformation_matrix_ = new_matrix;
-}
-
 void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
   file_path_ = uiState.GetUiState().filePath;
   transformations_.x_rotation_deg = uiState.GetUiState().x_rotation_deg;
@@ -259,10 +249,6 @@ void s21::OGLWidget::setWidgetState(ViewerSettings& uiState) {
 int s21::OGLWidget::getNVerticies() { return model_obj_.vertices.size(); }
 
 int s21::OGLWidget::getNIndicies() { return model_obj_.faces.size(); }
-
-s21::TransformData s21::OGLWidget::getTransformations() {
-  return transformations_;
-}
 
 std::string s21::OGLWidget::getFilePath() {
   using namespace std;

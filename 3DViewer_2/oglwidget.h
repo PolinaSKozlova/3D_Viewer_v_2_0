@@ -44,10 +44,8 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   ~OGLWidget();
   void setWidgetState(ViewerSettings& uiState);
   void setNewGeometry(ModelObj&& other);
-  void setMatrix4x4(const s21::Matrix4X4& new_matrix);
   int getNVerticies();
   int getNIndicies();
-  TransformData getTransformations();
   std::string getFilePath();
 
   /* Для реализации функционала мы должны переопределить 3 метода:
@@ -69,12 +67,9 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void cleanUp();
 
  private:
-  //  s21::Controller* controller_;
   std::string file_path_;
   float aspect = DEFAULT_ASPECT_RATIO;
-  //  model_data_t modelData;  // Модель
   ModelObj model_obj_;
-  float* matrix4X4_;
   // default member initialisation, google it!
   TransformData transformations_;
   StyleData style_;
