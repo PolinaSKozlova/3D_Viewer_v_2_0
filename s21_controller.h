@@ -8,24 +8,17 @@
 namespace s21 {
 class Controller {
  public:
-  Controller() {
-    std::cout << "Controller constructor" << std::endl;
-    matrix4X4_.print();
-    matrix4X4_.print_transformation();
-  }
+  Controller() = default;
   ~Controller() = default;
 
   ModelObj StartParsingFile(const std::string& filename) {
     return parser_.Parse(filename);
   }
 
-  float* CreateMatrixForMovements(TransformData& settings) {
-    // matrix4X4_.print();
-    matrix4X4_.MakeMovement(settings);
+  float* CreateMatrixForMovements(ViewerSettings& settings) {
+    matrix4X4_.MakeMovement(settings.GetTransformDataFromSettings());
     std::cout << "CreateMatrixForMovements in controller" << std::endl;
-    // matrix4X4_.print();
     return matrix4X4_.CreateOneRowMatrix();
-    // return matrix4X4_;
   }
 
  private:
