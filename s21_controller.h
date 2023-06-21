@@ -15,10 +15,12 @@ class Controller {
     return parser_.Parse(filename);
   }
 
-  float* CreateMatrixForMovements(ViewerSettings& settings) {
+  // float* CreateMatrixForMovements(ViewerSettings& settings) {
+  s21::Matrix4X4 CreateMatrixForMovements(ViewerSettings& settings) {
     matrix4X4_.MakeMovement(settings.GetTransformDataFromSettings());
     std::cout << "CreateMatrixForMovements in controller" << std::endl;
-    return matrix4X4_.CreateOneRowMatrix();
+    // return matrix4X4_.CreateOneRowMatrix();
+    return matrix4X4_;
   }
 
  private:
