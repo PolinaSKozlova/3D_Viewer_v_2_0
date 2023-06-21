@@ -40,7 +40,6 @@ set(PROJECT_SOURCES
     affine_transformations/s21_matrix4X4.cc
     affine_transformations/s21_matrix4X4_transform.cc
     s21_controller.h
-    s21_model.h
     3DViewer_2/gif_image/3rdParty/giflib/dgif_lib.c
     3DViewer_2/gif_image/3rdParty/giflib/egif_lib.c
     3DViewer_2/gif_image/3rdParty/giflib/gif_err.c
