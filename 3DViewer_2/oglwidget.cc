@@ -32,7 +32,8 @@ void s21::OGLWidget::initializeGL() {
   //    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
   initShaders();
   try {
-    loadGeometry(file_path_);
+    //    loadGeometry(file_path_);
+    loadGeometry();
   } catch (std::runtime_error& e) {
     QMessageBox::information(this, "Warning", e.what());
     file_path_ =
@@ -190,11 +191,12 @@ void s21::OGLWidget::initShaders() {
 }
 
 // Загрузка модели
-void s21::OGLWidget::loadGeometry(std::string& file_path) {
+// void s21::OGLWidget::loadGeometry(std::string& file_path) {
+void s21::OGLWidget::loadGeometry() {
   try {
     // std::cout << file_path_ << std::endl;
-    ObjParser parser{};
-    model_obj_ = parser.Parse(file_path);
+    // ObjParser parser{};
+    // model_obj_ = parser.Parse(file_path);
     //    model_obj_ = controller_->StartParsingFile(file_path);
 
     transformations_.model_scaler = model_obj_.scaler;
@@ -231,8 +233,10 @@ void s21::OGLWidget::loadGeometry(std::string& file_path) {
   }
 }
 
-void s21::OGLWidget::setNewGeometry() {
-  loadGeometry(file_path_);
+void s21::OGLWidget::setNewGeometry(ModelObj&& other) {
+  model_obj_ = std::move(other);
+  loadGeometry();
+  // loadGeometry(file_path_);
   update();
 }
 

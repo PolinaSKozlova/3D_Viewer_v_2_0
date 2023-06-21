@@ -9,7 +9,6 @@ s21::MainWindow::MainWindow(s21::Controller* controller, QWidget* parent)
   SetState(viewer_conf_);
   ShowFileInfo();
   MinimizeUi();
-  //  ui->widget->
   connect(ui->group_colors, &QButtonGroup::buttonClicked, this,
           &MainWindow::colorSettings);
   connect(ui->userScalerSlider, &QSlider::valueChanged, this,
@@ -70,6 +69,8 @@ void s21::MainWindow::SetState(ViewerSettings& uiState) {
   }
   SyncUi();
   ui->widget->setWidgetState(uiState);
+  ui->widget->setNewGeometry(
+      controller_->StartParsingFile(viewer_conf_.GetUiState().filePath));
 }
 
 void s21::MainWindow::SetDefaults() {
@@ -293,7 +294,8 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
     //    viewer_conf_.SetDefaultTransforms();
     SyncUi();
     ui->widget->setWidgetState(viewer_conf_);
-    ui->widget->setNewGeometry();
+    ui->widget->setNewGeometry(
+        controller_->StartParsingFile(viewer_conf_.GetUiState().filePath));
     viewer_conf_.GetUiState().n_indices = ui->widget->getNIndicies();
     viewer_conf_.GetUiState().n_verticies = ui->widget->getNVerticies();
     ShowFileInfo();

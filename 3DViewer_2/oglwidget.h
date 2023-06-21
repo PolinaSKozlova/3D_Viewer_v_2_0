@@ -43,7 +43,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   OGLWidget(QWidget* parent = nullptr);
   ~OGLWidget();
   void setWidgetState(ViewerSettings& uiState);
-  void setNewGeometry();
+  void setNewGeometry(ModelObj&& other);
   int getNVerticies();
   int getNIndicies();
   std::string getFilePath();
@@ -63,7 +63,8 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // Если шейдеры не компилируются, всё приложение закрывается
   void initShaders();
   // Функция ниже загружает геометрию модели
-  void loadGeometry(std::string& file_path);
+  // void loadGeometry(std::string& file_path);
+  void loadGeometry();
   void cleanUp();
 
  private:
