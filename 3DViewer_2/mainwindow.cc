@@ -88,7 +88,8 @@ void s21::MainWindow::SetDefaults() {
 void s21::MainWindow::UpdateUiState(int value, std::string& value_type) {
   viewer_conf_.UpdateState(value, value_type);
   ui->widget->setWidgetState(viewer_conf_);
-  ui->widget->setMatrix4x4(controller_->CreateMatrixForMovements(viewer_conf_));
+  ui->widget->setMatrix4x4(
+      controller_->CreateMatrixForMovements(ui->widget->getTransformations()));
 
   SyncUi();
 }

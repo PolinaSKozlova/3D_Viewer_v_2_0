@@ -47,6 +47,7 @@ class OGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void setMatrix4x4(const s21::Matrix4X4& new_matrix);
   int getNVerticies();
   int getNIndicies();
+  TransformData getTransformations();
   std::string getFilePath();
 
   /* Для реализации функционала мы должны переопределить 3 метода:

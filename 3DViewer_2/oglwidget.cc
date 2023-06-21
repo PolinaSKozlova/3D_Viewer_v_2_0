@@ -260,6 +260,10 @@ int s21::OGLWidget::getNVerticies() { return model_obj_.vertices.size(); }
 
 int s21::OGLWidget::getNIndicies() { return model_obj_.faces.size(); }
 
+s21::TransformData s21::OGLWidget::getTransformations() {
+  return transformations_;
+}
+
 std::string s21::OGLWidget::getFilePath() {
   using namespace std;
   string model_file_path = "Model file: ";
