@@ -7,12 +7,12 @@ void Matrix4X4::MakeMovement(const TransformData& other) {
   SetData(other);
   SetNullMatrix();
   InitializeIdentityMatrix();
-  InitializeShiftMatrix();
   InitializeXRotationMatrix();
   InitializeYRotationMatrix();
   InitializeZRotationMatrix();
   InitializeUserScalerMatrix();
   InitializeModelScalerMatrix();
+  InitializeShiftMatrix();
 }
 
 void Matrix4X4::InitializeXRotationMatrix() {
