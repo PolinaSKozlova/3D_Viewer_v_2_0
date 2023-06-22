@@ -17,17 +17,14 @@ class Controller {
     } catch (std::exception& e) {
       output_ = e.what();
     }
-    // return parser_.Parse(filename);
     return result;
   }
   std::string GetOutput() const { return output_; }
 
  private:
-  // s21::ModelObj model_obj_;
   s21::ObjParser parser_;
   std::string output_{};
 };
-
 };  // namespace s21
 
 #endif  // THREE_D_VIEWER_CONTROLLER_H_
