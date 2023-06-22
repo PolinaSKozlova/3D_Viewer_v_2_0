@@ -1,5 +1,5 @@
-#ifndef IMAGESAVER_H
-#define IMAGESAVER_H
+#ifndef THREE_D_VIEWER_IMAGESAVER_H
+#define THREE_D_VIEWER_IMAGESAVER_H
 
 #include <QBuffer>
 #include <QFileDialog>
@@ -9,11 +9,9 @@
 #include <QTimer>
 
 #include "gif_image/gifimage/qgifimage.h"
-//#include "mainwindow.h"
 
 namespace s21 {
-
-class ImageSaver : public QMainWindow {  //, public QOpenGLWidget
+class ImageSaver : public QMainWindow {
   Q_OBJECT
  public:
   ImageSaver() = default;
@@ -30,11 +28,11 @@ class ImageSaver : public QMainWindow {  //, public QOpenGLWidget
   void StartTimerForGif(QWidget* w);
   QOpenGLWidget* image_;
   QString image_file_name_;
-  QTimer* timer_;  // идентификатор таймера
+  QTimer* timer_;
   int frame_;
   QGifImage* gif_;
   QFile* ptr_save_file_;
 };
 };  // namespace s21
 
-#endif  // IMAGESAVER_H
+#endif  // THREE_D_VIEWER_IMAGESAVER_H

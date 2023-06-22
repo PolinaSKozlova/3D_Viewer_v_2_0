@@ -2,15 +2,12 @@
 #define THREE_D_VIEWER_MAINWINDOW_H
 
 #include <QAbstractButton>
-#include <QBuffer>
 #include <QColor>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMainWindow>
-#include <QTimer>
 
 #include "affine_transformations/s21_matrix4X4.h"
-#include "gif_image/gifimage/qgifimage.h"
 #include "imagesaver.h"
 #include "parser/s21_parser.h"
 #include "s21_controller.h"
@@ -23,10 +20,10 @@ class MainWindow;
 QT_END_NAMESPACE
 
 namespace s21 {
-#define FRAME_W 256
-#define FRAME_H_MIN 30
-#define FRAME_H_TR_CTRLS 284
-#define FRAME_H_ST_CTRLS 284
+constexpr int FRAME_W = 256;
+constexpr int FRAME_H_MIN = 30;
+constexpr int FRAME_H_TR_CTRLS = 284;
+constexpr int FRAME_H_ST_CTRLS = 284;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -35,7 +32,6 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  private slots:
-
   void on_uiShowButton_clicked();
   void on_showTransformsButton_clicked();
   void on_showStyleButton_clicked();

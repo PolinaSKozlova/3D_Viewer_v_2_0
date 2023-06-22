@@ -294,8 +294,6 @@ void s21::MainWindow::on_actionOpen_File_triggered() {
       this, "Open file", QString::fromStdString(base_path_), filter);
   if (inFileName.isNull() == false) {
     viewer_conf_.GetUiState().filePath = inFileName.toStdString();
-    // сохраняет настройки для новой модели
-    //    viewer_conf_.SetDefaultTransforms();
     SyncUi();
     ui->widget->setWidgetState(viewer_conf_);
     ui->widget->setNewGeometry(
@@ -361,8 +359,8 @@ void s21::MainWindow::on_edgesSizeSpinBox_valueChanged(double arg1) {
 
 void s21::MainWindow::on_setDefaultStyleButton_clicked() {
   viewer_conf_.SetDefaultStyle();
-  SyncUi();
   ui->widget->setWidgetState(viewer_conf_);
+  SyncUi();
 }
 
 void s21::MainWindow::on_Save_image_triggered() {
@@ -373,27 +371,4 @@ void s21::MainWindow::on_Save_image_triggered() {
 void s21::MainWindow::on_Save_gif_triggered() {
   image_saver_.SetOGLImage(ui->widget);
   image_saver_.SaveGif(this);
-}
-
-void s21::MainWindow::StartTimerGif() {
-  gif_ = new QGifImage(QSize(640, 480));
-  timer_ = new QTimer(this);
-  connect(timer_, &QTimer::timeout, this, &MainWindow::RecordGif);
-  timer_->start(100);
-  frame_ = 0;
-}
-
-void s21::MainWindow::RecordGif() {
-  frame_++;
-  gif_->addFrame(ui->widget->grabFramebuffer(), 100);
-  if (frame_ == 50) {
-    timer_->stop();
-    gif_->save(ptr_save_file_);
-    ptr_save_file_->close();
-    delete ptr_save_file_;
-    ptr_save_file_ = nullptr;
-    delete gif_;
-    gif_ = nullptr;
-    QMessageBox::about(this, "Статус", "GIF сохранена");
-  }
 }
