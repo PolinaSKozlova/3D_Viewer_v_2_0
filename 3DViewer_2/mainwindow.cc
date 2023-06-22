@@ -39,6 +39,14 @@ s21::MainWindow::MainWindow(s21::Controller* controller, QWidget* parent)
           &MainWindow::changeSpinBoxes);
   connect(ui->zShiftSpinBox, &QDoubleSpinBox::valueChanged, this,
           &MainWindow::changeSpinBoxes);
+  connect(ui->edgesSizeSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::EdgesAndVerticiesSizeChange);
+  connect(ui->edgesSizeSlider, &QSlider::valueChanged, this,
+          &MainWindow::EdgesAndVerticiesSizeChange);
+  connect(ui->vertexSizeSpinBox, &QDoubleSpinBox::valueChanged, this,
+          &MainWindow::EdgesAndVerticiesSizeChange);
+  connect(ui->verticiesSizeSlider, &QSlider::valueChanged, this,
+          &MainWindow::EdgesAndVerticiesSizeChange);
 }
 
 s21::MainWindow::~MainWindow() {
@@ -328,31 +336,16 @@ void s21::MainWindow::on_verticiesTypeComboBox_activated(int index) {
   ui->widget->setWidgetState(viewer_conf_);
 }
 
-void s21::MainWindow::on_verticiesSizeSlider_valueChanged(int value) {
-  viewer_conf_.GetUiState().v_size = value;
-  SyncUi();
-  ui->widget->setWidgetState(viewer_conf_);
-}
-
-void s21::MainWindow::on_vertexSizeSpinBox_valueChanged(double arg1) {
-  viewer_conf_.GetUiState().v_size = arg1;
-  ui->widget->setWidgetState(viewer_conf_);
-  SyncUi();
-}
-
 void s21::MainWindow::on_edgesTypeComboBox_activated(int index) {
   viewer_conf_.GetUiState().e_style = index;
   ui->widget->setWidgetState(viewer_conf_);
 }
 
-void s21::MainWindow::on_edgesSizeSlider_valueChanged(int value) {
-  viewer_conf_.GetUiState().e_size = value;
-  ui->widget->setWidgetState(viewer_conf_);
-  SyncUi();
-}
-
-void s21::MainWindow::on_edgesSizeSpinBox_valueChanged(double arg1) {
-  viewer_conf_.GetUiState().e_size = arg1;
+void s21::MainWindow::EdgesAndVerticiesSizeChange(double value) {
+  if (ui->edgesSizeSpinBox->hasFocus() || ui->edgesSizeSlider->hasFocus())
+    viewer_conf_.GetUiState().e_size = value;
+  if (ui->vertexSizeSpinBox->hasFocus() || ui->verticiesSizeSlider->hasFocus())
+    viewer_conf_.GetUiState().v_size = value;
   ui->widget->setWidgetState(viewer_conf_);
   SyncUi();
 }

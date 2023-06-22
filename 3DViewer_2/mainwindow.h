@@ -40,15 +40,14 @@ class MainWindow : public QMainWindow {
   void changeSliders(int value);
   void changeSpinBoxes(double arg);
   void on_setDefaultTransformsButton_clicked();
-  void on_persperctiveComboBox_activated(int index);
   void on_actionOpen_File_triggered();
+
+  void on_persperctiveComboBox_activated(int index);
   void on_verticiesTypeComboBox_activated(int index);
   void on_edgesTypeComboBox_activated(int index);
-  void on_verticiesSizeSlider_valueChanged(int value);
-  void on_edgesSizeSlider_valueChanged(int value);
+
+  void EdgesAndVerticiesSizeChange(double value);
   void on_setDefaultStyleButton_clicked();
-  void on_vertexSizeSpinBox_valueChanged(double arg1);
-  void on_edgesSizeSpinBox_valueChanged(double arg1);
   void colorSettings(QAbstractButton* button);
   void on_Save_image_triggered();
   void on_Save_gif_triggered();
