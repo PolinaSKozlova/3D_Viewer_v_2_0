@@ -11,6 +11,7 @@
 
 #include "affine_transformations/s21_matrix4X4.h"
 #include "gif_image/gifimage/qgifimage.h"
+#include "imagesaver.h"
 #include "parser/s21_parser.h"
 #include "s21_controller.h"
 #include "viewersettings.h"
@@ -55,8 +56,6 @@ class MainWindow : public QMainWindow {
   void colorSettings(QAbstractButton* button);
   void on_Save_image_triggered();
   void on_Save_gif_triggered();
-  void RecordGif();
-  void StartTimerGif();
 
  private:
   void FindOutBasePath();
@@ -75,11 +74,7 @@ class MainWindow : public QMainWindow {
   s21::Controller* controller_;
   std::string base_path_;
   ViewerSettings viewer_conf_;
-  QString image_file_name_;
-  QTimer* timer_;  // идентификатор таймера
-  int frame_;
-  QGifImage* gif_;
-  QFile* ptr_save_file_;
+  s21::ImageSaver image_saver_;
 };
 };      // namespace s21
 #endif  // THREE_D_VIEWER_MAINWINDOW_H

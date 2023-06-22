@@ -366,28 +366,13 @@ void s21::MainWindow::on_setDefaultStyleButton_clicked() {
 }
 
 void s21::MainWindow::on_Save_image_triggered() {
-  QString filter = "*.bmp;; *.jpeg";
-  image_file_name_ = "/0";
-  image_file_name_ = QFileDialog::getSaveFileName(this, "Сохранить файл",
-                                                  QDir::homePath(), filter);
-  ui->widget->grabFramebuffer().save(image_file_name_);
-  if (image_file_name_.isNull() == false) {
-    QMessageBox::about(this, "Статус", "Изображение сохранено");
-  }
+  image_saver_.SetOGLImage(ui->widget);
+  image_saver_.SaveImage(this);
 }
 
 void s21::MainWindow::on_Save_gif_triggered() {
-  QString filter = "*.gif";
-  image_file_name_ = "/0";
-  image_file_name_ = QFileDialog::getSaveFileName(this, "Сохранить GIF",
-                                                  QDir::homePath(), filter);
-
-  ptr_save_file_ = new QFile(image_file_name_);
-  if (!ptr_save_file_->open(QIODevice::WriteOnly)) {
-    QMessageBox::critical(this, "Warning", "Не удалось записать файл");
-  } else {
-    StartTimerGif();
-  }
+  image_saver_.SetOGLImage(ui->widget);
+  image_saver_.SaveGif(this);
 }
 
 void s21::MainWindow::StartTimerGif() {
