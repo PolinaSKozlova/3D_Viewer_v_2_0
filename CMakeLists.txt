@@ -34,6 +34,8 @@ set(PROJECT_SOURCES
     3DViewer_2/mainwindow.ui
     3DViewer_2/viewersettings.h
     3DViewer_2/viewersettings.cc
+    3DViewer_2/imagesaver.cc
+    3DViewer_2/imagesaver.h
     parser/s21_parser.cc
     parser/s21_parser.h
     affine_transformations/s21_matrix4X4.h
