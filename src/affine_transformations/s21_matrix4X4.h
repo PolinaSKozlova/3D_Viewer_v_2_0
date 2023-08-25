@@ -41,16 +41,7 @@ class Matrix4X4 {
   void MakeMovement(const TransformData& other);
   float** GetMatrix() const noexcept;
   void SetData(const TransformData& other);
-  float* CreateOneRowMatrix() const noexcept;
-  /*вывод матрицы*/
-  void print() {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < 4; ++j) {
-        std::cout << matrix_[i][j] << " ";
-      }
-      std::cout << std::endl;
-    }
-  }
+  float* CreateOneRowMatrix() noexcept;
 
  private:
   Matrix4X4& operator*=(const Matrix4X4& other) noexcept;
@@ -65,11 +56,11 @@ class Matrix4X4 {
   void InitializeZRotationMatrix();
   void InitializeUserScalerMatrix();
   void InitializeModelScalerMatrix();
-  void InitializeScalerMatrix() noexcept;
   void InitializeShiftMatrix();
   void SetNullMatrix();
   int rows_, cols_;
-  float** matrix_;
+  float** matrix_ = nullptr;
+  float* matrix_one_row_ = nullptr;
   TransformData data_{};
 };
 };  // namespace s21

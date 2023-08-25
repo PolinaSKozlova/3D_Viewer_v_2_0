@@ -17,8 +17,9 @@ TEST(affine_transformations_test_shift, test_1) {
                        {0, 0, 0, 1}};
   float **result_matrix = m.GetMatrix();
   for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; ++j)
+    for (int j = 0; j < 4; ++j) {
       EXPECT_NEAR(result_matrix[i][j], result[i][j], ACCURACY);
+    }
   }
 }
 
@@ -72,6 +73,51 @@ TEST(affine_transformations_test_all, test_1) {
                        {-4.80232, 46.52351823, 17.6776695, -15.54},
                        {0, 0, 0, 1}};
   float **result_matrix = m.GetMatrix();
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; ++j)
+      EXPECT_NEAR(result_matrix[i][j], result[i][j], ACCURACY);
+  }
+}
+
+TEST(one_row_matrix, test_1) {
+  s21::Matrix4X4 m;
+  s21::TransformData transformations;
+  transformations.x_shift = -26.67;
+  transformations.y_shift = 37.89;
+  transformations.z_shift = -10.54;
+  transformations.user_scaler = 50;
+  transformations.x_rotation_deg = 45;
+  transformations.y_rotation_deg = 60;
+  transformations.z_rotation_deg = 35;
+  m.MakeMovement(transformations);
+
+  float result[16] = {20.4788,  -14.3394109, 43.30127018, -26.67,
+                      45.3603,  11.39927829, -17.6776695, 37.89,
+                      -4.80232, 46.52351823, 17.6776695,  -15.54,
+                      0,        0,           0,           1};
+  float *result_matrix = m.CreateOneRowMatrix();
+  for (int i = 0; i < 16; i++) {
+    EXPECT_NEAR(result_matrix[i], result[i], ACCURACY);
+  }
+}
+
+TEST(copy_constructor, test_1) {
+  s21::Matrix4X4 m;
+  s21::TransformData transformations;
+  transformations.x_shift = -26.67;
+  transformations.y_shift = 37.89;
+  transformations.z_shift = -10.54;
+  transformations.user_scaler = 50;
+  transformations.x_rotation_deg = 45;
+  transformations.y_rotation_deg = 60;
+  transformations.z_rotation_deg = 35;
+  m.MakeMovement(transformations);
+  float result[][4] = {{20.4788, -14.3394109, 43.30127018, -26.67},
+                       {45.3603, 11.39927829, -17.6776695, 37.89},
+                       {-4.80232, 46.52351823, 17.6776695, -15.54},
+                       {0, 0, 0, 1}};
+  s21::Matrix4X4 copy(m);
+  float **result_matrix = copy.GetMatrix();
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; ++j)
       EXPECT_NEAR(result_matrix[i][j], result[i][j], ACCURACY);

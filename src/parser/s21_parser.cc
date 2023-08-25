@@ -88,22 +88,12 @@ ModelObj ObjParser::CalculateScaler(ModelObj& model) {
   }
 
   double max_val = std::max(std::max(x_max, y_max), z_max);
-  model.scaler = 1.0 / max_val;
-  return std::move(model);
-}
 
-std::ostream& operator<<(std::ostream& os, const ModelObj& model) {
-  os << "Vertices:\n";
-  for (size_t i = 0; i < model.vertices.size(); i += 3) {
-    os << "(" << model.vertices[i] << ", " << model.vertices[i + 1] << ", "
-       << model.vertices[i + 2] << ")\n";
+  model.scaler = 1.0 / max_val;
+  if (model.scaler > 1) {
+    model.scaler = 1.0;
   }
-  os << "Faces:\n";
-  for (size_t i = 0; i < model.faces.size(); i += 3) {
-    os << "(" << model.faces[i] << ", " << model.faces[i + 1] << ", "
-       << model.faces[i + 2] << ")\n";
-  }
-  os << "Scaler: " << model.scaler << "\n";
-  return os;
+
+  return std::move(model);
 }
 };  // namespace s21

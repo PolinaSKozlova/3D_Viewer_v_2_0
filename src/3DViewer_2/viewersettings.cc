@@ -147,27 +147,16 @@ void ViewerSettings::SetDefaultTransforms() {
 
 void ViewerSettings::SetDefaultStyle() {
   conf_settings_.e_style = 1;
-  conf_settings_.e_size = 0;
+  conf_settings_.e_size = 1;
   conf_settings_.v_style = 0;
   conf_settings_.v_size = 0;
   conf_settings_.bg_color = QColor(25, 39, 52);
   conf_settings_.e_color = QColor(136, 153, 166);
   conf_settings_.v_color = QColor(255, 255, 255);
 }
+
 void ViewerSettings::SetPath(std::string& path) {
   conf_settings_.filePath = path;
 }
-TransformData ViewerSettings::GetTransformDataFromSettings() {
-  TransformData temporary_data;
-  temporary_data.x_rotation_deg = conf_settings_.x_rotation_deg;
-  temporary_data.y_rotation_deg = conf_settings_.y_rotation_deg;
-  temporary_data.z_rotation_deg = conf_settings_.z_rotation_deg;
-  temporary_data.x_shift = conf_settings_.x_shift;
-  temporary_data.y_shift = conf_settings_.y_shift;
-  temporary_data.z_shift = conf_settings_.z_shift;
-  temporary_data.user_scaler = conf_settings_.user_scaler;
-  temporary_data.model_scaler = conf_settings_.user_scaler;
-  temporary_data.perspective_ortho = conf_settings_.perspective;
-  return temporary_data;
-}
+
 };  // namespace s21

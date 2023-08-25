@@ -5,11 +5,11 @@
 @settitle 3DViewer
 
 @copying
-Copyright (c) verenach martaori weldonfe NOV 2022
+Copyright (c) verenach martaori weldonfe JULY 2023
 @end copying
 
 @titlepage 
-@title 3DViewer_v1.0
+@title 3DViewer_v2.0
 
 @vskip 0pt plus 1filll
 @insertcopying

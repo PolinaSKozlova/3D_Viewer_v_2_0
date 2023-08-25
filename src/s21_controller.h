@@ -1,6 +1,7 @@
 #ifndef THREE_D_VIEWER_CONTROLLER_H_
 #define THREE_D_VIEWER_CONTROLLER_H_
 
+#include "imagesaver.h"
 #include "parser/s21_parser.h"
 
 namespace s21 {
@@ -21,9 +22,20 @@ class Controller {
   }
   std::string GetOutput() const { return output_; }
 
+  void SaveImage(QMainWindow* w, QOpenGLWidget* ogl) {
+    saver_.SetOGLImage(ogl);
+    saver_.SaveImage(w);
+  }
+
+  void SaveGif(QMainWindow* w, QOpenGLWidget* ogl) {
+    saver_.SetOGLImage(ogl);
+    saver_.SaveGif(w);
+  }
+
  private:
   s21::ObjParser parser_;
   std::string output_{};
+  s21::ImageSaver saver_;
 };
 };  // namespace s21
 

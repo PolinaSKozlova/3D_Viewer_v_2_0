@@ -9,10 +9,6 @@ SRCS=$(wildcard s21*.cc,*/s21*.cc)
 OBJ_FILES=$(patsubst %.cc,%.o,$(SRCS))
 REPORT_DIR = report
 
-run: clean
-	clear
-	$(CC) $(CC_FLAGS) $(SANITIZER_FLAGS) affine_transformations/s21_matrix4X4.cc affine_transformations/s21_matrix_transform.cc parser/s21_parser.cc $(OBJ_FILES) run.cc -o run -g
-#	./run
 
 all: install
 
@@ -26,24 +22,24 @@ uninstall:
 	rm -rf build
 
 clean:
-	rm -rf *.o *.gcno *.gcda *.info *.a $(REPORT_DIR) v_tests run *.dSYM 3DViewer_v_2_0.tar.gz CMakeLists.txt.user
+	rm -rf *.o *.gcno *.gcda *.info *.a $(REPORT_DIR) v_tests run *.dSYM 3DViewer_v_2_0.tar.gz CMakeLists.txt.user 3DViewer_v_2_0
 
 dvi:
 	makeinfo -o report --html --no-warn --no-validate --force doc.texi
 	open report/index.html
 
 dist:
-	tar -czf 3DViewer_v_2_0.tar.gz Makefile doc.texi CMakeLists.txt
+	tar -czf 3DViewer_v_2_0.tar.gz Makefile doc.texi CMakeLists.txt affine_transformations parser 3DViewer_2 s21_controller.h viewer_test
 	open .
 
 tests: 
 	clear
-	$(CC) $(CC_FLAGS) viewer_test/*.cc affine_transformations/s21_*.cc -o v_tests $(TEST_FLAGS)
+	$(CC) $(CC_FLAGS) viewer_test/*.cc affine_transformations/s21_*.cc parser/s21_parser.cc -o v_tests $(TEST_FLAGS)
 	./v_tests
 
 gcov_report:
 	clear
-	$(CC) $(CC_FLAGS) $(COVERAGE_FLAGS) viewer_test/*.cc affine_transformations/s21_*.cc -o v_tests $(TEST_FLAGS)
+	$(CC) $(CC_FLAGS) $(COVERAGE_FLAGS) viewer_test/*.cc affine_transformations/s21_*.cc parser/s21_parser.cc -o v_tests $(TEST_FLAGS)
 	./v_tests
 	lcov -t "$@" -o $@.info -c -d . --no-external
 	lcov -r $@.info "*include*" -o $@.info
@@ -58,19 +54,15 @@ valgrind: tests
         	 --show-leak-kinds=all \
          	 --track-origins=yes \
          	 --verbose \
-			 ./c_tests
+			 ./v_tests
 
 .PHONY:
 	all, clean, tests, gcov_report, install, uninstall, dvi, dist
 
 clang:
-	clang-format -i --style=Google **/s21*.cc **/s21*.h 
-	clang-format -n --style=Google **/s21*.cc **/s21*.h
+	clang-format -i --style=Google **/s21*.cc **/s21*.h s21*.h
+	clang-format -n --style=Google **/s21*.cc **/s21*.h s21*.h
 
 cppcheck:
 	cppcheck --enable=all --language=c++ --suppress=missingIncludeSystem **/*s21*.cc **/*s21*.h
-
-push:
-	git push origin matrix4x4
-
 

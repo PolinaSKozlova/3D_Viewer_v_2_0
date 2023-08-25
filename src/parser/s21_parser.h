@@ -42,8 +42,6 @@ class ObjParser {
   ModelObj ParseData(const std::string& filename);
   ModelObj CalculateScaler(ModelObj& model);
 };
-
-std::ostream& operator<<(std::ostream& os, const ModelObj& model);
 };  // namespace s21
 
 #endif  // THREE_D_VIEWER_S21_PARSER_H_

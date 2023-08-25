@@ -357,11 +357,9 @@ void s21::MainWindow::on_setDefaultStyleButton_clicked() {
 }
 
 void s21::MainWindow::on_Save_image_triggered() {
-  image_saver_.SetOGLImage(ui->widget);
-  image_saver_.SaveImage(this);
+  controller_->SaveImage(this, ui->widget);
 }
 
 void s21::MainWindow::on_Save_gif_triggered() {
-  image_saver_.SetOGLImage(ui->widget);
-  image_saver_.SaveGif(this);
+  controller_->SaveGif(this, ui->widget);
 }

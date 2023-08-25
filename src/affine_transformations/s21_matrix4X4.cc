@@ -12,11 +12,17 @@ Matrix4X4::~Matrix4X4() {
   if (matrix_) MemoryFree();
   matrix_ = nullptr;
   rows_ = cols_ = 0;
+  if (matrix_one_row_ != nullptr) delete[] matrix_one_row_;
 }
 
 void Matrix4X4::MulMatrix(const Matrix4X4& other) { *this *= other; }
 
 Matrix4X4& Matrix4X4::operator=(const Matrix4X4& other) noexcept {
+  if (matrix_ == nullptr) {
+    rows_ = other.rows_;
+    cols_ = other.cols_;
+    MemoryAllocate();
+  }
   for (int i = 0; i < rows_; ++i) {
     for (int j = 0; j < cols_; ++j) {
       matrix_[i][j] = other.matrix_[i][j];
@@ -36,11 +42,6 @@ Matrix4X4& Matrix4X4::operator*=(const Matrix4X4& other) noexcept {
     }
   }
   *this = result_matrix;
-  return *this;
-}
-
-Matrix4X4& Matrix4X4::operator*=(const double& num) noexcept {
-  MulNumber(num);
   return *this;
 }
 
@@ -66,14 +67,14 @@ void Matrix4X4::SetData(const TransformData& other) {
   data_.perspective_ortho = other.perspective_ortho;
 }
 
-float* Matrix4X4::CreateOneRowMatrix() const noexcept {
-  float* new_matrix = new float[rows_ * cols_];
+float* Matrix4X4::CreateOneRowMatrix() noexcept {
+  if (matrix_one_row_ == nullptr) matrix_one_row_ = new float[rows_ * cols_];
   for (int i = 0; i < rows_; ++i) {
     for (int j = 0; j < cols_; ++j) {
-      new_matrix[i * cols_ + j] = matrix_[i][j];
+      matrix_one_row_[i * cols_ + j] = matrix_[i][j];
     }
   }
-  return new_matrix;
+  return matrix_one_row_;
 }
 
 void Matrix4X4::MemoryAllocate() {

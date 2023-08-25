@@ -86,9 +86,9 @@ class ViewerSettings {
     return *this;
   }
   UiState& GetUiState() { return conf_settings_; }
-  TransformData GetTransformDataFromSettings();
 
  private:
+  s21::TransformData GetTransformations(s21::ViewerSettings& s);
   UiState conf_settings_{};
 };
 
